@@ -14,6 +14,6 @@ describe('Root', function(){
     .get('/')
     .then(function(res){ 
       expect(res).to.have.status(200)
-    })
+    }) 
   })
 })
