@@ -22,5 +22,8 @@
     "chai-http": "^4.0.0",
     "faker": "^4.1.0",
     "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
   }
 }
