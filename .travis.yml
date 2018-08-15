@@ -5,7 +5,7 @@ services:
 deploy:
   provider: heroku
   api_key:
-    secure: sKGUXq3AwjtbCMG4VzwiTHNw37VqLG+wAyQNH1yZIzB2onbKj6dsp9wyD/9WH0JBJuBrjGS2byO5Fljmswjw1Wv0uReJWB3OIdv0A0yS2+3PIaff2i6ejmjMcqlZ5cTCmYfFoOMrU26x+reI1nwIEme5aYBzQpefq9R+VDoPLSyH2E/sMGIGVW85mdcrhdphMg4A2DqfjajXY0QsAc6/bwrI3R/Un84WjosWo9HCtRofZhg+rq2PgmA5siRbzv40R+v5hCt06nWXdz7JACMMVxgUzF0Th/Hehco7bN6lwbwRCZ7G/YKPILImZaEEU4Qo9SpPMYW0O+Jjq0LqHxfSO6KK9Ohoh6EnWUo2Qf2N4we2rXj8XN9ASfKDae/4qnltV0Mxus/6EtQIjzFu+Jk0OiGvPFTiEpOmI7Ezh8QFHZyzr2TQiHmEyGAD4cNUA5YWS1pzjP725G9tb7W4FNm0AV8KEerux9nYUuLc/gqEBjnoAMrFLcXppROWKAJA7AS7MYLGPD7ZlvdPxTVX8p6VsGiqwtdw+9QRF7kARoF8ImNnwfuY3JU7WFwUAXwVq0B9VwPj0Q0NQ3akNwD2iShMaVOB9b/57k24EE+uIdbYSuKmiTLZEHH2qgKGx8Nv6lD+FDfOQj6m2Pg84xv1Q7Gv1Z/rtenDFBZ/NK15mhZdnPc=
+    secure: ac4c85af-34aa-4d52-a65d-91c9f2de21e6
   app: challenge-photos
   on:
     repo: DavidDoes/fullstack-node-capstone
