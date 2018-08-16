@@ -17,3 +17,15 @@ describe('Root', function(){
     }) 
   })
 })
+
+describe('Dashboard', function(){
+  it('should respond with status 200', function(){
+    return chai
+    .request(app)
+    .get('/dashboard.html') //must specify html
+    .then(function(res){
+      expect(res).to.have.status(200)
+      expect(res).to.be.html
+    })
+  })
+})
