@@ -1,0 +1,78 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0; /* remove white space  */
+  padding: 0; /* remove white space  */
+}
+
+body {
+  font-size: 16px;
+}
+
+header {
+  display: block;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, form, ul, li {
+  font-weight: 500;
+}
+
+.container {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.hero-image {
+  /* The image used */
+  /* background-color: #052F3F; */
+
+  /* Set a specific height */
+  height: 100%;
+  width: 100%;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;  
+}
+
+.hero-text {
+  max-width: 400px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+
+.hero-text::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  margin-left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+  opacity: 0.6;
+  background-color: white;
+}
+
+#challenges h2 {
+  text-align: center;
+}
+
+.one-third {
+  width: 30.6666666667%;
+  display: inline-block;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: 0 5px;
+}

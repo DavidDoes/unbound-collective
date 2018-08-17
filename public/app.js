@@ -28,11 +28,10 @@ function getChallenges(callback){
   )
 }
 //display title and desc:
-function displayChallenges(data){
+function displayChallenges(data){ 
   for (index in data.challenges){ 
     $('#challenges').append(
-      '<h2>' + data.challenges[index].title + '</h2>',
-      '<p>' + data.challenges[index].description + '</p>'
+      '<div class="one-third"><h2>' + data.challenges[index].title + '</h2><p>' + data.challenges[index].description + '</p></div>'
     )
   }
 }
