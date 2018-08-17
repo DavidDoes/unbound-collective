@@ -1,5 +1,3 @@
-//stuff up here?
-
 var MOCK_CHALLENGES = {
   "challenges": [
     {
@@ -22,15 +20,18 @@ var MOCK_CHALLENGES = {
     }
   ]
 }
-//??
+//replace when seeding real data
 function getChallenges(callback){
-    callback(MOCK_CHALLENGES)
+    setTimeout(function(){
+      callback(MOCK_CHALLENGES)
+    }, 100
+  )
 }
 //display title and desc:
 function displayChallenges(data){
   for (index in data.challenges){ 
-    $('body').append(
-      '<h1>' + data.challenges[index].title + '</h1>',
+    $('#challenges').append(
+      '<h2>' + data.challenges[index].title + '</h2>',
       '<p>' + data.challenges[index].description + '</p>'
     )
   }
