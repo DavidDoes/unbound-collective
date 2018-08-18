@@ -42,12 +42,22 @@ var MOCK_PHOTOS = {
     {
       "creator": "CoolPerson",
       "dateCreated": new Date(2018, 6, 24),
-      "photo": "../images/_DSC5452.png"
+      "challenge": "Patterns"
     },
     {
       "creator": "ProUser",
-      "dateCreated": new Date(2018, 7, 13),
-      "photo": "../images/_DSC3290.png"
+      "dateCreated": new Date(2018, 7, 2),
+      "challenge": "Patterns"
+    },
+    {
+      "creator": "ProUser",
+      "dateCreated": new Date(2018, 6, 29),
+      "challenge": "Get Closer"
+    },
+    {
+      "creator": "ProUser",
+      "dateCreated": new Date(2018, 6, 20),
+      "challenge": "Reflections"
     }
   ]
 }
@@ -62,7 +72,7 @@ function getChallenges(callback){
 }
 //display title and desc:
 function displayChallenges(data){ 
-  console.log(data)
+  // console.log(data)
 
   for (index in data.challenges){ 
     $('#challenges').append(
@@ -84,17 +94,19 @@ function getUserSubmissions(callback){
 }
 
 function displayUserSubmissions(data){
-  console.log(data)
+  // console.log(data)
   let currentUser = "ProUser" // username of current logged-in user
 
   for (var i = 0; i < data.submissions.length; i++){
-  // for (index in data.submissions){
+
     if (data.submissions[i].creator === currentUser){
+      console.log(data.submissions[i])
       $('#userSubmissions').append(
-        '<div class="one-third><img src="' + data.submissions[i].photo + '"</img></div>'
+        '<div class="one-third><h3>' + data.submissions[i].challenge + '</h3>'
       ) 
     }
   }
+
 }
 
 function getAndDisplayUserSubmissions(){
