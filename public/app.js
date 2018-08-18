@@ -97,16 +97,22 @@ function displayUserSubmissions(data){
   // console.log(data)
   let currentUser = "ProUser" // username of current logged-in user
 
-  for (var i = 0; i < data.submissions.length; i++){
-
-    if (data.submissions[i].creator === currentUser){
-      console.log(data.submissions[i])
+  for (index in data.submissions){ 
+    if (data.submissions[index].creator === currentUser){
       $('#userSubmissions').append(
-        '<div class="one-third><h3>' + data.submissions[i].challenge + '</h3>'
-      ) 
+        '<div class="one-third"><p>Submitted to Challenge <b>' + data.submissions[index].challenge + '</b></p><p>' + 'Submitted ' + data.submissions[index].dateCreated + '</p></div>'
+      )
     }
   }
 
+  // for (var i = 0; i < data.submissions.length; i++){
+  //   if (data.submissions[i].creator === currentUser){
+  //     console.log(data.submissions[i])
+  //     $('#userSubmissions').append(
+  //       '<div class="one-third><h3>' + data.submissions[i].challenge + '</h3>'
+  //     ) 
+  //   }
+  // }
 }
 
 function getAndDisplayUserSubmissions(){
