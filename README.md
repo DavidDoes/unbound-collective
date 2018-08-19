@@ -1,5 +1,5 @@
 # Challenge.photos
-[Challenge.photos](https://challenge-photos.herokuapp.com/)
+[Live version](https://challenge-photos.herokuapp.com/)
 
 ## Overview
 Challenge.photos is a dynamic web service providing users with the ability to contribute to photography challenges by uploading their own photos as submissions to challenges. 
