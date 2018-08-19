@@ -53,6 +53,7 @@ h1, h2, h3, form, ul, li {
   color:white;
 }
 
+/* hero text background */
 /* .hero-text::before {
   content: "";
   display: inline-block;
@@ -64,14 +65,22 @@ h1, h2, h3, form, ul, li {
   opacity: 0.6;
 } */
 
-#challenges h2 {
-  text-align: center;
-}
-
 .one-third {
   width: 30.6666666667%;
   display: inline-block;
   justify-content: space-between;
   box-sizing: border-box;
   margin: 0 5px;
+}
+
+#challenges h2 {
+  text-align: center;
+}
+
+.thumbnail {
+  height: 50%;
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  object-fit: cover;
 }

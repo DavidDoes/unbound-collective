@@ -5,21 +5,24 @@ var MOCK_CHALLENGES = {
       "title": "Patterns",
       "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
       "entries": 42,
-      "creator": "Name 1"
+      "creator": "Name 1",
+      "thumbnail": "\/assets\/images\/patterns-thumb.jpg"
     },
     {
       "id": "22222222",
       "title": "Reflections",
-      "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, what-have-you.",
+      "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
       "entries": 76,
-      "creator": "Name 2"
+      "creator": "Name 2",
+      "thumbnail": "\/assets\/images\/reflections-thumbnail.jpg"
     },
     {
       "id": "3333333",
       "title": "Get Closer",
       "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
       "entries": 50,
-      "creator": "Name 3"
+      "creator": "Name 3",
+      "thumbnail": "\/assets\/images\/get-closer-thumbnail.jpg"
     }
   ]
 }
@@ -76,7 +79,7 @@ function displayChallenges(data){
 
   for (index in data.challenges){ 
     $('#challenges').append(
-      '<div class="one-third"><h2>' + data.challenges[index].title + '</h2><p>' + data.challenges[index].description + '</p><p>' + data.challenges[index].entries + ' entries</p><p>Created by ' + data.challenges[index].creator + '</p></div>'
+      '<div class="one-third"><img class="thumbnail" src="' + data.challenges[index].thumbnail + '"><h2>' + data.challenges[index].title + '</h2><p>' + data.challenges[index].description + '</p><p>' + data.challenges[index].entries + ' entries</p><p>Created by ' + data.challenges[index].creator + '</p></div>'
     )
   }
 }
@@ -104,15 +107,6 @@ function displayUserSubmissions(data){
       )
     }
   }
-
-  // for (var i = 0; i < data.submissions.length; i++){
-  //   if (data.submissions[i].creator === currentUser){
-  //     console.log(data.submissions[i])
-  //     $('#userSubmissions').append(
-  //       '<div class="one-third><h3>' + data.submissions[i].challenge + '</h3>'
-  //     ) 
-  //   }
-  // }
 }
 
 function getAndDisplayUserSubmissions(){
