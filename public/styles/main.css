@@ -21,12 +21,16 @@ h1, h2, h3, form, ul, li {
 }
 
 .container {
-  display: flex;
+  /* display: flex; */
   position: relative;
   width: 100%;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
 }
 
 .hero-image {
