@@ -6,7 +6,7 @@ var MOCK_CHALLENGES = {
       "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
       "entries": 42,
       "creator": "Name 1",
-      "thumbnail": "\/assets\/images\/patterns-thumb.jpg"
+      "thumbnail": "\/images\/patterns-thumb.jpg"
     },
     {
       "id": "22222222",
@@ -14,7 +14,7 @@ var MOCK_CHALLENGES = {
       "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
       "entries": 76,
       "creator": "Name 2",
-      "thumbnail": "\/assets\/images\/reflections-thumbnail.jpg"
+      "thumbnail": "\/images\/reflections-thumbnail.jpg"
     },
     {
       "id": "3333333",
@@ -22,7 +22,7 @@ var MOCK_CHALLENGES = {
       "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
       "entries": 50,
       "creator": "Name 3",
-      "thumbnail": "\/assets\/images\/get-closer-thumbnail.jpg"
+      "thumbnail": "\/images\/get-closer-thumbnail.jpg"
     }
   ]
 }

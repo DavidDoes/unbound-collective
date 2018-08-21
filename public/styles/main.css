@@ -29,13 +29,23 @@ h1, h2, h3, form, ul, li {
   box-sizing: border-box;
 }
 
+.container:before,
+.container:after {
+    content: "";
+    display: table;
+}
+
+.container:after {
+  clear: both;
+}
+
 .flex {
   display: flex;
 }
 
 .hero-image {
   /* The image used */
-  background-image: url('../assets/images/hero-image.jpg');
+  background-image: url('../images/hero-image.jpg');
 
   /* Set a specific height */
   height: 100%;
@@ -87,4 +97,8 @@ h1, h2, h3, form, ul, li {
   display: inline-block;
   box-sizing: border-box;
   object-fit: cover;
+}
+
+@media (max-width: 750px) and (min-width: 320px) {
+
 }
