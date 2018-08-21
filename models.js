@@ -10,6 +10,13 @@ var creatorSchema = mongoose.Promise({
   }
 })
 
+var challengeSchema = mongoose.Promise({
+  title: 'string',
+  dateCreated: date,
+  description: 'string',
+  submissions: number
+})
+
 var commentSchema = mongoose.Schema({ content: 'string' })
 
 var submissionSchema = mongoose.Schema({
@@ -53,6 +60,7 @@ submissionSchema.methods.serialize = function(){
 
 //mongoose looks for plural version
 var Creator = mongoose.model('Creator', creatorSchema)
+var Challenge = mongoose.model('Challenge', challengeSchema)
 const Submission = mongoose.model('Submission', submissionSchema)
 
-module.exports = {Creator, Submission}
+module.exports = {Creator, Challenge, Submission}
