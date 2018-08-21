@@ -1,69 +1,69 @@
-var MOCK_CHALLENGES = {
-  "challenges": [
-    {
-      "id": "11111111",
-      "title": "Patterns",
-      "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
-      "entries": 42,
-      "creator": "Name 1",
-      "thumbnail": "\/images\/patterns-thumb.jpg"
-    },
-    {
-      "id": "22222222",
-      "title": "Reflections",
-      "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
-      "entries": 76,
-      "creator": "Name 2",
-      "thumbnail": "\/images\/reflections-thumbnail.jpg"
-    },
-    {
-      "id": "3333333",
-      "title": "Get Closer",
-      "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
-      "entries": 50,
-      "creator": "Name 3",
-      "thumbnail": "\/images\/get-closer-thumbnail.jpg"
-    }
-  ]
-}
+// var MOCK_CHALLENGES = {
+//   "challenges": [
+//     {
+//       "id": "11111111",
+//       "title": "Patterns",
+//       "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
+//       "entries": 42,
+//       "creator": "Name 1",
+//       "thumbnail": "\/images\/patterns-thumb.jpg"
+//     },
+//     {
+//       "id": "22222222",
+//       "title": "Reflections",
+//       "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
+//       "entries": 76,
+//       "creator": "Name 2",
+//       "thumbnail": "\/images\/reflections-thumbnail.jpg"
+//     },
+//     {
+//       "id": "3333333",
+//       "title": "Get Closer",
+//       "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
+//       "entries": 50,
+//       "creator": "Name 3",
+//       "thumbnail": "\/images\/get-closer-thumbnail.jpg"
+//     }
+//   ]
+// }
 
-var MOCK_USERS = {
-  "users": [
-    {
-      "username": "CoolPerson",
-      "password": "socool"
-    },
-    {
-      "username": "ProUser",
-      "password": "winner"
-    }
-  ]
-}
+// var MOCK_USERS = {
+//   "users": [
+//     {
+//       "username": "CoolPerson",
+//       "password": "socool"
+//     },
+//     {
+//       "username": "ProUser",
+//       "password": "winner"
+//     }
+//   ]
+// }
 
-var MOCK_PHOTOS = {
-  "submissions": [
-    {
-      "creator": "CoolPerson",
-      "dateCreated": new Date(2018, 6, 24),
-      "challenge": "Patterns"
-    },
-    {
-      "creator": "ProUser",
-      "dateCreated": new Date(2018, 7, 2),
-      "challenge": "Patterns"
-    },
-    {
-      "creator": "ProUser",
-      "dateCreated": new Date(2018, 6, 29),
-      "challenge": "Get Closer"
-    },
-    {
-      "creator": "ProUser",
-      "dateCreated": new Date(2018, 6, 20),
-      "challenge": "Reflections"
-    }
-  ]
-}
+// var MOCK_PHOTOS = {
+//   "submissions": [
+//     {
+//       "creator": "CoolPerson",
+//       "dateCreated": new Date(2018, 6, 24),
+//       "challenge": "Patterns"
+//     },
+//     {
+//       "creator": "ProUser",
+//       "dateCreated": new Date(2018, 7, 2),
+//       "challenge": "Patterns"
+//     },
+//     {
+//       "creator": "ProUser",
+//       "dateCreated": new Date(2018, 6, 29),
+//       "challenge": "Get Closer"
+//     },
+//     {
+//       "creator": "ProUser",
+//       "dateCreated": new Date(2018, 6, 20),
+//       "challenge": "Reflections"
+//     }
+//   ]
+// }
 
 //CHALLENGES ON INDEX.html
 //replace when seeding real data

@@ -1,0 +1,22 @@
+"submissions": [
+  {
+    "creator": "CoolPerson",
+    "dateCreated": new Date(2018, 6, 24),
+    "challenge": "Patterns"
+  },
+  {
+    "creator": "ProUser",
+    "dateCreated": new Date(2018, 7, 2),
+    "challenge": "Patterns"
+  },
+  {
+    "creator": "ProUser",
+    "dateCreated": new Date(2018, 6, 29),
+    "challenge": "Get Closer"
+  },
+  {
+    "creator": "ProUser",
+    "dateCreated": new Date(2018, 6, 20),
+    "challenge": "Reflections"
+  }
+]

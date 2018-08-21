@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-var creatorSchema = mongoose.Promise({
+var userSchema = mongoose.Promise({
   userName: {
     type: 'string',
     unique: true
@@ -24,27 +24,27 @@ var submissionSchema = mongoose.Schema({
   challenge: 'string',
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Creator'
+    ref: 'User'
   },
   comments: [commentSchema]
 })
 
 submissionSchema.pre('find', function(next){
-  this.populate('creator') //merge data from Creators collection on db
+  this.populate('User') //merge data from Creators collection on db
   next()
 })
 
 submissionSchema.pre('findOne', function(next){
-  this.populate('creator') //Creator in sep collection, merge to get serialize to work below
+  this.populate('User') //Creator in sep collection, merge to get serialize to work below
   next()
 })
 
 //virtual = attribute used, but not persisted to mongodb
 submissionSchema.virtual('userName').get(function(){
-  if (!this.creator){ 
+  if (!this.user){ 
     return null
   }
-  return `${this.creator.userName}`
+  return `${this.user.userName}`
 })
 
 //encodes string to URL notation
@@ -59,8 +59,8 @@ submissionSchema.methods.serialize = function(){
 }
 
 //mongoose looks for plural version
-var Creator = mongoose.model('Creator', creatorSchema)
+var User = mongoose.model('User', userSchema)
 var Challenge = mongoose.model('Challenge', challengeSchema)
 const Submission = mongoose.model('Submission', submissionSchema)
 
-module.exports = {Creator, Challenge, Submission}
+module.exports = {User, Challenge, Submission}
