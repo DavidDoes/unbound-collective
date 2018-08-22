@@ -113,7 +113,7 @@ router.post('/', jsonParser, (req, res) => {
     })
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', jsonParser, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -129,7 +129,7 @@ router.put('/:id', (req, res) => {
   });
 
   User
-    .findOne({ username: updated.username || '', _id: { $ne: req.params.id } })
+    .findOne({ username: updated.username })
     .then(user => {
       if(user) {
         const message = `Username is already taken`;
@@ -143,7 +143,6 @@ router.put('/:id', (req, res) => {
             res.status(200).json({
               id: updatedUser.id,
               username: `${updatedUser.username}`,
-              password: updatedUser.password
             });
           })
           .catch(err => res.status(500).json({ message: err }));

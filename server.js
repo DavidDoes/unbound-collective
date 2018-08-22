@@ -18,9 +18,8 @@ app.use('/users', usersRouter)
 app.use(express.static('public'))
 app.use(morgan('common'))
 
-//auth CORS
 // app.use(function(req, res, next){
-
+//   res.status(404).json({ message: 'Not found' })
 // })
 
 let server
