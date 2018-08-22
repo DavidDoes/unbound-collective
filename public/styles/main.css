@@ -29,7 +29,7 @@ h1, h2, h3, form, ul, li {
   box-sizing: border-box;
 }
 
-.container:before,
+/* .container:before,
 .container:after {
     content: "";
     display: table;
@@ -37,7 +37,7 @@ h1, h2, h3, form, ul, li {
 
 .container:after {
   clear: both;
-}
+} */
 
 .flex {
   display: flex;

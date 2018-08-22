@@ -1,6 +1,6 @@
 'use strict'
 
-const {Creator} = require('./models')
-const {router} = required('./router')
+const {User} = require('./models')
+const {router} = require('./router')
 
 module.exports = {User, router}

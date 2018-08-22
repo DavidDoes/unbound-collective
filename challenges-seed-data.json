@@ -1,26 +1,24 @@
-"challenges": [
-  {
-    "id": "11111111",
-    "title": "Patterns",
-    "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
-    "entries": 42,
-    "creator": "Name 1",
-    "thumbnail": "\/images\/patterns-thumb.jpg"
-  },
-  {
-    "id": "22222222",
-    "title": "Reflections",
-    "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
-    "entries": 76,
-    "creator": "Name 2",
-    "thumbnail": "\/images\/reflections-thumbnail.jpg"
-  },
-  {
-    "id": "3333333",
-    "title": "Get Closer",
-    "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
-    "entries": 50,
-    "creator": "Name 3",
-    "thumbnail": "\/images\/get-closer-thumbnail.jpg"
-  }
-]
+{ "challenges": [
+    {
+      "title": "Patterns",
+      "description": "Find patterns. Try to think outside the box to redefine your idea of what a pattern is.",
+      "entries": 42,
+      "creator": "Name 1",
+      "thumbnail": "\/images\/patterns-thumb.jpg"
+    },
+    {
+      "title": "Reflections",
+      "description": "A 'reflection' could be that of a mirror, a body of water, a self-portrait, a representation of an idea, etc.",
+      "entries": 76,
+      "creator": "Name 2",
+      "thumbnail": "\/images\/reflections-thumbnail.jpg"
+    },
+    {
+      "title": "Get Closer",
+      "description": "Instead of shooting from a distance, pop on that 50mm or lower lens and get closer to your subject.",
+      "entries": 50,
+      "creator": "Name 3",
+      "thumbnail": "\/images\/get-closer-thumbnail.jpg"
+    }
+  ]
+}

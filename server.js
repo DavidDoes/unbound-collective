@@ -1,25 +1,65 @@
 'use strict'
 
 const express     = require('express')
-const app         = express()
 const mongoose    = require('mongoose')
+const morgan      = require('morgan')
+const app         = express()
 mongoose.Promise  = global.Promise
 
 const { 
-  PORT, SUBMISSIONS_DB_URL, 
-  USERS_DB_URL, 
-  CHALLENGES_DB_URL
+  PORT,
+  CHALLENGES_DB_URL //just this db
 } = require('./config')
 
-const {
-  User, 
-  Submission,
-  Challenge
-} = require('./models')
+const {router: usersRouter } = require('./users')
+
+app.use('/users', usersRouter)
 
 app.use(express.static('public'))
-app.listen(process.env.PORT || 8080)
+app.use(morgan('common'))
 
+//auth CORS
+// app.use(function(req, res, next){
 
+// })
 
-module.exports = app
+let server
+
+function runServer(userDbUrl, port = PORT){
+  return new Promise((resolve, reject) => {
+    mongoose.connect(userDbUrl, err => {
+      if (err){
+        return reject(err)
+      }
+      server = app.listen(port, () =>{
+        console.log(`Your app is listening on port ${port}`)
+        resolve()
+      })
+      .on('error', err => {
+        mongoose.disconnect()
+        reject(err)
+      })
+    })
+  })
+}
+
+function closeServer(){
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing server')
+      server.close(err => {
+        if(err){
+          return reject(err)
+        }
+        resolve()
+      })
+    })
+  })
+}
+
+if (require.main === module){
+  runServer(CHALLENGES_DB_URL)
+    .catch(err => console.error(err))
+}
+
+module.exports = {app, runServer, closeServer}

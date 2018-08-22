@@ -1,22 +1,27 @@
-"submissions": [
-  {
-    "creator": "CoolPerson",
-    "dateCreated": new Date(2018, 6, 24),
-    "challenge": "Patterns"
-  },
-  {
-    "creator": "ProUser",
-    "dateCreated": new Date(2018, 7, 2),
-    "challenge": "Patterns"
-  },
-  {
-    "creator": "ProUser",
-    "dateCreated": new Date(2018, 6, 29),
-    "challenge": "Get Closer"
-  },
-  {
-    "creator": "ProUser",
-    "dateCreated": new Date(2018, 6, 20),
-    "challenge": "Reflections"
-  }
-]
+{ "submissions": [
+    {
+      "creator": "CoolPerson",
+      "dateCreated": "date",
+      "challenge": "Patterns",
+      "photo": "\/images\/_DSC3268.png"
+    },
+    {
+      "creator": "ProUser",
+      "dateCreated": "date",
+      "challenge": "Patterns",
+      "photo": "\/images\/_DSC0842.png"
+    },
+    {
+      "creator": "ProUser",
+      "dateCreated": "date",
+      "challenge": "Get Closer",
+      "photo": "\/images\/_DSC6175.png"
+    },
+    {
+      "creator": "ProUser",
+      "dateCreated": "date",
+      "challenge": "Get Closer",
+      "photo": "\/images\/_DSC3290.png"
+    }
+  ]
+}
