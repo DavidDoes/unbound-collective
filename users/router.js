@@ -113,54 +113,43 @@ router.post('/', jsonParser, (req, res) => {
     })
 })
 
-// router.put('/:id', (req, res) => {
-//   const requiredFields = ['id', 'username']
-//   for(let i = 0; i < requiredFields.length; i++){
-//     const field = requiredFields[i]
-//     if (!(field in req.body)){
-//       const message = `Missing \`${field}\` in request body`
-//       console.error(message)
-//       return res.status(400).send(message)
-//     }
-//   }
-
-//   if (req.params.id !== req.body.id){
-//     const message = `Request path id ``(${req.params.id}) and request body id ``(${req.body.id}) must match`
-//     console.error(message)
-//     return res.status(400).send(message)
-//   }
-//   const updatedUser = User.update({
-//     id: req.params.id,
-//     username: req.body.username,
-//     password: req.body.password
-//   })
-//   res.status(200).json(updatedItem)
-// })
-
 router.put('/:id', (req, res) => {
-  if (!(req.params.id && req.body.id && req.params.id=== req.body.id)) {
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
-    })
+    });
   }
 
-  const updated = {}
-  const updateableFields = ['username', 'password']
+  const updated = {};
+  const updateableFields = ['username', 'password'];
   updateableFields.forEach(field => {
     if (field in req.body) {
-      updated[field] = req.body[field]
+      updated[field] = req.body[field];
     }
-  })
+  });
 
   User
-    .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-    .then(updatedUser => res.status(200).json({
-      id: updatedUser.id,
-      username: updatedUser.username,
-      password: updatedUser.password
-    }))
-    .catch(err => res.status(500).json({ message: err }))
-})
+    .findOne({ username: updated.username || '', _id: { $ne: req.params.id } })
+    .then(user => {
+      if(user) {
+        const message = `Username is already taken`;
+        console.error(message);
+        return res.status(400).send(message);
+      }
+      else {
+        User
+          .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
+          .then(updatedUser => {
+            res.status(200).json({
+              id: updatedUser.id,
+              username: `${updatedUser.username}`,
+              password: updatedUser.password
+            });
+          })
+          .catch(err => res.status(500).json({ message: err }));
+      }
+    });
+});
 
 router.delete('/:id', (req, res) => {
   User
