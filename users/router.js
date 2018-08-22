@@ -52,31 +52,32 @@ router.post('/', jsonParser, (req, res) => {
     },
     password: {
       min: 10,
-      max: 20
+      max: 72
     }
   }
 
   const tooSmallField = Object.keys(sizedFields).find(
-    field => 
+    field =>
       'min' in sizedFields[field] &&
-        req.body[field].trim().length < sizedFields[field].min
-  )
-
+            req.body[field].trim().length < sizedFields[field].min
+  );
   const tooLargeField = Object.keys(sizedFields).find(
     field =>
       'max' in sizedFields[field] &&
-        req.body[field].trim().length < sizedFields[field].max
-  )
-
-  if (tooSmallField || tooLargeField){
+            req.body[field].trim().length > sizedFields[field].max
+  );
+//if incorrect length, return JSON object
+  if (tooSmallField || tooLargeField) {
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
       message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField].min} characters long`
-        : `Must be no longer than ${sizedFields[tooLargeField].max} characters long`,
-      location: tooSmallField || tooLargeField
-    })
+        ? `Must be at least ${sizedFields[tooSmallField]
+          .min} characters long`
+        : `Must be at no longer than ${sizedFields[tooLargeField]
+          .max} characters long`,
+      location: tooSmallField || tooLargeField 
+    });
   }
 
   let {username, password = ''} = req.body
@@ -100,6 +101,9 @@ router.post('/', jsonParser, (req, res) => {
         username,
         password: hash,
       })
+    })
+    .then(user => {
+      return res.status(201).json(user.serialize())
     })
     .catch(err => {
       if(err.reason === 'ValidationError'){
