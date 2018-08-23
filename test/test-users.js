@@ -157,4 +157,24 @@ describe('Users resource', function () {
         })
     })
   })
+
+  describe('DELETE endpoint', function(){
+    it('Should delete user by id', function(){
+      let user
+
+      return User
+        .findOne()
+        .then(_user => {
+          user = _user
+          return chai.request(app).delete(`/users/${user.id}`)
+        })
+        .then(res => {
+          res.should.have.status(204)
+          return User.findById(user.id)
+        })
+        .then(_user => {
+          should.not.exist(_user)
+        })
+    })
+  })
 })
