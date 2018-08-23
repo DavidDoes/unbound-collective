@@ -89,7 +89,7 @@ describe('Users resource', function () {
 
           res.body.forEach(function(user){
             user.should.be.a('object')
-            user.should.include.keys('id', 'username', 'password')
+            user.should.include.keys('id', 'username')
           })
           resUser = res.body[0]
           return User.findById(resUser.id)
@@ -98,6 +98,35 @@ describe('Users resource', function () {
           resUser.id.should.equal(user.id)
           resUser.username.should.equal(user.username)
           resUser.password.should.equal(user.password)
+        })
+    })
+  })
+
+  describe('POST endpoint', function(){
+    it('Should add new user', function(){
+      const newUser = {
+        username: faker.internet.userName(),
+        password: faker.internet.password()
+      }
+      return chai.request(app)
+        .post('/users')
+        .send(newUser)
+        .then(function(res){
+          res.should.have.status(201)
+          res.should.be.json
+          res.body.should.be.a('object')
+          res.body.should.include.keys('id', 'username', 'password')
+          res.body.username.should.equal(newUser.username)
+          res.body.password.should.not.be.null
+          res.body.id.should.not.be.null
+          // res.body.user.should.equal( 
+          //   `${newUser.username}`)
+          return User.findById(res.body.id)
+        })
+        .then(function(user){
+          // user.id.should.equal(newUser.id)
+          user.username.should.equal(newUser.username)
+          user.password.should.not.be.null
         })
     })
   })
