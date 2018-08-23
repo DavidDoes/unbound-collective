@@ -6,19 +6,36 @@ const bcrypt = require('bcryptjs')
 mongoose.Promise = global.Promise
 
 var SubmissionSchema = mongoose.Schema({
-  ObjectId = mongoose.Types.ObjectId,
-  dateCreated: {type: Date, required: true, defautl: Date.now},
+  dateCreated: {type: Date, required: true, default: Date.now},
   challenge: {type: String, required: true},
   creator: {type: String, required: true},
-  comments: [CommentSchema]
+  comments: String
 })
 
 var CommentSchema = mongoose.Schema({
-  ObjectId = mongoose.Types.ObjectId,
   dateCreated: {type: Date, require: true},
   submission: {type: String, required: true},
-  creator: {type: String, required: true},
+  author: {type: String, required: true},
 })
+
+SubmissionSchema.methods.serialize = function(){
+  return {
+    id: this._id,
+    dateCreated: this.dateCreated,
+    challenge: this.challenge,
+    creator: this.creator,
+    comments: this.comments
+  }
+}
+
+CommentSchema.methods.serialize = function(){
+  return {
+    id: this._id,
+    dateCreated: this.dateCreated,
+    submission: this.submission,
+    author: this.author
+  }
+}
 
 const Submission = mongoose.model('Submission', SubmissionSchema)
 const Comment = mongoose.model('Comment', CommentSchema)

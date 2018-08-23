@@ -11,9 +11,13 @@ const {
   CHALLENGES_DB_URL //just this db
 } = require('./config')
 
-const {router: usersRouter } = require('./users')
+const {router: usersRouter} = require('./users')
+const {router: submissionsRouter} = require('./submissions')
+// const {router: challengesRouter} = require('./challenges')
 
 app.use('/users', usersRouter)
+app.use('/submissions', submissionsRouter)
+// app.use('/challenges', challengesRouter)
 
 app.use(express.static('public'))
 app.use(morgan('common'))
