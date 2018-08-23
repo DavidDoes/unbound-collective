@@ -2,9 +2,12 @@
 
 const chai = require('chai')
 const chaiHttp = require('chai-http')
-const expect = chai.expect
-const app = require('../server')
 
+const { app, runServer, closeServer } = require('../server')
+const { CHALLENGES_DB_URL } = require('../config')
+const { User } = require('../users')
+
+const expect = chai.expect
 chai.use(chaiHttp)
 
 describe('Root', function(){
