@@ -130,4 +130,31 @@ describe('Users resource', function () {
         })
     })
   })
+
+  describe('PUT endpoint', function(){
+    it('Should update fields sent over', function(){
+      const updateData = {
+        username: 'string',
+        password: 'string'
+      }
+
+      return User
+        .findOne()
+        .then(user => {
+          updateData.id = user.id
+
+          return chai.request(app)
+            .put(`/users/${user.id}`)
+            .send(updateData)
+        })
+        .then(res => {
+          res.should.have.status(200)
+          return User.findById(updateData.id)
+        })
+        .then(user => {
+          user.username.should.equal(updateData.username)
+          user.password.should.not.be.null
+        })
+    })
+  })
 })
