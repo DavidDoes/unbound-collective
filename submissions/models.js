@@ -6,14 +6,14 @@ const bcrypt = require('bcryptjs')
 mongoose.Promise = global.Promise
 
 var SubmissionSchema = mongoose.Schema({
-  dateCreated: {type: Date, required: true, default: Date.now},
+  // dateCreated: {type: Date, required: true, default: Date.now},
   challenge: {type: String, required: true},
   creator: {type: String, required: true},
   comments: String
 })
 
 var CommentSchema = mongoose.Schema({
-  dateCreated: {type: Date, require: true},
+  // dateCreated: {type: Date, require: true},
   submission: {type: String, required: true},
   author: {type: String, required: true},
 })
@@ -21,7 +21,7 @@ var CommentSchema = mongoose.Schema({
 SubmissionSchema.methods.serialize = function(){
   return {
     id: this._id,
-    dateCreated: this.dateCreated,
+    // dateCreated: this.dateCreated,
     challenge: this.challenge,
     creator: this.creator,
     comments: this.comments
@@ -31,7 +31,7 @@ SubmissionSchema.methods.serialize = function(){
 CommentSchema.methods.serialize = function(){
   return {
     id: this._id,
-    dateCreated: this.dateCreated,
+    // dateCreated: this.dateCreated,
     submission: this.submission,
     author: this.author
   }

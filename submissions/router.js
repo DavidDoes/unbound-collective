@@ -7,10 +7,12 @@ const router        = express.Router()
 const jsonParser    = bodyParser.json()
 
 router.post('/', jsonParser, function(req, res){
-  const requiredFields = ['dateCreated', 'creator', 'challenge']
+  // console.log(req.body)
+  const requiredFields = ['creator', 'challenge']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField){
+    console.log('hello from if statement')
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
@@ -30,6 +32,16 @@ router.post('/', jsonParser, function(req, res){
       location: nonStringField
     })
   }
+
+  let {creator, challenge = ''} = req.body
+
+  return Submission.create({
+    creator,
+    challenge
+  })
+  .then(submission => {
+    return res.status(201).json(submission.serialize())
+  })
 })
 
 router.put('/:id', jsonParser, (req, res) => {
@@ -49,17 +61,16 @@ router.put('/:id', jsonParser, (req, res) => {
 
   Submission
     .findOne({ challenge: updated.challenge })
-    .then(submission => {
       Submission
-        .findByIdAndUpdate(req.params.id, { $set: updated }, {new: true})
+        .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
         .then(updatedSubmission => {
           res.status(200).json({
             id: updatedSubmission.id,
-            challenge: `${updatedSubmission.challenge}`
+            creator: updatedSubmission.creator,
+            challenge: updatedSubmission.challenge
           })
         })
         .catch(err => res.status(500).json({ message: err }))
-    })
 })
 
 router.delete('/:id', (req, res) => {

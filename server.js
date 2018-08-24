@@ -8,7 +8,7 @@ mongoose.Promise  = global.Promise
 
 const { 
   PORT,
-  CHALLENGES_DB_URL //just this db
+  TEST_DB_URL //change in production
 } = require('./config')
 
 const {router: usersRouter} = require('./users')
@@ -22,15 +22,15 @@ app.use('/submissions', submissionsRouter)
 app.use(express.static('public'))
 app.use(morgan('common'))
 
-// app.use(function(req, res, next){
-//   res.status(404).json({ message: 'Not found' })
-// })
+app.use(function(req, res, next){
+  res.status(404).json({ message: 'Not found' })
+})
 
 let server
 
-function runServer(userDbUrl, port = PORT){
+function runServer(testDbUrl, port = PORT){
   return new Promise((resolve, reject) => {
-    mongoose.connect(userDbUrl, err => {
+    mongoose.connect(testDbUrl, err => {
       if (err){
         return reject(err)
       }
@@ -61,7 +61,7 @@ function closeServer(){
 }
 
 if (require.main === module){
-  runServer(CHALLENGES_DB_URL)
+  runServer(TEST_DB_URL)
     .catch(err => console.error(err))
 }
 
