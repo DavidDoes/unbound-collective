@@ -14,9 +14,7 @@ const { TEST_DB_URL } = require('../config')
 const { User } = require('../users/models')
 
 const should = chai.should();
-const expect = chai.expect
 chai.use(chaiHttp)
-
 
 function tearDownDb(){
   return new Promise((resolve, reject) => {
@@ -36,8 +34,6 @@ function seedUsersData(){
       username: faker.internet.userName(),
       password: faker.internet.password()
     })
-    console.log(seedData)
-
   }
   return User.insertMany(seedData)
 }
