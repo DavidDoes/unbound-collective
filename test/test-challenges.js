@@ -105,4 +105,33 @@ describe('Challenges resource', function () {
         })
     })
   })
+
+  describe('Challenges POST endpoint', function(){
+    it('Should add new challenge', function(){
+      const newChallenge = {
+        title: faker.lorem.words(),
+        creator: faker.internet.userName(),
+        description: faker.lorem.paragraph()
+      }
+      return chai.request(app)
+        .post('/challenges')
+        .send(newChallenge)
+        .then(function(res){
+          res.should.have.status(201)
+          res.should.be.json
+          res.body.should.be.a('object')
+          res.body.should.include.keys('id', 'title', 'creator', 'description')
+          res.body.title.should.equal(newChallenge.title)
+          res.body.creator.should.equal(newChallenge.creator)
+          res.body.description.should.equal(newChallenge.description)
+          res.body.id.should.not.be.null
+          return Challenge.findById(res.body.id)
+        })
+        .then(function(challenge){
+          challenge.title.should.equal(newChallenge.title)
+          challenge.creator.should.equal(newChallenge.creator)
+          challenge.description.should.equal(newChallenge.description)
+        })
+    })
+  })
 })
