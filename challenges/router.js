@@ -1,16 +1,18 @@
 'use strict'
 
-const express       = require('express')
-const bodyParser    = require('body-parser')
-const {Challenge}  = require('./models')
-const router        = express.Router()
-const jsonParser    = bodyParser.json()
+const express = require('express')
+const bodyParser = require('body-parser')
+const {
+  Challenge
+} = require('./models')
+const router = express.Router()
+const jsonParser = bodyParser.json()
 
-router.post('/', jsonParser, function(req, res){
-  const requiredFields = ['title', 'creator', 'numSubmissions']
+router.post('/', jsonParser, function (req, res) {
+  const requiredFields = ['title', 'creator']
   const missingField = requiredFields.find(field => !(field in req.body))
 
-  if (missingField){
+  if (missingField) {
     console.log('hello from if statement')
     return res.status(422).json({
       code: 422,
@@ -23,24 +25,87 @@ router.post('/', jsonParser, function(req, res){
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   )
-  if (nonStringField){
+  if (nonStringField) {
     return res.status(422).json({
       code: 422,
-      reason: 'ValidatioNError', 
+      reason: 'ValidatioNError',
       message: 'Incorrect field type: expected string',
       location: nonStringField
     })
   }
 
-  let {title, creator = ''} = req.body
-  
-  return Challenge.create({
+  let {
     title,
-    creator
+    creator = ''
+  } = req.body
+
+  return Challenge.create({
+      title,
+      creator
+    })
+    .then(challenge => {
+      return res.status(201).json(challenge.serialize())
+    })
+})
+
+router.put('/:id', jsonParser, (req, res) => {
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    res.status(400).json({
+      error: 'Request path id and request body id values must match'
+    })
+  }
+
+  const updated = {}
+  const updateableFields = ['title', 'description', 'numSubmissions']
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field]
+    }
   })
-  .then(challenge => {
-    return res.status(201).json(challenge.serialize())
-  })
+
+  Challenge
+    .findOne({
+      title: updated.title
+    })
+  Challenge
+    .findByIdAndUpdate(req.params.id, {
+      $set: updated
+    }, {
+      new: true
+    })
+    .then(updatedChallenge => {
+      res.status(200).json({
+        id: updatedChallenge.id,
+        title: updatedChallenge.title,
+        description: updatedChallenge.description,
+        numSubmissions: updatedChallenge.numSubmissions
+      })
+    })
+    .catch(err => res.status(500).json({
+      message: err
+    }))
+})
+
+router.delete('/:id', (req, res) => {
+  Challenge
+    .remove({
+      Challenge: req.params.id
+    })
+    .then(() => {
+      Challenge
+        .findByIdAndRemove(req.params.id)
+        .then(() => {
+          res.status(204).json({
+            message: 'success'
+          })
+        })
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).json({
+        err: 'Internal server error'
+      })
+    })
 })
 
 
@@ -49,7 +114,11 @@ router.post('/', jsonParser, function(req, res){
 router.get('/', (req, res) => {
   return Challenge.find()
     .then(challenges => res.json(challenges.map(challenge => challenge.serialize())))
-    .catch(err => res.status(500).json({message: 'Internal server error' }))
+    .catch(err => res.status(500).json({
+      message: 'Internal server error'
+    }))
 })
 
-module.exports = {router}
+module.exports = {
+  router
+}

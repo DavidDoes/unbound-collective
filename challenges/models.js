@@ -14,7 +14,7 @@ var ChallengeSchema = mongoose.Schema({
 
 ChallengeSchema.methods.serialize = function(){
   return {
-    // id: this._id,
+    id: this._id,
     title: this.title,
     creator: this.creator,
     description: this.description,

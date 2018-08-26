@@ -10,18 +10,14 @@ const {
   runServer,
   closeServer
 } = require('../server')
-const {
-  TEST_DB_URL
-} = require('../config')
-const {
-  Challenge
-} = require('../challenges/models')
+const { TEST_DB_URL } = require('../config')
+const { Challenge } = require('../challenges/models')
 
 const should = chai.should()
 const expect = chai.expect
 chai.use(chaiHttp)
 
-function tearDownDb() {
+function tearDownDb(){
   return new Promise((resolve, reject) => {
     console.warn('Deleting database')
     mongoose.connection.dropDatabase()
@@ -30,33 +26,31 @@ function tearDownDb() {
   })
 }
 
-function seedChallengesData() {
-  console.info('seeding Challenges')
+function seedChallengesData(){
+  console.info('seeding challenges')
   const seedData = []
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++){
     seedData.push({
-      // id: faker.random.number(),
+      id: faker.random.number(),
       title: faker.lorem.words(),
       creator: faker.internet.userName(),
-      numSubmissions: faker.random.number(),
-      dateCreated: faker.date.recent()
+      description: faker.lorem.paragraph()
     })
-    // console.log(seedData)
   }
   return Challenge.insertMany(seedData)
 }
 
-describe('Challenges resource', function () {
+describe('Challenges resource', function(){
 
   before(function () {
     return runServer(TEST_DB_URL)
   })
 
-  beforeEach(function () {
+  beforeEach(function(){
     return seedChallengesData()
   })
 
-  afterEach(function () {
+  afterEach(function(){
     return tearDownDb()
   })
 
@@ -64,8 +58,8 @@ describe('Challenges resource', function () {
     return closeServer()
   })
 
-  describe('Challenges GET endpoint', function () {
-    it('Should return all existing Challenges', function () {
+  describe('Challenges GET endpoint', function(){
+    it('Should return all existing challenges', function(){
       let res
       return chai.request(app)
         .get('/challenges')
@@ -79,29 +73,29 @@ describe('Challenges resource', function () {
           res.body.should.have.lengthOf(count)
         })
     })
-    it('Should return Challenges with correct fields', function () {
+
+    it('Should return challenges with correct fields', function(){
       let resChallenge
       return chai.request(app)
         .get('/challenges')
-        .then(function (res) {
+        .then(function(res){
           res.should.have.status(200)
           res.should.be.json
           res.body.should.be.a('array')
           res.body.should.have.lengthOf.at.least(1)
 
-          res.body.forEach(function (challenge) {
+          res.body.forEach(function(challenge){
             challenge.should.be.a('object')
-            challenge.should.include.keys('title', 'creator', 'numSubmissions')
+            challenge.should.include.keys('id', 'title', 'creator', 'description')
           })
           resChallenge = res.body[0]
-          return Challenge.findById(resChallenge)
+          return Challenge.findById(resChallenge.id)
         })
         .then(challenge => {
-          // resChallenge.id.should.equal(challenge.id)
+          resChallenge.id.should.equal(challenge.id)
           resChallenge.title.should.equal(challenge.title)
           resChallenge.creator.should.equal(challenge.creator)
-          resChallenge.numSubmissions.should.equal(challenge.numSubmissions)
-          // resChallenge.dateCreated.should.equal(challenge.dateCreated)
+          resChallenge.description.should.equal(challenge.description)
         })
     })
   })
@@ -109,9 +103,8 @@ describe('Challenges resource', function () {
   describe('Challenges POST endpoint', function(){
     it('Should add new challenge', function(){
       const newChallenge = {
-        title: faker.lorem.words(),
-        creator: faker.internet.userName(),
-        description: faker.lorem.paragraph()
+        challenge: faker.lorem.words(),
+        creator: faker.internet.userName()
       }
       return chai.request(app)
         .post('/challenges')
@@ -120,17 +113,67 @@ describe('Challenges resource', function () {
           res.should.have.status(201)
           res.should.be.json
           res.body.should.be.a('object')
-          res.body.should.include.keys('id', 'title', 'creator', 'description')
-          res.body.title.should.equal(newChallenge.title)
+          res.body.should.include.keys('id', 'challenge', 'creator')
+          res.body.challenge.should.equal(newChallenge.challenge)
           res.body.creator.should.equal(newChallenge.creator)
-          res.body.description.should.equal(newChallenge.description)
           res.body.id.should.not.be.null
           return Challenge.findById(res.body.id)
         })
         .then(function(challenge){
-          challenge.title.should.equal(newChallenge.title)
+          challenge.challenge.should.equal(newChallenge.challenge)
           challenge.creator.should.equal(newChallenge.creator)
           challenge.description.should.equal(newChallenge.description)
+        })
+    })
+  })
+
+  describe('Challenges PUT endpoint', function(){
+    it('Should update fields sent over', function(){
+      const updateData = {
+        title: 'string',
+        creator: 'string',
+        description: 'string',
+        numSubmissions: Number
+      }
+
+      return Challenge
+        .findOne()
+        .then(challenge => {
+          updateData.id = challenge.id
+
+          return chai.request(app)
+            .put(`/challenges/${challenge.id}`)
+            .send(updateData)
+        })
+        .then(res => {
+          res.should.have.status(200)
+          return Challenge.findById(updateData.id)
+        })
+        .then(challenge => {
+          challenge.title.should.equal(updateData.title)
+          // challenge.creator.should.equal(updateData.creator)
+          challenge.description.should.equal(updateData.description)
+          // challenge.numSubmissions.should.equal(updateData.numSubmissions)
+        })
+    })
+  })
+
+  describe('Challenges DELETE endpoint', function(){
+    it('Should update fields sent over', function(){
+      let challenge
+
+      return Challenge
+        .findOne()
+        .then(_challenge => {
+          challenge = _challenge
+          return chai.request(app).delete(`/challenges/${challenge.id}`)
+        })
+        .then(res => {
+          res.should.have.status(204)
+          return Challenge.findById(challenge.id)
+        })
+        .then(_challenge => {
+          should.not.exist(_challenge)
         })
     })
   })
