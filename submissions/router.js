@@ -11,7 +11,6 @@ router.post('/', jsonParser, function(req, res){
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField){
-    console.log('hello from if statement')
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',

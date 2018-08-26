@@ -6,6 +6,7 @@ const morgan      = require('morgan')
 const app         = express()
 mongoose.Promise  = global.Promise
 
+
 const { 
   PORT,
   TEST_DB_URL //change in production
@@ -13,11 +14,11 @@ const {
 
 const {router: usersRouter} = require('./users')
 const {router: submissionsRouter} = require('./submissions')
-// const {router: challengesRouter} = require('./challenges')
+const {router: challengesRouter} = require('./challenges')
 
 app.use('/users', usersRouter)
 app.use('/submissions', submissionsRouter)
-// app.use('/challenges', challengesRouter)
+app.use('/challenges', challengesRouter)
 
 app.use(express.static('public'))
 app.use(morgan('common'))
@@ -61,7 +62,7 @@ function closeServer(){
 }
 
 if (require.main === module){
-  runServer(TEST_DB_URL)
+  runServer(TEST_DB_URL) //change in production
     .catch(err => console.error(err))
 }
 

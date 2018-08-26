@@ -35,7 +35,6 @@ function seedSubmissionsData(){
       challenge: faker.lorem.words(),
       creator: faker.internet.userName()
     })
-    // console.log(seedData)
   }
   return Submission.insertMany(seedData)
 }
@@ -74,7 +73,7 @@ describe('Submissions resource', function(){
         })
     })
 
-    it('Should return submissions with correct field', function(){
+    it('Should return submissions with correct fields', function(){
       let resSubmission
       return chai.request(app)
         .get('/submissions')
