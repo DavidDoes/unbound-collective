@@ -103,9 +103,11 @@ describe('Challenges resource', function(){
   describe('Challenges POST endpoint', function(){
     it('Should add new challenge', function(){
       const newChallenge = {
-        challenge: faker.lorem.words(),
-        creator: faker.internet.userName()
+        title: faker.lorem.words(),
+        creator: faker.internet.userName(),
+        description: faker.lorem.paragraph()
       }
+      console.log('>>>>>>>>>>>>>>>>>>>' + newChallenge.description)
       return chai.request(app)
         .post('/challenges')
         .send(newChallenge)
@@ -113,16 +115,15 @@ describe('Challenges resource', function(){
           res.should.have.status(201)
           res.should.be.json
           res.body.should.be.a('object')
-          res.body.should.include.keys('id', 'challenge', 'creator')
-          res.body.challenge.should.equal(newChallenge.challenge)
+          res.body.should.include.keys('id', 'title', 'creator')
+          res.body.title.should.equal(newChallenge.title)
           res.body.creator.should.equal(newChallenge.creator)
           res.body.id.should.not.be.null
           return Challenge.findById(res.body.id)
         })
         .then(function(challenge){
-          challenge.challenge.should.equal(newChallenge.challenge)
+          challenge.title.should.equal(newChallenge.title)
           challenge.creator.should.equal(newChallenge.creator)
-          challenge.description.should.equal(newChallenge.description)
         })
     })
   })
