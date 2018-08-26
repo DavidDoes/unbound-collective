@@ -35,7 +35,7 @@ function seedSubmissionsData(){
       challenge: faker.lorem.words(),
       creator: faker.internet.userName()
     })
-    console.log(seedData)
+    // console.log(seedData)
   }
   return Submission.insertMany(seedData)
 }

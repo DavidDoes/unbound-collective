@@ -93,7 +93,6 @@ describe('Users resource', function () {
         .then(user => {
           resUser.id.should.equal(user.id)
           resUser.username.should.equal(user.username)
-          resUser.password.should.equal(user.password)
         })
     })
   })
@@ -108,21 +107,20 @@ describe('Users resource', function () {
         .post('/users')
         .send(newUser)
         .then(function(res){
+          console.log(res.body)
           res.should.have.status(201)
           res.should.be.json
           res.body.should.be.a('object')
-          res.body.should.include.keys('id', 'username', 'password')
+          res.body.should.include.keys('id', 'username')
           res.body.username.should.equal(newUser.username)
-          res.body.password.should.not.be.null
           res.body.id.should.not.be.null
-          // res.body.user.should.equal( 
-          //   `${newUser.username}`)
+          res.body.username.should.equal( 
+            `${newUser.username}`
+          )
           return User.findById(res.body.id)
         })
         .then(function(user){
-          // user.id.should.equal(newUser.id)
           user.username.should.equal(newUser.username)
-          user.password.should.not.be.null
         })
     })
   })
@@ -149,7 +147,6 @@ describe('Users resource', function () {
         })
         .then(user => {
           user.username.should.equal(updateData.username)
-          user.password.should.not.be.null
         })
     })
   })

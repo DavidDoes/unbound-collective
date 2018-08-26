@@ -6,10 +6,6 @@ const bcrypt = require('bcryptjs')
 mongoose.Promise = global.Promise
 
 var UserSchema = mongoose.Schema({
-  // id: {
-  //   type: Number,
-  //   unique: true
-  // },
   username: {
     type: String,
     required: true,
@@ -25,7 +21,6 @@ UserSchema.methods.serialize = function() {
   return {
     id: this._id,
     username: this.username || '',
-    password: this.password
   }
 }
 

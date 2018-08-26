@@ -7,7 +7,7 @@ const router        = express.Router()
 const jsonParser    = bodyParser.json()
 
 router.post('/', jsonParser, (req, res) => {
-  const requiredFields = ['username', 'password']
+  const requiredFields = ['username']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField){
@@ -18,7 +18,7 @@ router.post('/', jsonParser, (req, res) => {
       location: missingField
     })
   }
-  const stringFields = ['username', 'password']
+  const stringFields = ['username']
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   )
@@ -32,7 +32,7 @@ router.post('/', jsonParser, (req, res) => {
   }
 
   //if username and pass not trimmed, give error. Reject space values.
-  const explicitlyTrimmedFields = ['username', 'password']
+  const explicitlyTrimmedFields = ['username']
   const nonTrimmedField = explicitlyTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   )

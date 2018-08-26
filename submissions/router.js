@@ -7,7 +7,6 @@ const router        = express.Router()
 const jsonParser    = bodyParser.json()
 
 router.post('/', jsonParser, function(req, res){
-  // console.log(req.body)
   const requiredFields = ['creator', 'challenge']
   const missingField = requiredFields.find(field => !(field in req.body))
 
