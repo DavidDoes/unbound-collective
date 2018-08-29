@@ -11,7 +11,7 @@ var CommentSchema = mongoose.Schema({
 })
 
 var SubmissionSchema = mongoose.Schema({
-  dateCreated: {type: Date, default: Date.now},
+  dateCreated: {type: Date, default: Date.now}, 
   // challenge: {type: String, required: true},
   challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'},
   // creator: {type: String, required: true},

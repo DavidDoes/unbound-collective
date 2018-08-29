@@ -16,6 +16,8 @@ const { TEST_DB_URL }   = require('../config'),
       { User }          = require('../users/models'),
       { Challenge }     = require('../challenges/models')
 
+var ObjectId = mongoose.Schema.Types.ObjectId;
+
 const should = chai.should()
 chai.use(chaiHttp)
 
@@ -108,13 +110,9 @@ function seedSubmissionsData() {
               submission.should.include.keys('id', 'challenge', 'creator')
             })
             resSubmission = res.body[0]
-            console.log('!! res.body' + res.body)
-            console.log('@@ res.submission.id' + resSubmission.id)
             return Submission.findById(resSubmission.id) 
           })
           .then(submission => {
-            console.log('resSubmission.challenge' + resSubmission.challenge)
-            console.log('submission.challenge' + submission.challenge)
             resSubmission.id.should.equal(submission.id)
             resSubmission.challenge.should.equal(submission.challenge.toString())
             resSubmission.creator.should.equal(submission.creator.toString())
@@ -125,9 +123,9 @@ function seedSubmissionsData() {
     describe('Submissions POST endpoint', function () {
       it('Should add new submission', function () {
         const newSubmission = {
-          dateCreated: {type: Date, default: Date.now},
-          challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'},
-          creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+          dateCreated: faker.date.recent(),
+          creator: faker.internet.userName(),
+          challenge: faker.lorem.words()
         }
         return chai.request(app)
           .post('/submissions')
@@ -136,9 +134,9 @@ function seedSubmissionsData() {
             res.should.have.status(201)
             res.should.be.json
             res.body.should.be.a('object')
-            res.body.should.include.keys('id', 'challenge', 'creator')
-            res.body.challenge.should.equal(newSubmission.challenge)
-            res.body.creator.should.equal(newSubmission.creator)
+            res.body.should.include.keys('id', 'dateCreated', 'challenge', 'creator')
+            res.body.challenge.should.equal(newSubmission.challenge.toString())
+            res.body.creator.should.equal(newSubmission.creator.toString())
             res.body.id.should.not.be.null
             return Submission.findById(res.body.id)
           })
@@ -152,9 +150,9 @@ function seedSubmissionsData() {
     describe('Submissions PUT endpoint', function () {
       it('Should update fields sent over', function () {
         const updateData = {
-          challenge: 'string',
-          creator: 'string',
-          dateCreated: Date
+          dateCreated: {type: Date},
+          challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'},
+          creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
         }
 
         return Submission
