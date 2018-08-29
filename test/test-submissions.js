@@ -108,16 +108,16 @@ function seedSubmissionsData() {
               submission.should.include.keys('id', 'challenge', 'creator')
             })
             resSubmission = res.body[0]
-            console.log('~~~~~~' + res.body)
-            console.log('!!!!!!!' + resSubmission.id)
+            console.log('!! res.body' + res.body)
+            console.log('@@ res.submission.id' + resSubmission.id)
             return Submission.findById(resSubmission.id) 
           })
           .then(submission => {
-            console.log('?????' + resSubmission.challenge)
-            console.log('><><><><><><><' + submission.challenge)
+            console.log('resSubmission.challenge' + resSubmission.challenge)
+            console.log('submission.challenge' + submission.challenge)
             resSubmission.id.should.equal(submission.id)
-            resSubmission.challenge.should.equal(submission.challenge)
-            resSubmission.creator.should.equal(submission.creator)
+            resSubmission.challenge.should.equal(submission.challenge.toString())
+            resSubmission.creator.should.equal(submission.creator.toString())
           })
       })
     })
@@ -125,8 +125,9 @@ function seedSubmissionsData() {
     describe('Submissions POST endpoint', function () {
       it('Should add new submission', function () {
         const newSubmission = {
-          challenge: faker.lorem.words(),
-          creator: faker.internet.userName()
+          dateCreated: {type: Date, default: Date.now},
+          challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'},
+          creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
         }
         return chai.request(app)
           .post('/submissions')
@@ -152,7 +153,8 @@ function seedSubmissionsData() {
       it('Should update fields sent over', function () {
         const updateData = {
           challenge: 'string',
-          creator: 'string'
+          creator: 'string',
+          dateCreated: Date
         }
 
         return Submission
@@ -169,7 +171,7 @@ function seedSubmissionsData() {
             return Submission.findById(updateData.id)
           })
           .then(submission => {
-            submission.challenge.should.equal(updateData.challenge)
+            submission.challenge.should.equal(updateData.challenge.toString())
             // submission.creator.should.equal(updateData.creator)
           })
       })
