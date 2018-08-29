@@ -108,9 +108,13 @@ function seedSubmissionsData() {
               submission.should.include.keys('id', 'challenge', 'creator')
             })
             resSubmission = res.body[0]
-            return Submission.findById(resSubmission.id)
+            console.log('~~~~~~' + res.body)
+            console.log('!!!!!!!' + resSubmission.id)
+            return Submission.findById(resSubmission.id) 
           })
           .then(submission => {
+            console.log('?????' + resSubmission.challenge)
+            console.log('><><><><><><><' + submission.challenge)
             resSubmission.id.should.equal(submission.id)
             resSubmission.challenge.should.equal(submission.challenge)
             resSubmission.creator.should.equal(submission.creator)
