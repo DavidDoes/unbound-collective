@@ -37,13 +37,13 @@ function seedChallengesData(){
   }
 
   return User
-  .create(challengeCreator)
-  .then(function (user) {
-    return Submission
+    .create(challengeCreator)
+    .then(function (user) {
+      return Submission
         .create({
-        dateCreated: new Date(),
-        challenge: Challenge.title,
-        creator: user._id
+          dateCreated: new Date(),
+          challenge: 'Sample Challenge Title',
+          creator: user._id
       })
       .then(function (submission) {
         const seedChallenges = []

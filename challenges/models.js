@@ -8,8 +8,8 @@ var ChallengeSchema = mongoose.Schema({
   title: {type: String, required: true},
   creator: {type: String, required: true},
   description: String,
-  numSubmissions: Number
-  // dateCreated: Date
+  numSubmissions: Number,
+  dateCreated: Date
 })
 
 ChallengeSchema.methods.serialize = function(){
@@ -18,8 +18,8 @@ ChallengeSchema.methods.serialize = function(){
     title: this.title,
     creator: this.creator,
     description: this.description,
-    numSubmissions: this.numSubmissions
-    // dateCreated: this.dateCreated
+    numSubmissions: this.numSubmissions,
+    dateCreated: this.dateCreated
   }
 }
 

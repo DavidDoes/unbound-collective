@@ -16,8 +16,6 @@ const { TEST_DB_URL }   = require('../config'),
       { User }          = require('../users/models'),
       { Challenge }     = require('../challenges/models')
 
-var ObjectId = mongoose.Schema.Types.ObjectId;
-
 const should = chai.should()
 chai.use(chaiHttp)
 
@@ -134,9 +132,9 @@ function seedSubmissionsData() {
             res.should.have.status(201)
             res.should.be.json
             res.body.should.be.a('object')
-            res.body.should.include.keys('id', 'dateCreated', 'challenge', 'creator')
-            res.body.challenge.should.equal(newSubmission.challenge.toString())
-            res.body.creator.should.equal(newSubmission.creator.toString())
+            res.body.should.include.keys('id', 'challenge', 'creator')
+            res.body.challenge.should.equal(newSubmission.challenge)
+            res.body.creator.should.equal(newSubmission.creator)
             res.body.id.should.not.be.null
             return Submission.findById(res.body.id)
           })
@@ -150,9 +148,7 @@ function seedSubmissionsData() {
     describe('Submissions PUT endpoint', function () {
       it('Should update fields sent over', function () {
         const updateData = {
-          dateCreated: {type: Date},
-          challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'},
-          creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+          challenge: faker.lorem.words()
         }
 
         return Submission
@@ -166,11 +162,12 @@ function seedSubmissionsData() {
           })
           .then(res => {
             res.should.have.status(200)
+            res.body.should.include.keys('id', 'challenge')
+            res.body.challenge.should.equal(updateData.challenge)
             return Submission.findById(updateData.id)
           })
           .then(submission => {
-            submission.challenge.should.equal(updateData.challenge.toString())
-            // submission.creator.should.equal(updateData.creator)
+            submission.challenge.should.equal(updateData.challenge)
           })
       })
     })
