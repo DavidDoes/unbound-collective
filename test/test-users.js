@@ -107,7 +107,7 @@ describe('Users resource', function () {
         .post('/users')
         .send(newUser)
         .then(function(res){
-          console.log(res.body)
+          // console.log(res.body)
           res.should.have.status(201)
           res.should.be.json
           res.body.should.be.a('object')

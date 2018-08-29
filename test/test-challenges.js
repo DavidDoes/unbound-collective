@@ -10,11 +10,13 @@ const {
   runServer,
   closeServer
 } = require('../server')
-const { TEST_DB_URL } = require('../config')
-const { Challenge } = require('../challenges/models')
+
+const { TEST_DB_URL }   = require('../config'),
+      { Challenge }     = require('../challenges/models'),
+      { Submission }    = require('../submissions/models'), 
+      { User }          = require('../users/models')
 
 const should = chai.should()
-const expect = chai.expect
 chai.use(chaiHttp)
 
 function tearDownDb(){
@@ -28,16 +30,34 @@ function tearDownDb(){
 
 function seedChallengesData(){
   console.info('seeding challenges')
-  const seedData = []
-  for (let i = 1; i <= 10; i++){
-    seedData.push({
-      id: faker.random.number(),
-      title: faker.lorem.words(),
-      creator: faker.internet.userName(),
-      description: faker.lorem.paragraph()
-    })
+
+  const challengeCreator = {
+    username: 'ChallengeCreator',
+    password: 'securepass'
   }
-  return Challenge.insertMany(seedData)
+
+  return User
+  .create(challengeCreator)
+  .then(function (user) {
+    return Submission
+        .create({
+        dateCreated: new Date(),
+        challenge: Challenge.title,
+        creator: user._id
+      })
+      .then(function (submission) {
+        const seedChallenges = []
+        for (let i = 0; i <= 1; i++) {
+          seedChallenges.push({
+            title: 'Submission title',
+            description: 'Challenge description',
+            submission: submission._id,
+            creator: user._id
+          })
+        }
+        return Challenge.insertMany(seedChallenges)
+      })
+  })
 }
 
 describe('Challenges resource', function(){
@@ -107,7 +127,7 @@ describe('Challenges resource', function(){
         creator: faker.internet.userName(),
         description: faker.lorem.paragraph()
       }
-      console.log('>>>>>>>>>>>>>>>>>>>' + newChallenge.description)
+      // console.log('>>>>>>>>>>>>>>>>>>>' + newChallenge.description)
       return chai.request(app)
         .post('/challenges')
         .send(newChallenge)

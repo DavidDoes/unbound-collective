@@ -47,6 +47,10 @@ function getAndDisplayUserSubmissions(){
   getUserSubmissions(displayUserSubmissions)
 }
 
+function newUserSubmission(){
+  
+}
+
 $(function(){
   getAndDisplayChallenges()
   getAndDisplayUserSubmissions()
