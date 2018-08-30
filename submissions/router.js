@@ -7,7 +7,12 @@ const router        = express.Router()
 const jsonParser    = bodyParser.json()
 
 router.post('/', jsonParser, function(req, res){
-  const requiredFields = ['creator', 'challenge']
+  var newPhoto = new Item();
+  newPhoto.img.data = fs.readFileSync(req.files.userPhoto.path);
+  newPhoto.img.contentType = 'image/png' || 'image/jpg' || 'image/jpeg' || 'image/tiff' || 'image/tif';
+  newPhoto.save();
+
+  const requiredFields = ['creator', 'challenge', 'photo']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField){
@@ -35,7 +40,9 @@ router.post('/', jsonParser, function(req, res){
 
   return Submission.create({
     creator,
-    challenge
+    challenge,
+    dateCreated: Date,
+    photo
   })
   .then(submission => {
     return res.status(201).json(submission.serialize())

@@ -106,7 +106,7 @@ describe('Challenges resource', function(){
 
           res.body.forEach(function(challenge){
             challenge.should.be.a('object')
-            challenge.should.include.keys('id', 'title', 'creator', 'description')
+            challenge.should.include.keys('id', 'title', 'creator', 'description', 'thumbnail')
           })
           resChallenge = res.body[0]
           return Challenge.findById(resChallenge.id)
@@ -116,6 +116,7 @@ describe('Challenges resource', function(){
           resChallenge.title.should.equal(challenge.title)
           resChallenge.creator.should.equal(challenge.creator)
           resChallenge.description.should.equal(challenge.description)
+          resChallenge.thumbnail.should.equal(challenge.thumbnail)
         })
     })
   })

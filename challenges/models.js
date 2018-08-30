@@ -9,7 +9,8 @@ var ChallengeSchema = mongoose.Schema({
   creator: {type: String, required: true},
   description: String,
   numSubmissions: Number,
-  dateCreated: Date
+  dateCreated: Date,
+  thumbnail: {data: Buffer, contentType: String}
 })
 
 ChallengeSchema.methods.serialize = function(){

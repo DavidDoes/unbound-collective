@@ -1,3 +1,7 @@
+'use strict';
+
+const express = require('express');
+const app     = express();
 
 //CHALLENGES ON INDEX.html
 //replace when seeding real data

@@ -14,6 +14,7 @@ var SubmissionSchema = mongoose.Schema({
   dateCreated: Date, 
   challenge: {type: String, required: true},
   creator: {type: String, required: true},
+  photo: {data: Buffer, contentType: String}
 })
 
 SubmissionSchema.methods.serialize = function(){

@@ -105,7 +105,7 @@ function seedSubmissionsData() {
 
             res.body.forEach(function (submission) {
               submission.should.be.a('object')
-              submission.should.include.keys('id', 'challenge', 'creator')
+              submission.should.include.keys('id', 'challenge', 'creator', 'photo', 'dateCreated')
             })
             resSubmission = res.body[0]
             return Submission.findById(resSubmission.id) 
@@ -123,7 +123,7 @@ function seedSubmissionsData() {
         const newSubmission = {
           dateCreated: faker.date.recent(),
           creator: faker.internet.userName(),
-          challenge: faker.lorem.words()
+          challenge: faker.lorem.words(),
         }
         return chai.request(app)
           .post('/submissions')
