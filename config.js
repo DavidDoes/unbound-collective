@@ -1,6 +1,6 @@
 'use strict'
 
-exports.CHALLENGES_DB_URL = process.env.CHALLENGES_DB_URL ||
+exports.DB_URL = process.env.DB_URL ||
 'mongodb://localhost/challenge-photos';
 
 exports.TEST_DB_URL = process.env.TEST_DB_URL || 

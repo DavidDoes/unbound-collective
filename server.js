@@ -9,7 +9,7 @@ mongoose.Promise  = global.Promise
 
 const { 
   PORT,
-  TEST_DB_URL //change in production
+  DB_URL //change in production
 } = require('./config')
 
 const {router: usersRouter} = require('./users')
@@ -62,7 +62,7 @@ function closeServer(){
 }
 
 if (require.main === module){
-  runServer(TEST_DB_URL) //change in production
+  runServer(DB_URL)
     .catch(err => console.error(err))
 }
 
