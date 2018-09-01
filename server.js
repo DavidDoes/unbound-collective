@@ -1,8 +1,15 @@
 'use strict'
 
-const express     = require('express')
-const mongoose    = require('mongoose')
-const morgan      = require('morgan')
+const express         = require('express')
+const mongoose        = require('mongoose')
+const morgan          = require('morgan')
+const path            = require('path')
+const crypto          = require('crypto')
+const GridFsStorage   = require('multer-gridfs-storage')
+const Grid            = require('gridfs-stream')
+const methodOverride  = require('method-override')
+const bodyParser      = require('body-parser')
+
 const app         = express()
 
 mongoose.Promise  = global.Promise

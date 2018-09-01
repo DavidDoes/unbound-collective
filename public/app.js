@@ -1,7 +1,20 @@
 'use strict';
 
-const express = require('express');
-const app     = express();
+const express         = require('express');
+const app             = express();
+const path            = require('path')
+const crypto          = require('crypto')
+const multer          = require('multer')
+const GridFsStorage   = require('multer-gridfs-storage')
+const Grid            = require('gridfs-stream')
+const methodOverride  = require('method-override')
+const bodyParser      = require('body-parser')
+
+
+//IF USING VIEWS:
+// app.get('/', (req, res) => {
+//   res.render('index')
+// })
 
 //CHALLENGES ON INDEX.html
 //replace when seeding real data
