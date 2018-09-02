@@ -11,11 +11,6 @@ const methodOverride  = require('method-override')
 const bodyParser      = require('body-parser')
 
 
-//IF USING VIEWS:
-// app.get('/', (req, res) => {
-//   res.render('index')
-// })
-
 //CHALLENGES ON INDEX.html
 //replace when seeding real data
 function getChallenges(callback){
@@ -64,9 +59,6 @@ function getAndDisplayUserSubmissions(){
   getUserSubmissions(displayUserSubmissions)
 }
 
-function newUserSubmission(){
-  
-}
 
 $(function(){
   getAndDisplayChallenges()

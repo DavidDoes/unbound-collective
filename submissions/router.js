@@ -7,10 +7,10 @@ const router        = express.Router()
 const jsonParser    = bodyParser.json()
 
 router.post('/', jsonParser, function(req, res){
-  var newPhoto = new Item();
-  newPhoto.img.data = fs.readFileSync(req.files.userPhoto.path);
-  newPhoto.img.contentType = 'image/png' || 'image/jpg' || 'image/jpeg' || 'image/tiff' || 'image/tif';
-  newPhoto.save();
+  // var newPhoto = new Item();
+  // newPhoto.img.data = fs.readFileSync(req.files.userPhoto.path);
+  // newPhoto.img.contentType = 'image/png' || 'image/jpg' || 'image/jpeg' || 'image/tiff' || 'image/tif';
+  // newPhoto.save();
 
   const requiredFields = ['creator', 'challenge', 'photo']
   const missingField = requiredFields.find(field => !(field in req.body))
