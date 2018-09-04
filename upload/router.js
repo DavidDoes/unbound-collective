@@ -16,10 +16,6 @@ const router          = express.Router()
 const app             = express()
 const jsonParser      = bodyParser.json()
 
-
-// const server      = require('../server')
-// const DB_URL      = require('../config')
-
 // Middleware
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
@@ -45,11 +41,6 @@ const storage = new GridFsStorage({
   }
 });
 const upload = multer({ storage });
-
-//IF USING VIEWS:
-router.get('/', function(req, res) {
-  res.send('hello from /upload')
-})
 
 // POST /upload route
 // upload file to db

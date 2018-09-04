@@ -2,13 +2,6 @@
 
 const express         = require('express');
 const app             = express();
-const path            = require('path')
-const crypto          = require('crypto')
-const multer          = require('multer')
-const GridFsStorage   = require('multer-gridfs-storage')
-const Grid            = require('gridfs-stream')
-const methodOverride  = require('method-override')
-const bodyParser      = require('body-parser')
 
 
 //CHALLENGES ON INDEX.html
