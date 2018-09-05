@@ -1,11 +1,5 @@
 'use strict'
 
-// https://www.youtube.com/watch?v=3f5Q9wDePzY&t=453s
-// https://github.com/bradtraversy/mongo_file_uploads
-
-// This app uses the following to get file from a form, upload to mongodb
-// CRUD routes are handled with gridfs stream
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -22,7 +16,8 @@ mongoose.Promise = global.Promise;
 
 // Middleware
 app.use(bodyParser.json());
-app.use(methodOverride('_method')); 
+app.use(methodOverride('_method'));
+app.use(express.static('public'));
 
 // Mongo URI
 // const mongoURI = 'mongodb://admin:password1@ds133252.mlab.com:33252/challenges-photos';
