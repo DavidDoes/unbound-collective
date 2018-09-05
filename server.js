@@ -20,14 +20,12 @@ app.use(methodOverride('_method'));
 app.use(express.static('public'));
 
 // Mongo URI
-// const mongoURI = 'mongodb://admin:password1@ds133252.mlab.com:33252/challenges-photos';
+app.use(methodOverride('_method')); 
 
 const { DB_URL, PORT } = require('./config')
 
-// Create Mongo connection
 const conn = mongoose.createConnection(DB_URL);
 
-// Init gfs
 let gfs;
 
 conn.once('open', () => {
@@ -56,44 +54,39 @@ const storage = new GridFsStorage({
     });
   }
 });
-// const upload = multer({ storage });
 
-// Init uploaded
 const upload = multer({
   // :storage is variable defined above
   storage: storage,
-  limits: { fileSize: 10000000 }, // 10 MB - 10000000 bytes
+  limits: { fileSize: 10000000 },
   fileFilter: function(req, file, cb){
-    checkFileType(file, cb); // defined below
+    checkFileType(file, cb);
   }
-}).single('image') // name='' from form input
+}).single('image')
 
-// Check file type
 function checkFileType(file, cb){
-  // Check for extensions allowed
   const filetypes = /jpeg|jpg|png|tif|tiff/;
-  // Check ext - test() js function on file's original name
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase()); 
-  // Check mimetype - users can easily change extension.
   const mimetype = filetypes.test(file.mimetype); //see file object at bottom
 
   if (mimetype && extname){
     return cb(null, true)
   } else {
     cb('Error: Must be image of following mimetypes: jpeg, png, tiff');
-    // ISSUE - this is not reached, but instead the error handler in post router
   }
 }
 
 // @route GET /
 // @desc loads form
-app.get('/',(req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
+// app.get('/',(req, res) => {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+
 
 // @route POST /upload
 // @desc uploads file to db
-// ('image') is from index.html name='' field on form input
 app.post('/upload', upload, (req, res) => {
 //  res.json({ file: req.file });
   res.redirect('/');
@@ -109,8 +102,7 @@ app.get('/files', (req, res) => {
         err: 'No files exist.'
       });
     }
-    // Files exist
-    return res.json(files); // send files array
+    return res.json(files);
   });
 });
 
@@ -118,13 +110,11 @@ app.get('/files', (req, res) => {
 // @desc display one file 
 app.get('/files/:filename', (req, res) => {
   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    // Check if file
     if(!file || file.length === 0){
       return res.status(404).json({
         err: 'No file exists.'
       });
     }
-    // File exists
     return res.json(file);
   });
 });
@@ -133,15 +123,12 @@ app.get('/files/:filename', (req, res) => {
 // @desc display image
 app.get('/image/:filename', (req, res) => {
   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    // Check if file
     if(!file || file.length === 0) {
       return res.status(404).json({
         err: 'No file exists'
       });
     }
-    // Check if image
     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/tiff'){
-      // Read output to browser
       const readstream = gfs.createReadStream(file.filename);
       readstream.pipe(res);
     } else {
@@ -179,6 +166,6 @@ module.exports = {
   // runServer,
   // closeServer,
   // DB_URL,
-  upload,
-  storage
+  // upload,
+  // storage
 }

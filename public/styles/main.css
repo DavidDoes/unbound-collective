@@ -45,7 +45,7 @@ h1, h2, h3, form, ul, li {
 
 .hero-image {
   /* The image used */
-  background-image: url('../images/hero-image.jpg');
+  background-image: url('../public/images/hero-image.jpg');
 
   /* Set a specific height */
   height: 100%;

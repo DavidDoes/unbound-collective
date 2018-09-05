@@ -3,6 +3,8 @@
 const express         = require('express');
 const app             = express();
 
+app.use(express.static('public'));
+
 
 //CHALLENGES ON INDEX.html
 //replace when seeding real data
@@ -58,4 +60,4 @@ $(function(){
   getAndDisplayUserSubmissions()
 })
 
-module.exports = app
+module.exports = app;
