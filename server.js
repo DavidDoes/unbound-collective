@@ -17,6 +17,7 @@ mongoose.Promise = global.Promise;
 // Middleware
 app.use(bodyParser.json());
 app.use(methodOverride('_method')); 
+// app.use(express.static('public'));
 
 const { DB_URL, PORT } = require('./config')
 
@@ -74,9 +75,12 @@ function checkFileType(file, cb){
 
 // @route GET /
 // @desc loads form
-app.get('/',(req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
+// app.get('/',(req, res) => {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+
 
 // @route POST /upload
 // @desc uploads file to db
@@ -159,6 +163,6 @@ module.exports = {
   // runServer,
   // closeServer,
   // DB_URL,
-  upload,
-  storage
+  // upload,
+  // storage
 }
