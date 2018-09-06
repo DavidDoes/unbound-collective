@@ -32,7 +32,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 let server;
-let gfs;
+// let gfs;
 
 function runServer(DB_URL, port = PORT){
   return new Promise((resolve, reject) => {
@@ -49,14 +49,9 @@ function runServer(DB_URL, port = PORT){
         mongoose.disconnect()
         reject(err)
       });
-    })
-    .once('open', () => {
-      gfs = Grid(DB_URL, mongoose.mongo);
-      gfs.collection('uploads');
-      
     });
   });
-}
+};
 
 function closeServer(){
   return mongoose.disconnect().then(() => {
