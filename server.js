@@ -18,11 +18,68 @@ mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
+// app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Mongo URI
 app.use(methodOverride('_method')); 
 
 const { DB_URL, PORT } = require('./config')
+
+// NEW IN THIS BRANCH
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+let server;
+
+function runServer(DB_URL, port = PORT){
+  return new Promise((resolve, reject) => {
+
+    mongoose.connect(DB_URL, err => {
+      if (err){
+        return reject(err)
+      }
+      server = app.listen(port, () =>{
+        console.log(`Your app is listening on port ${port}`)
+        resolve()
+      })
+      .on('error', err => {
+        mongoose.disconnect()
+        reject(err)
+      });
+    })
+    .once('open', () => {
+      let gfs = Grid(DB_URL, mongoose.mongo);
+      gfs.collection('uploads');
+
+      
+    });
+  });
+}
+
+function closeServer(){
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing server')
+      server.close(err => {
+        if(err){
+          return reject(err)
+        }
+        resolve()
+      })
+    })
+  })
+}
+
+if (require.main === module){
+  runServer(DB_URL) //change in production
+    .catch(err => console.error(err))
+}
+
+module.exports = {app, runServer, closeServer}
+
+// END NEW IN THIS BRANCH
 
 const conn = mongoose.createConnection(DB_URL);
 
@@ -82,7 +139,6 @@ function checkFileType(file, cb){
 //   res.sendFile(__dirname + '/public/index.html');
 // });
 
-app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 // @route POST /upload
@@ -153,13 +209,13 @@ app.delete('/files/:id', (req, res) => {
   })
 });
 
-app.listen(PORT, () => {
-  console.log(`Your app is listening on port ${PORT}`)
-})
-  .on('error', err => {
-    mongoose.disconnect();
-    reject(err);
-})
+// app.listen(PORT, () => {
+//   console.log(`Your app is listening on port ${PORT}`)
+// })
+//   .on('error', err => {
+//     mongoose.disconnect();
+//     reject(err);
+// })
 
 module.exports = {
   app,

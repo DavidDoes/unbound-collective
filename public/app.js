@@ -1,13 +1,5 @@
 'use strict';
 
-const express         = require('express');
-const app             = express();
-
-app.use(express.static('public'));
-
-
-//CHALLENGES ON INDEX.html
-//replace when seeding real data
 function getChallenges(callback){
   setTimeout(function(){
     callback(MOCK_CHALLENGES)
@@ -17,7 +9,6 @@ function getChallenges(callback){
 //display title and desc:
 function displayChallenges(data){ 
   // console.log(data)
-
   for (index in data.challenges){ 
     $('#challenges').append(
       '<div class="one-third"><img class="thumbnail" src="' + data.challenges[index].thumbnail + '"><h2>' + data.challenges[index].title + '</h2><p>' + data.challenges[index].description + '</p><p>' + data.challenges[index].entries + ' entries</p><p>Created by ' + data.challenges[index].creator + '</p></div>'
@@ -59,5 +50,3 @@ $(function(){
   getAndDisplayChallenges()
   getAndDisplayUserSubmissions()
 })
-
-module.exports = app;
