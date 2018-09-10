@@ -7,10 +7,8 @@ const crypto = require('crypto'); // core js module, filename generator
 const mongoose = require('mongoose');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
+// const Grid = require('gridfs-stream');
 const methodOverride = require('method-override');
-
-// const {Stream} = require('upload/models.js');
 
 const app = express();
 
@@ -27,6 +25,8 @@ app.use(methodOverride('_method'));
 const { DB_URL, PORT } = require('./config')
 
 // NEW IN THIS BRANCH
+let gfs = require('./upload/models.js');
+
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
