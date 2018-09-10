@@ -10,7 +10,7 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const methodOverride = require('method-override');
 
-const {Stream} = require('upload/models.js');
+// const {Stream} = require('upload/models.js');
 
 const app = express();
 
@@ -38,7 +38,7 @@ let server;
 function runServer(DB_URL, port = PORT){
   return new Promise((resolve, reject) => {
 
-    mongoose.connect(DB_URL, err => {
+    mongoose.connect(DB_URL, { useNewUrlParser: true }, err => {
       if (err){
         return reject(err)
       }
