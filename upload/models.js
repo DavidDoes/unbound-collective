@@ -9,15 +9,9 @@ mongoose.Promise = global.Promise
 // var gfsSchema = Grid(DB_URL, mongoose.mongo);
 
 var gfsSchema = mongoose.Schema({ //Grid?
-  DB_URL : String
+  DB_URL : String,
+  files: Array
 });
-
-// var StreamSchema = {
-//   function(gfs){
-//     gfs = Grid(DB_URL, mongoose.mongo)
-//     gfs.collection('uploads')
-//   }
-// };
 
 const gfs = mongoose.model('gfs', gfsSchema);
 
