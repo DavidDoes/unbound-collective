@@ -2,14 +2,23 @@
 
 const express           = require('express')
 const router            = express.Router()
-const { gfs, upload, Photo }   = require('./scripts')
+const { upload, Photo }   = require('./setup')
 // const bodyParser        = require('body-parser')
 // const jsonParser        = bodyParser.json()
 
 router.post('/', upload, (req, res) => {
-  res.json({ file: req.file });
-  // res.redirect('/');
-});
+  const photos = req.files.map((file) => {
+    return {
+      filename: file.filename,
+      originalname: file.originalname
+    }
+  })
+  Photo.insertMany(photos, (err, result) => {
+    if(err) return res.sendStatus(404)
+    res.json(result);
+  })
+  res.send('image uploaded')
+})
 
 router.get('/files', (req, res, next) => {
   Photo.findById(photo, (err, item) => {

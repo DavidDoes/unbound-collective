@@ -12,7 +12,6 @@ const methodOverride = require('method-override');
 
 mongoose.Promise = global.Promise
 
-// gfs and upload logic
 const app = express();
 app.use(methodOverride('_method')); 
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -30,7 +29,7 @@ const Photo = mongoose.model('Photo', PhotoSchema)
 mongoose.connection.on('open', () => {
   const photo = new Photo
 
-  photo.img.data = fs.readFile(path) //where is path defined?
+  photo.img.data = fs.readFile(DB_URL) //where is path defined?
   photo.img.contentType = 'image/png' || 'image/tiff' || 'image/jpeg'
   photo.save( (err) => {
     if(err) throw err
@@ -80,4 +79,4 @@ function checkFileType(file, cb){
   }
 }
 
-module.exports = { upload }
+module.exports = { upload, Photo }

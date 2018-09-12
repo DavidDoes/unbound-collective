@@ -1,6 +1,6 @@
 'use strict'
 
-const {Upload} = require('./scripts')
+const {Upload} = require('./setup')
 const {router} = require('./router')
 
 module.exports = {Upload, router}
