@@ -1,13 +1,14 @@
 'use strict';
 
 const express = require('express');
-const path = require('path');
 const crypto = require('crypto'); // core js module, filename generator
 const mongoose = require('mongoose');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const methodOverride = require('method-override'); //for DELETE w/o AJAX - REWRITE TO USE AJAX W/ GFS?
+const fs = require('fs');
+const path = require('path'); //core node module
+const Schema = mongoose.Schema;
+const methodOverride = require('method-override');
 
 mongoose.Promise = global.Promise
 
@@ -16,21 +17,26 @@ const app = express();
 app.use(methodOverride('_method')); 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-// const conn = mongoose.createConnection('mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]', options);
+const { DB_URL } = require('../config')
 
-const { DB_URL, PORT } = require('../config')
+// Schema
+const PhotoSchema = mongoose.Schema({
+  img: { data: Buffer, contentType: String }
+})
 
-// Create Mongo connection
-const conn = mongoose.connect(DB_URL, PORT );
+// Model
+const Photo = mongoose.model('Photo', PhotoSchema)
 
-let gfs;
+mongoose.connection.on('open', () => {
+  const photo = new Photo
 
-conn.once('open', () => {
-  console.log(conn.db);
-  // Init stream
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('uploads');
-});
+  photo.img.data = fs.readFile(path) //where is path defined?
+  photo.img.contentType = 'image/png' || 'image/tiff' || 'image/jpeg'
+  photo.save( (err) => {
+    if(err) throw err
+    console.error('saved photo to mongo')
+  })
+})
 
 // Create storage object engine
 const storage = new GridFsStorage({
@@ -74,4 +80,4 @@ function checkFileType(file, cb){
   }
 }
 
-module.exports = { gfs, upload }
+module.exports = { upload }

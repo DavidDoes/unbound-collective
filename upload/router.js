@@ -2,25 +2,22 @@
 
 const express           = require('express')
 const router            = express.Router()
-const { gfs, upload }   = require('./scripts')
+const { gfs, upload, Photo }   = require('./scripts')
 // const bodyParser        = require('body-parser')
 // const jsonParser        = bodyParser.json()
 
-
 router.post('/', upload, (req, res) => {
-//  res.json({ file: req.file });
-  res.redirect('/');
+  res.json({ file: req.file });
+  // res.redirect('/');
 });
 
-router.get('/files', (req, res) => {
-  gfs.files.find().toArray((err, files) => {
-    if(!files || files.length === 0){
-      return res.status(404).json({
-        err: 'No files exist.'
-      });
-    }
-    return res.json(files);
-  });
+router.get('/files', (req, res, next) => {
+  Photo.findById(photo, (err, item) => {
+    if(err) return next(err)
+    res.contentType(item.photo.contentType)
+    res.send(item.photo.data)
+  })
+    return res.json(photo);
 });
 
 router.get('/files/:filename', (req, res) => {
