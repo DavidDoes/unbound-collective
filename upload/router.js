@@ -7,16 +7,7 @@ const { upload, Photo }   = require('./setup')
 // const jsonParser        = bodyParser.json()
 
 router.post('/', upload, (req, res) => {
-  const photos = req.files.map((file) => {
-    return {
-      filename: file.filename,
-      originalname: file.originalname
-    }
-  })
-  Photo.insertMany(photos, (err, result) => {
-    if(err) return res.sendStatus(404)
-    res.json(result);
-  })
+
   res.send('image uploaded')
 })
 

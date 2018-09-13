@@ -4,10 +4,8 @@ const express = require('express');
 const crypto = require('crypto'); // core js module, filename generator
 const mongoose = require('mongoose');
 const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
 const fs = require('fs');
 const path = require('path'); //core node module
-const Schema = mongoose.Schema;
 const methodOverride = require('method-override');
 
 mongoose.Promise = global.Promise
@@ -29,7 +27,14 @@ const Photo = mongoose.model('Photo', PhotoSchema)
 mongoose.connection.on('open', () => {
   const photo = new Photo
 
-  photo.img.data = fs.readFile(DB_URL) //where is path defined?
+  photo.img.data = fs.readFile(storage, (err, data) => {
+    if (err) {
+      throw err
+    } else {
+      console.log(data)
+      content = data
+    }
+  }) //where is path defined?
   photo.img.contentType = 'image/png' || 'image/tiff' || 'image/jpeg'
   photo.save( (err) => {
     if(err) throw err
@@ -38,7 +43,7 @@ mongoose.connection.on('open', () => {
 })
 
 // Create storage object engine
-const storage = new GridFsStorage({
+const storage = multer.memoryStorage({ // was new GridFsStorage
   url: DB_URL,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
