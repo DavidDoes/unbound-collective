@@ -1,5 +1,6 @@
 'use strict'
 
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -22,7 +23,7 @@ const {router: uploadRouter} = require('./upload')
 app.use('/users', usersRouter)
 app.use('/submissions', submissionsRouter)
 app.use('/challenges', challengesRouter)
-app.use('/uploads', uploadRouter)
+app.use('/upload', uploadRouter)
 
 const { DB_URL, PORT } = require('./config')
 
@@ -33,7 +34,6 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 let server;
-// let gfs;
 
 function runServer(DB_URL, port = PORT){
   return new Promise((resolve, reject) => {

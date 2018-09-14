@@ -1,5 +1,7 @@
 'use strict'
+console.log(process.env.DB_URL)
+const DB_URL = process.env.DB_URL || 'mongodb://localhost/challenge-photos';
 
-exports.DB_URL = process.env.DB_URL || 'mongodb://admin:password1@ds133252.mlab.com:33252/challenges-photos';
+const PORT = process.env.PORT || 8080;
 
-exports.PORT = process.env.PORT || 8080;
+module.exports = { DB_URL, PORT }
