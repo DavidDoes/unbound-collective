@@ -3,35 +3,47 @@
 const express           = require('express')
 const router            = express.Router()
 const { upload, Photo }   = require('./scripts')
+const cloudinary = require('cloudinary')
+
 // const bodyParser        = require('body-parser')
 // const jsonParser        = bodyParser.json()
 
 router.post('/', upload, (req, res) => {
-  console.log(req.file);
-  Photo.create({ data: req.file.buffer, contentType: req.file.mimetype })
-    .then(function(data){
-      console.log(data)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  res.send('image uploaded')
+  // console.log(req.file);
+  cloudinary.uploader.upload(req.file.path, (result) => {
+    req.body.image = result.secure_url
+    req.body.id = result.public_id
+    // req.body.image.creator = { //auth not yet implemented
+    //   id: req.user._id,
+    //   username: req.user.username
+    // }
+  })
+  Photo.create(
+    req.body.image, (err, photo) => {
+      if(err){
+        res.send('error', err.message)
+        return res.redirect('back')
+      }
+      res.redirect('/upload/' + photo.id)
+    }
+  )
+  console.log(req.body)
 })
 
 router.get('/files', (req, res, next) => {
-  Photo.findById(photo, (err, item) => {
-    if(err) return next(err)
-    res.contentType(item.photo.contentType)
-    res.send(item.photo.data)
-  })
-    return res.json(photo);
+
 });
 
 router.get('/files/:filename', (req, res) => {
 
 });
 
-router.get('/image/:filename', (req, res) => {
+router.get('/:id', (req, res) => {
+  // Photo
+  //   .findById(req.params.id)
+  //   .then(
+  //     console.log(req.params)
+  //   )
 
 });
 

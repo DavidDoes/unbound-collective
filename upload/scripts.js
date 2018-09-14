@@ -6,10 +6,11 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path'); // core node module
 const methodOverride = require('method-override');
+const cloudinary = require('cloudinary')
+
 
 mongoose.Promise = global.Promise
 
-// gfs and upload logic
 const app = express();
 app.use(methodOverride('_method')); 
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -25,7 +26,19 @@ const PhotoSchema = mongoose.Schema({
 const Photo = mongoose.model('Photo', PhotoSchema)
 
 // Create storage object engine
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  filename: function(req, file, callback){
+    callback(null, Date.now() + file.originalname)
+  }
+});
+
+// Accept image files only
+// const imageFilter = function(req, file, cb){
+//   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+//     return cb(new Error('Ensure file is JPEG or PNG.'), false)
+//   }
+//   cb(null, true)
+// }
 
 const upload = multer({
   // :storage is variable defined above
@@ -47,5 +60,11 @@ function checkFileType(file, cb){
     cb('Error: Must be image of following mimetypes: jpeg, png, tiff');
   }
 }
+
+cloudinary.config({
+  cloud_name: 'challenge-photos',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 module.exports = { upload, Photo }
