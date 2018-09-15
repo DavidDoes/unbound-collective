@@ -30,8 +30,8 @@ router.post('/', upload, (req, res) => {
   console.log(req.body)
 })
 
-router.get('/files', (req, res, next) => {
-
+router.get('/', (req, res, next) => {
+  res.send('hello')
 });
 
 router.get('/files/:filename', (req, res) => {
@@ -39,6 +39,7 @@ router.get('/files/:filename', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+  res.send('hello from upload/:id')
   // Photo
   //   .findById(req.params.id)
   //   .then(
