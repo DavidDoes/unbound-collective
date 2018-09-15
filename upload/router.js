@@ -18,11 +18,11 @@ router.post('/', upload, (req, res) => {
     //   username: req.user.username
     // }
   })
+
   Photo.create(
     req.body.image, (err, photo) => {
       if(err){
         res.send('error', err.message)
-        return res.redirect('back')
       }
       res.redirect('/upload/' + photo.id)
     }
@@ -30,26 +30,13 @@ router.post('/', upload, (req, res) => {
   console.log(req.body)
 })
 
-router.get('/', (req, res, next) => {
-  res.send('hello')
-});
-
-router.get('/files/:filename', (req, res) => {
-
-});
-
 router.get('/:id', (req, res) => {
   res.send('hello from upload/:id')
-  // Photo
-  //   .findById(req.params.id)
-  //   .then(
-  //     console.log(req.params)
-  //   )
 
 });
 
-router.delete('/files/:id', (req, res) => {
-
+router.delete('/:id', (req, res) => {
+  res.send('photo deleted')
 });
 
 if (require.main === module){
