@@ -14,8 +14,7 @@ router.post('/', upload, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     req.body.id = result.public_id
-    res.redirect(CLOUDINARY_BASE_URL + '/image/upload/' + result.public_id)
-    console.log(result.public_id)
+    res.redirect(CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id)
     // req.body.image.creator = { //auth not yet implemented
     //   id: req.user._id,
     //   username: req.user.username
