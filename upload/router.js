@@ -2,8 +2,9 @@
 
 const express           = require('express')
 const router            = express.Router()
-const { upload, Photo }   = require('./scripts')
-const cloudinary = require('cloudinary')
+const { upload, Photo } = require('./scripts')
+const cloudinary        = require('cloudinary')
+const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 // const bodyParser        = require('body-parser')
 // const jsonParser        = bodyParser.json()
@@ -13,7 +14,8 @@ router.post('/', upload, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     req.body.id = result.public_id
-    res.redirect('/upload/' + req.body.id)
+    res.redirect(CLOUDINARY_BASE_URL + '/image/upload/' + result.public_id)
+    console.log(result.public_id)
     // req.body.image.creator = { //auth not yet implemented
     //   id: req.user._id,
     //   username: req.user.username
@@ -33,7 +35,7 @@ router.post('/', upload, (req, res) => {
 
 router.get('/:id', (req, res) => {
   res.send('hello from upload/:id')
-  
+  cloudinary.image(public_id)
 });
 
 router.delete('/:id', (req, res) => {
