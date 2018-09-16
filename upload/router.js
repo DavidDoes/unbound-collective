@@ -14,13 +14,13 @@ router.post('/', upload, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     req.body.id = result.public_id
+    // change next line once plugged into submissions
     res.redirect(CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id)
     // req.body.image.creator = { //auth not yet implemented
     //   id: req.user._id,
     //   username: req.user.username
     // }
   })
-
   // Photo.create(
   //   req.body.image, (err, photo) => {
   //     if(err){
@@ -31,11 +31,6 @@ router.post('/', upload, (req, res) => {
   // )
   // console.log(req.body)
 })
-
-router.get('/:id', (req, res) => {
-  res.send('hello from upload/:id')
-  cloudinary.image(public_id)
-});
 
 router.delete('/:id', (req, res) => {
   res.send('photo deleted')

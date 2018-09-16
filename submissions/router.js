@@ -42,7 +42,7 @@ router.post('/', jsonParser, function(req, res){
     creator,
     challenge,
     dateCreated: Date,
-    photo
+    photo: CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id
   })
   .then(submission => {
     return res.status(201).json(submission.serialize())
