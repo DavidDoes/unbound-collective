@@ -15,9 +15,9 @@ router.post('/', upload, (req, res) => {
     Photo.create({
       image: CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id
     })
-    .then(
-      photo => res.json(photo.map(photo => photo.serialize()))
-    )
+    // .then(
+    //   photo => res.json(photo.map(photo => photo.serialize()))
+    // )
     // change once Submissions route fully implemented: 
     res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id)
     // add following lines when auth implemented
@@ -29,6 +29,12 @@ router.post('/', upload, (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
+  // delete from cloudinary
+  // NOT WORKING - may need to go into its own fn and invoked via form?
+  // https://cloudinary.com/documentation/node_image_upload#update_and_delete_images
+  // cloudinary.v2.uploader.destroy(req.params.id, function(error, result){console.log(result, error)});
+    
+  // delete from db
   Photo
     .remove({ Photo: req.params.id })
     .then(() => {
