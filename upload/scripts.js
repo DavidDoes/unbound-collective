@@ -17,13 +17,13 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 const { DB_URL } = require('../config')
 
-// Schema
-const PhotoSchema = mongoose.Schema({
-  data: Buffer, contentType: String
-})
+// // Schema
+// const PhotoSchema = mongoose.Schema({
+//   data: Buffer, contentType: String
+// })
 
-// Model
-const Photo = mongoose.model('Photo', PhotoSchema)
+// // Model
+// const Photo = mongoose.model('Photo', PhotoSchema)
 
 // Create storage object engine
 const storage = multer.diskStorage({
@@ -67,4 +67,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-module.exports = { upload, Photo }
+module.exports = { upload }

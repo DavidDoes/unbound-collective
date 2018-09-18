@@ -2,6 +2,7 @@
 
 const {Upload} = require('./scripts')
 const {router} = require('./router')
+const {Photo}  = require('./models')
 
-module.exports = {Upload, router}
+module.exports = {Photo, Upload, router}
 
