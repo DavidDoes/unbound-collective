@@ -15,30 +15,12 @@ const app = express();
 app.use(methodOverride('_method')); 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-const { DB_URL } = require('../config')
-
-// // Schema
-// const PhotoSchema = mongoose.Schema({
-//   data: Buffer, contentType: String
-// })
-
-// // Model
-// const Photo = mongoose.model('Photo', PhotoSchema)
-
 // Create storage object engine
 const storage = multer.diskStorage({
   filename: function(req, file, callback){
     callback(null, Date.now() + file.originalname)
   }
 });
-
-// Accept image files only
-// const imageFilter = function(req, file, cb){
-//   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-//     return cb(new Error('Ensure file is JPEG or PNG.'), false)
-//   }
-//   cb(null, true)
-// }
 
 const upload = multer({
   // :storage is variable defined above
@@ -51,8 +33,8 @@ const upload = multer({
 
 function checkFileType(file, cb){
   const filetypes = /jpeg|jpg|png|tif|tiff/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase()); 
-  const mimetype = filetypes.test(file.mimetype); //see file object at bottom
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+  const mimetype = filetypes.test(file.mimetype)
 
   if (mimetype && extname){
     return cb(null, true)

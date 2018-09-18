@@ -18,12 +18,10 @@ router.post('/', upload, (req, res) => {
     .then(
       photo => res.json(photo.map(photo => photo.serialize()))
     )
+    // change once Submissions route fully implemented: 
     res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id)
-    // change next line once plugged into submissions
-
-    // res.redirect(CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id)
-
-    // req.body.image.creator = { //auth not yet implemented
+    // add following lines when auth implemented
+    // req.body.image.creator = { 
     //   id: req.user._id,
     //   username: req.user.username
     // }
@@ -31,8 +29,20 @@ router.post('/', upload, (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  res.send('photo deleted')
-});
+  Photo
+    .remove({ Photo: req.params.id })
+    .then(() => {
+      Photo
+        .findByIdAndRemove(req.params.id)
+        .then(() => {
+          res.status(204).json({ message: 'successfully deleted' })
+        })
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).json({ err: 'Internal server error' })
+    })
+})
 
 if (require.main === module){
   runServer(DB_URL)
