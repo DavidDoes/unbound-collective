@@ -50,10 +50,19 @@ router.post('/', upload, (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete from cloudinary
-  // NOT WORKING
   // https://cloudinary.com/documentation/node_image_upload#update_and_delete_images
-  cloudinary.v2.uploader.destroy(req.params.cloudinary_id, function(error, result){console.log(result, error)});
-    
+  Photo
+    .findById(req.params.id)
+    .then(photo => {
+      cloudinary.v2.uploader
+      .destroy(photo.cloudinary_id, (err, result) => {
+        console.log(result, err)
+      })
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
+    })    
   // delete from db
   Photo
     .remove({ Photo: req.params.id })
@@ -75,10 +84,11 @@ router.get('/', (req, res) => {
     .find()
     .then(photo => {
       res.send(photo)
+      console.log(photo[0].cloudinary_id)
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
+      console.error(err)
+      res.status(500).json({ error: 'something went terribly wrong' })
     })
 })
 
