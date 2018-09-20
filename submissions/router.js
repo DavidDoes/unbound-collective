@@ -5,12 +5,18 @@ const bodyParser    = require('body-parser')
 const {Submission}  = require('./models')
 const router        = express.Router()
 const jsonParser    = bodyParser.json()
+const cloudinary        = require('cloudinary')
+const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 router.post('/', jsonParser, function(req, res){
   // var newPhoto = new Item();
   // newPhoto.img.data = fs.readFileSync(req.files.userPhoto.path);
   // newPhoto.img.contentType = 'image/png' || 'image/jpg' || 'image/jpeg' || 'image/tiff' || 'image/tif';
   // newPhoto.save();
+
+  cloudinary.uploader.upload(req.file.path, (result) => {
+    req.body.image = result.secure_url
+    req.body.id = result.public_id
 
   const requiredFields = ['creator', 'challenge', 'photo']
   const missingField = requiredFields.find(field => !(field in req.body))
@@ -41,7 +47,8 @@ router.post('/', jsonParser, function(req, res){
   return Submission.create({
     creator,
     challenge,
-    dateCreated: Date,
+    dateCreated: Date.now,
+    // rewrite to reference Photo document
     photo: CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id
   })
   .then(submission => {
@@ -99,6 +106,7 @@ router.get('/', (req, res) => {
   return Submission.find()
     .then(submissions => res.json(submissions.map(submission => submission.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error' }))
+})
 })
 
 module.exports = {router}
