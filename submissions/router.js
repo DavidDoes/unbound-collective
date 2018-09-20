@@ -100,13 +100,23 @@ router.delete('/:id', (req, res) => {
       res.status(500).json({ err: 'Internal server error' })
     })
 })
-//FOR TESTING ONLY
-//do not use this method in production
+
+
 router.get('/', (req, res) => {
-  return Submission.find()
-    .then(submissions => res.json(submissions.map(submission => submission.serialize())))
-    .catch(err => res.status(500).json({message: 'Internal server error' }))
-})
+  Submission
+    .find()
+    .then(submission => {
+      res.json({
+        submission: submission.map(
+          (submission) => submission.serialize())
+      });
+    })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+    })
+  })
 })
 
 module.exports = {router}

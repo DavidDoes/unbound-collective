@@ -1,8 +1,11 @@
 'use strict';
 
-// function getChallenges(){
-
-// };
+function getChallenges(callback){
+  setTimeout(function(){
+    callback(MOCK_CHALLENGES)
+  }, 100
+  )
+}
 
 //display title and desc:
 function displayChallenges(data){ 

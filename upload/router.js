@@ -17,8 +17,8 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'something went terribly wrong' });
-    });
-});
+    })
+})
 //
 
 router.post('/', upload, (req, res) => {
@@ -67,6 +67,18 @@ router.delete('/:id', (req, res) => {
     .catch(err => {
       console.error(err)
       res.status(500).json({ err: 'Internal server error' })
+    })
+})
+
+router.get('/', (req, res) => {
+  Photo
+    .find()
+    .then(photo => {
+      res.send(photo)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
     })
 })
 
