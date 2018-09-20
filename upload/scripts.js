@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const crypto = require('crypto'); // core js module, filename generator
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path'); // core node module

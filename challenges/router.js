@@ -56,7 +56,7 @@ router.put('/:id', jsonParser, (req, res) => {
   }
 
   const updated = {}
-  const updateableFields = ['title', 'description', 'numSubmissions']
+  const updateableFields = ['title']
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field]
@@ -77,8 +77,6 @@ router.put('/:id', jsonParser, (req, res) => {
       res.status(200).json({
         id: updatedChallenge.id,
         title: updatedChallenge.title,
-        description: updatedChallenge.description,
-        numSubmissions: updatedChallenge.numSubmissions
       })
     })
     .catch(err => res.status(500).json({

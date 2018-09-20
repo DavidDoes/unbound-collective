@@ -7,17 +7,33 @@ const { Photo }         = require('./models')
 const cloudinary        = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
+// GET BY ID Route only for development
+router.get('/:id', (req, res) => {
+  Photo
+    .findById(req.params.id)
+    .then(photo => {
+      res.send(photo)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'something went terribly wrong' });
+    });
+});
+//
+
 router.post('/', upload, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     req.body.id = result.public_id
+    console.log(result.public_id)
+    console.log(req.body.id)
 
-    Photo.create({
-      image: CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id
+    Photo
+      .create({
+        cloudinary_id: result.public_id,
+        image: CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id
     })
-    // .then(
-    //   photo => res.json(photo.map(photo => photo.serialize()))
-    // )
+
     // change once Submissions route fully implemented: 
     res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id)
     // add following lines when auth implemented
@@ -26,13 +42,17 @@ router.post('/', upload, (req, res) => {
     //   username: req.user.username
     // }
   })
+  .catch(err => {
+    console.error(err)
+    res.status(500).json({ error: 'Internal server error' })
+  })
 })
 
 router.delete('/:id', (req, res) => {
   // delete from cloudinary
-  // NOT WORKING - may need to go into its own fn and invoked via form?
+  // NOT WORKING
   // https://cloudinary.com/documentation/node_image_upload#update_and_delete_images
-  // cloudinary.v2.uploader.destroy(req.params.id, function(error, result){console.log(result, error)});
+  cloudinary.v2.uploader.destroy(req.params.cloudinary_id, function(error, result){console.log(result, error)});
     
   // delete from db
   Photo
