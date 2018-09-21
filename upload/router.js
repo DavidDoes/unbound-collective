@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'something went terribly wrong' });
+      res.status(500).json({ error: 'Internal server error' });
     })
 })
 //
