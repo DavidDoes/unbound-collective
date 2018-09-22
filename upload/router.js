@@ -25,8 +25,6 @@ router.post('/', upload, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     req.body.id = result.public_id
-    console.log(result.public_id)
-    console.log(req.body.id)
 
     Photo
       .create({
