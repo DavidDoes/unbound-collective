@@ -1,19 +1,22 @@
 'use strict'
 
-const express       = require('express')
-const bodyParser    = require('body-parser')
-const Submission  = require('../models/submissions')
-const router        = express.Router()
-const jsonParser    = bodyParser.json()
-const cloudinary        = require('cloudinary')
+const express             = require('express')
+const bodyParser          = require('body-parser')
+const router              = express.Router()
+const jsonParser          = bodyParser.json()
+
+const cloudinary          = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
-router.post('/', jsonParser, function(req, res){
-  cloudinary.uploader.upload(req.file.path, (result) => {
-    req.body.image = result.secure_url
-    req.body.id = result.public_id
+const { Submission }      = require('../models/submissions')
+const { Challenge }       = require('../models/challenges')
 
-  const requiredFields = ['creator', 'challenge', 'photo']
+router.post('/', jsonParser, function(req, res){
+  // cloudinary.uploader.upload(req.file.path, (result) => {
+  //   req.body.image = result.secure_url
+  //   req.body.id = result.public_id
+
+  const requiredFields = ['creator', 'challenge', 'image']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField){
@@ -37,15 +40,11 @@ router.post('/', jsonParser, function(req, res){
     })
   }
 
-  let {creator, challenge = ''} = req.body
+  let creator = req.creator.id
+  let {challenge, image} = req.body
+  let newSubmission = {creator, challenge, image}
 
-  return Submission.create({
-    creator,
-    challenge,
-    dateCreated: Date.now,
-    // rewrite to reference Photo document
-    photo: CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id
-  })
+  return Submission.create(newSubmission)
   .then(submission => {
     return res.status(201).json(submission.serialize())
   })
@@ -112,6 +111,6 @@ router.get('/', (req, res) => {
         res.status(500).json({message: 'Internal server error'});
     })
   })
-})
+// })
 
 module.exports = {router}

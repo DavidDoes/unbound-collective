@@ -8,6 +8,8 @@ const path = require('path'); // core node module
 const methodOverride = require('method-override');
 const cloudinary = require('cloudinary')
 
+// THIS MIDDLEWARE IS NO LONGER REFERENCED
+
 mongoose.Promise = global.Promise
 
 const app = express();

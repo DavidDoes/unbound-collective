@@ -2,8 +2,8 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const Challenge = require('../models/challenges')
-const Submission = require('../models/submissions')
+const { Challenge } = require('../models/challenges')
+const { Submission } = require('../models/submissions')
 const router = express.Router()
 const jsonParser = bodyParser.json()
 

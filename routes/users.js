@@ -1,11 +1,11 @@
 'use strict'
 
-const express       = require('express')
-const bodyParser    = require('body-parser')
-const jsonParser    = bodyParser.json()
-const User        = require('../models/users')
-const Submission = require('../models/submissions')
-const router        = express.Router()
+const express         = require('express')
+const bodyParser      = require('body-parser')
+const jsonParser      = bodyParser.json()
+const { User }        = require('../models/users')
+const { Submission }  = require('../models/submissions')
+const router          = express.Router()
 
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username']
