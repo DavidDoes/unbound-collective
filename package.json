@@ -32,7 +32,6 @@
     "express": "^4.16.3",
     "gridfs-stream": "^1.1.1",
     "json-parser": "^1.1.5",
-    "lightbox2": "^2.10.0",
     "method-override": "^3.0.0",
     "mongodb": "^3.1.4",
     "mongoose": "^5.2.9",
