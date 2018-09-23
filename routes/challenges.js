@@ -2,14 +2,29 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const {
-  Challenge
-} = require('./models')
+const Challenge = require('../models/challenges')
+const Submission = require('../models/submissions')
 const router = express.Router()
 const jsonParser = bodyParser.json()
 
+router.get('/', (req, res) => {
+  Challenge
+    .find()
+    .then(challenge => {
+      res.json({
+        challenge: challenge.map(
+          (challenge) => challenge.serialize())
+      });
+    })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+    })
+  })
+
 router.post('/', jsonParser, function (req, res) {
-  const requiredFields = ['title', 'creator']
+  const requiredFields = ['title', 'creator', 'thumbnail']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField) {
@@ -21,7 +36,7 @@ router.post('/', jsonParser, function (req, res) {
       location: missingField
     })
   }
-  const stringFields = ['title', 'creator']
+  const stringFields = ['title', 'creator', 'thumbnail']
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   )
@@ -34,14 +49,10 @@ router.post('/', jsonParser, function (req, res) {
     })
   }
 
-  let {
-    title,
-    creator = ''
-  } = req.body
+  let { title, creator, thumbnail = '' } = req.body
 
   return Challenge.create({
-      title,
-      creator
+      title, creator, thumbnail
     })
     .then(challenge => {
       return res.status(201).json(challenge.serialize())
@@ -105,22 +116,6 @@ router.delete('/:id', (req, res) => {
       })
     })
 })
-
-router.get('/', (req, res) => {
-  Challenge
-    .find()
-    .then(challenge => {
-      res.json({
-        challenge: challenge.map(
-          (challenge) => challenge.serialize())
-      });
-    })
-    .catch(
-      err => {
-        console.error(err);
-        res.status(500).json({message: 'Internal server error'});
-    })
-  })
 
 module.exports = {
   router

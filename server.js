@@ -15,15 +15,15 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-const {router: usersRouter} = require('./users')
-const {router: submissionsRouter} = require('./submissions')
-const {router: challengesRouter} = require('./challenges')
-const {router: uploadRouter} = require('./upload')
+const {router: usersRouter} = require('./routes/users.js')
+const {router: submissionsRouter} = require('./routes/submissions')
+const {router: challengesRouter} = require('./routes/challenges')
+const {router: uploadRouter} = require('./routes/photos')
 
 app.use('/users', usersRouter)
 app.use('/submissions', submissionsRouter)
 app.use('/challenges', challengesRouter)
-app.use('/upload', uploadRouter)
+app.use('/photos', uploadRouter)
 
 const { DB_URL, PORT } = require('./config')
 

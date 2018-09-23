@@ -1,6 +1,6 @@
 'use strict'
 
-const DB_URL = process.env.DB_URL || 'mongodb://localhost/challenge-photos';
+const DB_URL = process.env.DB_URL
 
 const PORT = process.env.PORT || 8080;
 

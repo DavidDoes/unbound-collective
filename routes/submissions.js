@@ -2,55 +2,17 @@
 
 const express       = require('express')
 const bodyParser    = require('body-parser')
-const {Submission}  = require('./models')
+const Submission  = require('../models/submissions')
 const router        = express.Router()
 const jsonParser    = bodyParser.json()
-
 const cloudinary        = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
-const { upload }        = require('../upload/scripts')
-const { Photo }         = require('../upload/models')
 
-// router.post('/', jsonParser, function(req, res){
-//   const requiredFields = ['creator', 'challenge', 'photo']
-//   const missingField = requiredFields.find(field => !(field in req.body))
+router.post('/', jsonParser, function(req, res){
+  cloudinary.uploader.upload(req.file.path, (result) => {
+    req.body.image = result.secure_url
+    req.body.id = result.public_id
 
-//   if (missingField){
-//     return res.status(422).json({
-//       code: 422,
-//       reason: 'ValidationError',
-//       message: 'Missing field',
-//       location: missingField
-//     })
-//   }
-//   const stringFields = ['creator', 'challenge']
-//   const nonStringField = stringFields.find(
-//     field => field in req.body && typeof req.body[field] !== 'string'
-//   )
-//   if (nonStringField){
-//     return res.status(422).json({
-//       code: 422,
-//       reason: 'ValidationError',
-//       message: 'Incorrect field type: expected string',
-//       location: nonStringField
-//     })
-//   }
-
-//   let {creator, challenge = ''} = req.body
-
-//   return Submission.create({
-//     creator,
-//     challenge,
-//     dateCreated: Date.now,
-//     // rewrite to reference Photo document
-//     photo: CLOUDINARY_BASE_URL + 'image/upload/' + result.public_id
-//   })
-//   .then(submission => {
-//     return res.status(201).json(submission.serialize())
-//   })
-// })
-
-router.post('/', jsonParser, upload, function(req, res){
   const requiredFields = ['creator', 'challenge', 'photo']
   const missingField = requiredFields.find(field => !(field in req.body))
 
@@ -74,22 +36,6 @@ router.post('/', jsonParser, upload, function(req, res){
       location: nonStringField
     })
   }
-
-  cloudinary.uploader.upload(req.file.path, (result) => {
-    req.body.image = result.secure_url
-    req.body.id = result.public_id
-
-    Photo
-      .create({
-        cloudinary_id: result.public_id,
-        image: CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id
-    })
-    res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + req.body.id)
-  })
-  .catch(err => {
-    console.error(err)
-    res.status(500).json({ error: 'Internal server error' })
-  })
 
   let {creator, challenge = ''} = req.body
 
@@ -104,31 +50,6 @@ router.post('/', jsonParser, upload, function(req, res){
     return res.status(201).json(submission.serialize())
   })
 })
-
-router.post('/', jsonParser, function(req, res){
-  const requiredFields = ['creator', 'challenge', 'photo']
-  const missingField = requiredFields.find(field => !(field in req.body))
-
-  if (missingField){
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Missing field',
-      location: missingField
-    })
-  }
-  const stringFields = ['creator', 'challenge']
-  const nonStringField = stringFields.find(
-    field => field in req.body && typeof req.body[field] !== 'string'
-  )
-  if (nonStringField){
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected string',
-      location: nonStringField
-    })
-  }
 
 router.put('/:id', jsonParser, (req, res) => {
   if(!(req.params.id && req.body.id && req.params.id === req.body.id)){
