@@ -2,9 +2,10 @@
 
 // const app = (function() {
 
+
+// Challenges
   const storeChallenges = {
-    challenges: [],
-    currentChallenge: null
+    challenges: []
   }
 
   function getChallenges(){
@@ -14,8 +15,8 @@
       async: true,
       crossDomain: true,
       url: '/challenges',
-      method: 'GET',
-      // headers { // implement with auth
+      method: 'GET'
+      // headers: { // implement with auth
 
       // },
     }
@@ -25,21 +26,58 @@
     })
   }
 
-  //display title and desc:
   function displayChallenges(data){ 
     const challenges = storeChallenges.challenges.map(challenge => `
-        '<div class="one-third"><img class="thumbnail" src="${challenge.thumbnail}"><h2>'${challenge.title}'</h2>
+        <div class="one-third card"><img class="thumbnail" src="${challenge.thumbnail}"><h2>${challenge.title}</h2>
+        </div>
         `)
     $('#challenges').append(challenges)
   }
 
-  //run fns above
   function getAndDisplayChallenges(){
     getChallenges(displayChallenges)
   }
 
+  // Submissions
+  const storeSubmissions = {
+    submissions: []
+  }
+
+  function getSubmissions(){
+    console.log('getSubmissions() invoked')
+    const settings = {
+      async: true,
+      crossDomain: true,
+      url: '/submissions',
+      method: 'GET'
+      // headers: {}
+    }
+    $.ajax(settings).done((res) => {
+      storeSubmissions.submissions = res.submissions
+      displaySubmissions()
+    })
+  }
+
+  function displaySubmissions(){
+    const submission = storeSubmissions.submissions.map(submission => `
+    <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
+    <p>Submitted by ${submission.creator}.</p>
+    </div>
+    `)
+    $('')
+  }
+
+  function getAndDisplaySubmissions(){
+    getSubmissions(displaySubmissions)
+  }
+
+//
   function bindEventListeners(){
     console.log('hello from bindEventListeners()')
+    // user clicks on challenge
+    $(document).on('click', '.card', (event) => {
+      getAndDisplaySubmissions()
+    })
     // handleSignupSubmit()
     // handleLoginSubmit()
 
@@ -55,32 +93,10 @@
     getChallenges()
   }
 
-  //SUBMISSIONS ON DASHBOARD
-  function getUserSubmissions(callback){
-    console.log('hello from getUserSubmissions()')
-  };
-
-  function displayUserSubmissions(data){
-    // console.log(data)
-    let currentUser = "ProUser" // username of current logged-in user
-
-    for (index in data.submissions){ 
-      if (data.submissions[index].creator === currentUser){
-        $('#userSubmissions').append(
-          '<div class="one-third"><p>Submitted to Challenge <b>' + data.submissions[index].challenge + '</b></p><p>' + 'Submitted ' + data.submissions[index].dateCreated + '</p></div>'
-        )
-      }
-    }
-  }
-
-  function getAndDisplayUserSubmissions(){
-    getUserSubmissions(displayUserSubmissions)
-  }
-
-
   $(function(){
+    bindEventListeners()
     getAndDisplayChallenges()
-    getAndDisplayUserSubmissions()
+    getAndDisplaySubmissions()
   })
 
   // Exposed methods in other files

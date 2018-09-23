@@ -17,6 +17,7 @@ SubmissionSchema.methods.serialize = function(){
     dateCreated: this.dateCreated,
     challenge: this.challenge,
     creator: this.creator,
+    photo: this.photo
   }
 }
 
