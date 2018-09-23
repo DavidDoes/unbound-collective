@@ -1,10 +1,26 @@
 'use strict';
 
-function getChallenges(callback){
-  setTimeout(function(){
-    callback(MOCK_CHALLENGES)
-  }, 100
-  )
+const storeChallenges = {
+  challenges: [],
+  currentChallenge: null
+}
+
+function getChallenges(){
+  console.log('getChallenges() invoked')
+  // const token = 
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: '/challenges',
+    method: 'GET',
+    // headers { // implement with auth
+
+    // },
+  }
+  $.ajax(settings).done((res) => {
+    storeChallenges.challenges = res.challenge
+    displayChallenges()
+  })
 }
 
 //display title and desc:
