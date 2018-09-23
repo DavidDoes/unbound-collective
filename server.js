@@ -13,7 +13,8 @@ mongoose.Promise = global.Promise;
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use('/', express.static(path.join(__dirname, 'public')));
+// app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'))
 
 const {router: usersRouter} = require('./routes/users.js')
 const {router: submissionsRouter} = require('./routes/submissions')
