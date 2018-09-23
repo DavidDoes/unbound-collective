@@ -10,6 +10,7 @@ const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 const { Submission }      = require('../models/submissions')
 const { Challenge }       = require('../models/challenges')
+const { Photo }           = require('../models/photos')
 
 router.post('/', jsonParser, function(req, res){
   // cloudinary.uploader.upload(req.file.path, (result) => {
