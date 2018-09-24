@@ -1,6 +1,6 @@
-// 'use strict'
+'use strict'
 
-// $(document).ready(() => {
-//   app.bindEventListeners()
-//   app.render()
-// })
+$(document).ready(() => {
+  app.bindEventListeners()
+  app.render()
+})

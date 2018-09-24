@@ -4,7 +4,6 @@ const express         = require('express')
 const bodyParser      = require('body-parser')
 const jsonParser      = bodyParser.json()
 const { User }        = require('../models/users')
-const { Submission }  = require('../models/submissions')
 const router          = express.Router()
 
 router.post('/', jsonParser, (req, res) => {
@@ -83,73 +82,61 @@ router.post('/', jsonParser, (req, res) => {
 
   let {username, password = ''} = req.body
 
-  return User.find({username})
-    .count()
-    .then(count => {
-      if(count > 0) {
-        //username already exists
-        return Promise.reject({
-          code: 422,
-          reason: 'ValidationError',
-          message: 'Username already in use.',
-          location: 'username'
-        })
+  return User.hashPassword(password)
+    .then(hash => {
+      const newUser = {
+        username, 
+        password: hash
       }
-      return User.hashPassword(password)
-    })
-    .then(hash => { //assign hashed pw to User object's password key
-      return User.create({
-        username,
-        password: hash,
-      })
+      return User.create(newUser)
     })
     .then(user => {
-      return res.status(201).json(user.serialize())
+      return res.status(201).location(`/api/users/${user.id}`).json(user)
     })
     .catch(err => {
-      if(err.reason === 'ValidationError'){
-        return res.status(err.code).json(err)
+      if (err.code === 11000){
+        err = new Error('The username already exists. Please choose a new one.')
+        err.status = 400
       }
-      res.status(500).json({code: 500, message: 'Internal server error'})
     })
 })
 
-router.put('/:id', jsonParser, (req, res) => {
-  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    res.status(400).json({
-      error: 'Request path id and request body id values must match'
-    });
-  }
+// router.put('/:id', jsonParser, (req, res) => {
+//   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+//     res.status(400).json({
+//       error: 'Request path id and request body id values must match'
+//     });
+//   }
 
-  const updated = {};
-  const updateableFields = ['username', 'password'];
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      updated[field] = req.body[field];
-    }
-  });
+//   const updated = {};
+//   const updateableFields = ['username', 'password'];
+//   updateableFields.forEach(field => {
+//     if (field in req.body) {
+//       updated[field] = req.body[field];
+//     }
+//   });
 
-  User
-    .findOne({ username: updated.username })
-    .then(user => {
-      if(user) {
-        const message = `Username is already taken`;
-        console.error(message);
-        return res.status(400).send(message);
-      }
-      else {
-        User
-          .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-          .then(updatedUser => {
-            res.status(200).json({
-              id: updatedUser.id,
-              username: `${updatedUser.username}`,
-            });
-          })
-          .catch(err => res.status(500).json({ message: err }));
-      }
-    });
-});
+//   User
+//     .findOne({ username: updated.username })
+//     .then(user => {
+//       if(user) {
+//         const message = `Username is already taken`;
+//         console.error(message);
+//         return res.status(400).send(message);
+//       }
+//       else {
+//         User
+//           .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
+//           .then(updatedUser => {
+//             res.status(200).json({
+//               id: updatedUser.id,
+//               username: `${updatedUser.username}`,
+//             });
+//           })
+//           .catch(err => res.status(500).json({ message: err }));
+//       }
+//     });
+// });
 
 router.delete('/:id', (req, res) => {
   User
@@ -167,6 +154,7 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+// FOR DEVELOPMENT ONLY
 router.get('/', (req, res) => {
   User
     .find()
@@ -174,7 +162,7 @@ router.get('/', (req, res) => {
       res.json({
         user: user.map(
           (user) => user.serialize())
-      });
+      })
     })
     .catch(
       err => {

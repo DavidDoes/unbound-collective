@@ -1,7 +1,16 @@
 'use strict';
 
-// const app = (function() {
+function showSuccessMsg(msg){
+  const listener = $('.js-success-msg')
+  listener.text(msg).show()
+  setTimeout(() => listener.fadeOut('slow'), 2000)
+}
 
+function showFailMsg(msg){
+  const listener = $('.js-fail-msg')
+  listener.text(msg).show()
+  setTimeout(() => listener.fadeOut('slow'), 2000)
+}
 
 // Challenges
   const storeChallenges = {
@@ -71,21 +80,19 @@
     getSubmissions(displaySubmissions)
   }
 
+  // user clicks on challenge
+  $(document).on('click', '.card', (event) => {
+    getAndDisplaySubmissions()
+  })
+
 //
   function bindEventListeners(){
     console.log('hello from bindEventListeners()')
-    // user clicks on challenge
-    $(document).on('click', '.card', (event) => {
-      getAndDisplaySubmissions()
-    })
-    // handleSignupSubmit()
-    // handleLoginSubmit()
+
+    handleSignupSubmit()
+    handleLoginSubmit()
 
     // handleSubmissionSubmit()
-  }
-
-  function handleLoginSubmit(){
-
   }
 
   function handleSignupSubmit(){
@@ -121,7 +128,9 @@
           store.authorized = true
           loginForm[0].reset()
 
-          // return Promise.all([])
+          return Promise.all([
+            api.search('/api/submissions')
+          ])
         })
         .then(([submissions]) => {
           store.submissions = submissions
