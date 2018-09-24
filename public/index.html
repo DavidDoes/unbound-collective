@@ -49,16 +49,36 @@
     <p>The idea is that it's all open-ended. Really, all you need is your camera and the challenge title.</p>
   </div>
 
-  <div class='container' id='login'>
-    <form role='form' class='js-login'>
-      <legend>Enter username and password</legend>
-      <input aria-label="username" type="text">
-      <input aria-label="password" type="password">
+  <section class='signup-login'>
+    <form role='form' id='signup-form' class='js-signup-form'>
+      <legend>Signup</legend>
+      <div>
+        <label for="username">Username</label>
+        <input name="username" class="js-username-entry" aria-label="username" type="text">
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input name="password" class="js-password-entry" aria-label="password" type="password">
+      </div>
+        <button aria-label="submit" type="submit">SIGNUP</button>
+      </div>
+    </form>
+
+    <form role='form' id="login-form" class='js-login-form'>
+      <legend>Login</legend>
+      <div>
+        <label for="username">Username</label>
+        <input name="username" class="js-username-entry" aria-label="username" type="text">
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input name="password" class="js-password-entry" aria-label="password" type="password">
+      </div>
       <button aria-label="submit" type="submit">LOGIN</button>
       <p><a href="#">Forgot password.</a></p>
-      <p><a href="#">Register.</a></p>
     </form>
-  </div>
+  </section>
+
 
   <div class='container' id='upload'>
     <form role='form' class='js-upload' action='/photos' method='POST' enctype='multipart/form-data'>

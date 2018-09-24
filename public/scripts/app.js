@@ -60,9 +60,9 @@
 
   function displaySubmissions(){
     const submission = storeSubmissions.submissions.map(submission => `
-    <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
-    <p>Submitted by ${submission.creator}.</p>
-    </div>
+      <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
+      <p>Submitted by ${submission.creator}.</p>
+      </div>
     `)
     $('')
   }
@@ -88,9 +88,46 @@
 
   }
 
-  function render(){
-    console.log('hello from render()')
-    getChallenges()
+  function handleSignupSubmit(){
+    $('.js-signup-from').on('submit', event => {
+      event.preventDefault()
+  
+      const signupForm = $(event.currentTarget)
+      const newUser = {
+        username: signupForm.find('.js-username-entry').val(),
+        password: signupForm.find('.js-password-entry').val()
+      } // in api.js
+      api.create('/api/users', newUser)
+        .then(res => {
+          signupForm[0].reset() //clear storage
+          showSuccessMsg(`Signup successful. Please login.`)
+        })
+        .catch(handleErrors)
+    })
+  }
+
+  function handleLoginSubmit(){
+    $('.js-login-form').on('submit', event => {
+      event.preventDefault();
+
+      const loginForm = $(event.currentTarget)
+      const loginUser = {
+        username: loginForm.find('.js-username-entry').val(),
+        password: loginForm.find('.js-password-entyr').val()
+      }
+      api.create('/api/login', loginUser)
+        .then(res => {
+          store.authToken = response.authToken
+          store.authorized = true
+          loginForm[0].reset()
+
+          // return Promise.all([])
+        })
+        .then(([submissions]) => {
+          store.submissions = submissions
+          render()
+        })
+    })
   }
 
   $(function(){
@@ -98,6 +135,22 @@
     getAndDisplayChallenges()
     getAndDisplaySubmissions()
   })
+
+  function render(){
+    $('.signup-login').toggle(!store.authorized) //unauthorized, not allowed
+    // show user's submissions on dashboard
+    const submissionsList = showUserSubmissions(store.submissions)
+    $('.js-submissions-list').html(submissionsList)
+  }
+// show on dashboard
+  function showUserSubmissions(submissions){
+    const userSubmissions = submissions.map(submission => `
+    <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
+    <p><a href="">Remove Submission</a></p>
+    </div>
+  `)
+    $('.js-user-submissions').html(userSubmissions)
+  }
 
   // Exposed methods in other files
 //   return {
