@@ -95,10 +95,9 @@ function showFailMsg(msg){
   }
 
   function signupSubmit(){
-    // $(document).on('submit', '.js-signup.form')
     $('.js-signup-form').on('submit', event => {
       event.preventDefault()
-      console.log('hello from handleSignupSubmit()')
+      console.log('hello from signupSubmit()')
   
       const signupForm = $(event.currentTarget)
       const newUser = {
@@ -118,16 +117,16 @@ function showFailMsg(msg){
   function loginSubmit(){
     $('.js-login-form').on('submit', event => {
       event.preventDefault()
-      console.log('hello from handleLoginSubmit()')
+      console.log('hello from loginSubmit()')
 
       const loginForm = $(event.currentTarget)
       const loginUser = {
         username: loginForm.find('.js-username-entry').val(),
-        password: loginForm.find('.js-password-entyr').val()
+        password: loginForm.find('.js-password-entry').val()
       }
       api.create('/api/login', loginUser)
         .then(res => {
-          store.authToken = response.authToken
+          store.authToken = res.authToken
           store.authorized = true
           loginForm[0].reset()
 

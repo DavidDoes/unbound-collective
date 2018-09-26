@@ -1,94 +1,49 @@
-// 'use strict'
+'use strict'
 
-// const bcrypt = require('bcryptjs')
-// const User = require('../models/users.js')
-
-// function localAuth(req, res, next){
-//   const { username, password } = req.body
-
-//   if(!username && !password){
-//     const err = new Error('No credentials provided. Please try again.')
-//     err.status = 400
-//     return next(err)
-//   }
-
-//   let user
-//   return User.findOne({ username })
-//     .then(_user => {
-//       user = _user
-
-//       if(!user){
-//         const err = new Error('Invalid credentials. Please try again.')
-//         err.status = 401
-//         err.location = 'username'
-//         return Promise.reject(err)
-//       }
-
-//       return bcrypt.compare(password, user.password)
-//     })
-//     ,then(isValid => {
-      
-//       if(!isValid){
-//         const err = new Error('Invalid credentials. Please try again.')
-//         err.status = 401
-//         err.location = 'password'
-//         return Promise.reject(err)
-//       }
-
-//       req.user = user
-//       next()
-//     })
-//     .catch((err) => {
-//       next(err)
-//     })
-// }
-
-// module.exports = localAuth
-
-"use strict";
-
-const bcrypt = require("bcryptjs");
-
-const User = require("../models/users");
+const bcrypt = require('bcryptjs')
+const User = require('../models/users')
 
 function localAuth(req, res, next) {
-  const { username, password } = req.body;
+  const { username, password } = req.body
+  console.log('>>>>' + req.body)
 
   if (!username && !password) {
-    const err = new Error("No credentials provided");
-    err.status = 400;
-    return next(err);
+    const err = new Error('No credentials provided. Please try again.')
+    err.status = 400
+    return next(err)
   }
 
-  let user;
+  let user
   return User.findOne({ username })
     .then(_user => {
-      user = _user;
+      user = _user
 
       if (!user) {
-        const err = new Error("Invalid credentials");
+        const err = new Error('Invalid credentials. Please try again.')
         err.status = 401;
-        err.location = "username";
-        return Promise.reject(err);
+        err.location = 'username'
+        return Promise.reject(err)
       }
+      console.log('>>> password:' + password)
+      console.log('>>> user.password:' + user.password)
 
-      return bcrypt.compare(password, user.password);
+      return bcrypt.compare(password, user.password)
     })
     .then(isValid => {
 
       if (!isValid) {
-        const err = new Error("Invalid credentials");
+        const err = new Error('Invalid credentials. Please try again.')
         err.status = 401;
-        err.location = "password";
-        return Promise.reject(err);
+        err.location = 'password'
+        return Promise.reject(err)
       }
 
-      req.user = user;
+      req.user = user
       next();
     })
     .catch((err) => {
       next(err);
-    });
+    })
 }
 
-module.exports = localAuth;
+module.exports = localAuth
