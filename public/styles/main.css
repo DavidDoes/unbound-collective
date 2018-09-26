@@ -41,6 +41,7 @@ h1, h2, h3, form, ul, li {
 
 .flex {
   display: flex;
+  align-items: center;
 }
 
 .hero-image {
@@ -80,7 +81,9 @@ h1, h2, h3, form, ul, li {
 } */
 
 .one-third {
+  position: relative;
   width: 30.6666666667%;
+  height: 20em;
   display: inline-block;
   box-sizing: border-box;
   margin: 0 .5em;
