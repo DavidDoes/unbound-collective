@@ -88,14 +88,15 @@ function showFailMsg(msg){
   function bindEventListeners(){
     console.log('hello from bindEventListeners()')
 
-    handleSignupSubmit()
-    handleLoginSubmit()
+    signupSubmit()
+    loginSubmit()
 
     // handleSubmissionSubmit()
   }
 
-  function handleSignupSubmit(){
-    $('.js-signup-from').on('submit', event => {
+  function signupSubmit(){
+    // $(document).on('submit', '.js-signup.form')
+    $('.js-signup-form').on('submit', event => {
       event.preventDefault()
       console.log('hello from handleSignupSubmit()')
   
@@ -107,14 +108,14 @@ function showFailMsg(msg){
       api.create('/api/users', newUser)
         .then(res => {
           signupForm[0].reset() //clear storage
-          showSuccessMsg(`Signup successful. Please login.`)
+          showSuccessMsg(`Thank you, ${res.username}! Signup successful. Please login.`)
           console.log('user created')
         })
         .catch(handleErrors)
     })
   }
 
-  function handleLoginSubmit(){
+  function loginSubmit(){
     $('.js-login-form').on('submit', event => {
       event.preventDefault()
       console.log('hello from handleLoginSubmit()')
