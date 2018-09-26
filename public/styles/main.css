@@ -21,11 +21,11 @@ h1, h2, h3, form, ul, li {
 }
 
 .container {
-  /* display: flex; */
   position: relative;
+  flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
   box-sizing: border-box;
 }
 
@@ -82,9 +82,8 @@ h1, h2, h3, form, ul, li {
 .one-third {
   width: 30.6666666667%;
   display: inline-block;
-  justify-content: space-between;
   box-sizing: border-box;
-  margin: 0 5px;
+  margin: 0 .5em;
 }
 
 #challenges h2 {
@@ -92,7 +91,7 @@ h1, h2, h3, form, ul, li {
 }
 
 .thumbnail {
-  height: 50%;
+  height: 70%;
   width: 100%;
   display: inline-block;
   box-sizing: border-box;
