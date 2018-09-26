@@ -6,7 +6,14 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const jwtAuth = require('./middleware/jwt-auth')
 
-const app = express();
+const app = express()
+
+const usersRouter = require('./routes/users.js')
+const submissionsRouter = require('./routes/submissions')
+const challengesRouter = require('./routes/challenges')
+const mySubmissionsRouter = require('./routes/my-submissions')
+const uploadRouter = require('./routes/photos')
+const authRouter = require('./routes/auth')
 
 mongoose.Promise = global.Promise
 
@@ -15,17 +22,15 @@ app.use(bodyParser.json())
 // app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'))
 
-const {router: usersRouter} = require('./routes/users.js')
-const {router: submissionsRouter} = require('./routes/submissions')
-const {router: challengesRouter} = require('./routes/challenges')
-const {router: uploadRouter} = require('./routes/photos')
-const {router: authRouter} = require('./routes/auth')
-
-app.use('/users', usersRouter)
+// Public Routes
 app.use('/submissions', submissionsRouter)
 app.use('/challenges', challengesRouter)
 app.use('/photos', uploadRouter)
 app.use('/api', authRouter)
+
+// Protected Routes
+app.use('/api/my-submissions', jwtAuth, mySubmissionsRouter)
+app.use('/api/users', usersRouter)
 
 const { DB_URL, PORT } = require('./config')
 

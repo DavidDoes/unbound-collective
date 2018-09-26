@@ -1,5 +1,7 @@
 'use strict';
 
+const app = (function() {
+
 function showSuccessMsg(msg){
   const listener = $('.js-success-msg')
   listener.text(msg).show()
@@ -76,13 +78,10 @@ function showFailMsg(msg){
     $('')
   }
 
-  function getAndDisplaySubmissions(){
-    getSubmissions(displaySubmissions)
-  }
-
   // user clicks on challenge
   $(document).on('click', '.card', (event) => {
-    getAndDisplaySubmissions()
+    console.log('challenge card clicked')
+    // getAndDisplaySubmissions()
   })
 
 //
@@ -98,6 +97,7 @@ function showFailMsg(msg){
   function handleSignupSubmit(){
     $('.js-signup-from').on('submit', event => {
       event.preventDefault()
+      console.log('hello from handleSignupSubmit()')
   
       const signupForm = $(event.currentTarget)
       const newUser = {
@@ -108,6 +108,7 @@ function showFailMsg(msg){
         .then(res => {
           signupForm[0].reset() //clear storage
           showSuccessMsg(`Signup successful. Please login.`)
+          console.log('user created')
         })
         .catch(handleErrors)
     })
@@ -115,7 +116,8 @@ function showFailMsg(msg){
 
   function handleLoginSubmit(){
     $('.js-login-form').on('submit', event => {
-      event.preventDefault();
+      event.preventDefault()
+      console.log('hello from handleLoginSubmit()')
 
       const loginForm = $(event.currentTarget)
       const loginUser = {
@@ -129,7 +131,7 @@ function showFailMsg(msg){
           loginForm[0].reset()
 
           return Promise.all([
-            api.search('/api/submissions')
+            api.search('/api/my-submissions')
           ])
         })
         .then(([submissions]) => {
@@ -142,28 +144,25 @@ function showFailMsg(msg){
   $(function(){
     bindEventListeners()
     getAndDisplayChallenges()
-    getAndDisplaySubmissions()
   })
 
   function render(){
     $('.signup-login').toggle(!store.authorized) //unauthorized, not allowed
-    // show user's submissions on dashboard
-    const submissionsList = showUserSubmissions(store.submissions)
-    $('.js-submissions-list').html(submissionsList)
+    // show all submissions of challenge
+    // incomplete
+    // const submissionsList = showAllSubmissions(store.submissions)
+    // $('.js-submissions-list').html(submissionsList)
+    // // show user's challenges on dashboard
+    // const mySubmissions = showMySubmissions(store.mySubmissions)
+    // $('.js-my-submissions').html(mySubmissions)
   }
-// show on dashboard
-  function showUserSubmissions(submissions){
-    const userSubmissions = submissions.map(submission => `
+  // show all challenges
+  function showAllSubmissions(submissions){
+    const allSubmissions = submissions.map(submission => `
     <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
-    <p><a href="">Remove Submission</a></p>
     </div>
   `)
-    $('.js-user-submissions').html(userSubmissions)
+    $('.js-all-submissions').html(allSubmissions)
+    // include this in challenge display
   }
-
-  // Exposed methods in other files
-//   return {
-//     render: render,
-//     bindEventListeners: bindEventListeners
-//   }
-// })
+}())

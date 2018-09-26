@@ -23,4 +23,4 @@ ChallengeSchema.methods.serialize = function(){
 
 const Challenge = mongoose.model('Challenge', ChallengeSchema)
 
-module.exports = {Challenge}
+module.exports = Challenge

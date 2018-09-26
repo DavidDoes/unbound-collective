@@ -3,7 +3,7 @@
 const express           = require('express')
 const router            = express.Router()
 // const parser            = require('../middleware/upload')
-const { Photo }         = require('../models/photos')
+const Photo         = require('../models/photos')
 const cloudinary        = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
@@ -131,4 +131,4 @@ if (require.main === module){
     .catch(err => console.error(err))
 }
 
-module.exports = {router}
+module.exports = router

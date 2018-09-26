@@ -5,16 +5,9 @@ const bcrypt = require('bcryptjs')
 
 mongoose.Promise = global.Promise
 
-var UserSchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 })
 
 UserSchema.methods.serialize = function() {
@@ -34,4 +27,4 @@ UserSchema.statics.hashPassword = function(password){
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = {User}
+module.exports = User

@@ -18,4 +18,4 @@ PhotoSchema.methods.serialize = () => {
 
 const Photo = mongoose.model('Photo', PhotoSchema)
 
-module.exports = { Photo }
+module.exports = Photo

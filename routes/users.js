@@ -3,7 +3,7 @@
 const express         = require('express')
 const bodyParser      = require('body-parser')
 const jsonParser      = bodyParser.json()
-const { User }        = require('../models/users')
+const User            = require('../models/users')
 const router          = express.Router()
 
 router.post('/', jsonParser, (req, res) => {
@@ -171,4 +171,4 @@ router.get('/', (req, res) => {
     })
   })
 
-module.exports = {router}
+module.exports = router

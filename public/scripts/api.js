@@ -8,7 +8,7 @@ const store = (function() {
 })
 
 const api = (function(){
-  const create = (path, obj) =>{
+  const create = function(path, obj){
     return $.ajax({
       type: 'POST',
       url: path,
@@ -19,7 +19,16 @@ const api = (function(){
       headers: { 'Authorization': `Bearer ${store.authToken}` }
     })
   }
-  const update = (path, obj) =>{
+  const search = function(path, query){
+    return $.ajax({
+      type: 'GET',
+      url: path,
+      dataType: 'jason',
+      data: query,
+      headers: { 'Authorization': `Bearer ${store.authToken}` }
+    })
+  }
+  const update = function (path, obj){
     return $.ajax({
       type: 'PUT',
       url: path,
@@ -28,7 +37,7 @@ const api = (function(){
       headers: { 'Authorization': `Bearer ${store.authToken}` }
     })
   }
-  const remove = (path, obj) =>{
+  const remove = function (path){
     return $.ajax({
       type: "DELETE",
       dataType: "json",
@@ -37,6 +46,6 @@ const api = (function(){
     })
   }
   return {
-    create, update, remove
+    create, update, remove, search
   }
 }())

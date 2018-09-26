@@ -28,7 +28,9 @@ function jwtAuth(req, res, next){
       return next(err)
     }
 
-    req.user = decoded.user
+    req.user = decoded.user // get user's id decoded from jwt
     next()
   })
 }
+
+module.exports = jwtAuth
