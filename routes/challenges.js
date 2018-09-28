@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
       res.json({
         challenge: challenge.map(
           (challenge) => challenge.serialize())
-      });
+      })
     })
     .catch(
       err => {

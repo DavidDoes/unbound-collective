@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
 var SubmissionSchema = mongoose.Schema({
-  challId: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true},
+  challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
   cloudinary_id: String,
   image: String

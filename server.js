@@ -8,7 +8,7 @@ const jwtAuth = require('./middleware/jwt-auth')
 
 const app = express()
 
-const usersRouter = require('./routes/users.js')
+const usersRouter = require('./routes/users')
 const submissionsRouter = require('./routes/submissions')
 const challengesRouter = require('./routes/challenges')
 const mySubmissionsRouter = require('./routes/my-submissions')
@@ -23,14 +23,19 @@ app.use(bodyParser.json())
 app.use(express.static('public'))
 
 // Public Routes
+// DON'T USE IN DEVELOPMENT:
+app.use('/users', usersRouter)
 app.use('/submissions', submissionsRouter)
+// also POSt to public submissions route?
 app.use('/challenges', challengesRouter)
 app.use('/photos', uploadRouter)
 app.use('/api', authRouter)
+// above - rewrite w/ API/
 
 // Protected Routes
-app.use('/api/my-submissions', jwtAuth, mySubmissionsRouter)
-app.use('/api/users', usersRouter)
+app.use('/auth/users', usersRouter)
+app.use('/auth/users/:id/submissions', submissionsRouter)
+// above - rewrite > users/:id/submissions
 
 const { DB_URL, PORT } = require('./config')
 

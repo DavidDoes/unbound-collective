@@ -20,7 +20,6 @@ function showFailMsg(msg){
   }
 
   function getChallenges(){
-    console.log('getChallenges() invoked')
     // const token = 
     const settings = {
       async: true,
@@ -86,7 +85,6 @@ function showFailMsg(msg){
 
 //
   function bindEventListeners(){
-    console.log('hello from bindEventListeners()')
 
     signupSubmit()
     loginSubmit()
@@ -97,7 +95,6 @@ function showFailMsg(msg){
   function signupSubmit(){
     $('.js-signup-form').on('submit', event => {
       event.preventDefault()
-      console.log('hello from signupSubmit()')
   
       const signupForm = $(event.currentTarget)
       const newUser = {

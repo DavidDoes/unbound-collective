@@ -6,9 +6,9 @@ mongoose.Promise = global.Promise
 
 var ChallengeSchema = mongoose.Schema({
   title: {type: String, required: true},
-  creator: {type: String, required: true},
-  dateCreated: Date,
-  thumbnail: String
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},  
+  thumbnail: String,
+  submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]
 })
 
 ChallengeSchema.methods.serialize = function(){
@@ -16,7 +16,6 @@ ChallengeSchema.methods.serialize = function(){
     id: this._id,
     title: this.title,
     creator: this.creator,
-    dateCreated: this.dateCreated,
     thumbnail: this.thumbnail
   }
 }

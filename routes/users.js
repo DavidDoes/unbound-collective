@@ -159,10 +159,11 @@ router.get('/', (req, res) => {
   User
     .find()
     .then(user => {
-      res.json({
-        user: user.map(
-          (user) => user.serialize())
-      })
+      // res.json({
+      //   user: user.map(
+      //     (user) => user.serialize())
+      // })
+      res.send(user)
     })
     .catch(
       err => {
