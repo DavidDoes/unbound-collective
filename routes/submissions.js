@@ -36,14 +36,11 @@ router.get('/', (req, res) => {
   })
 
 // POST to /users/:id/submissions
-// pass to public route also
 // image should come from photo upload
 router.post('/', (req, res, next) => {
   const { challenge, image } = req.body
   const creator = req.user.id // should be req.user.id if logged in
   const newSubmission = { creator, challenge, image }
-  console.log(req.body.challenge) // shows up
-  console.log(req.user) // undefined 
 
   Promise.all([
     validateChallengeId(creator, challenge)

@@ -128,7 +128,7 @@ function showFailMsg(msg){
           loginForm[0].reset()
 
           return Promise.all([
-            api.search('/api/my-submissions')
+            api.search('/api/users/:id/submissions')
           ])
         })
         .then(([submissions]) => {
