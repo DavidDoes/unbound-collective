@@ -1,10 +1,9 @@
 'use strict'
 
-const express           = require('express')
-const router            = express.Router()
-// const parser            = require('../middleware/upload')
-const Photo         = require('../models/photos')
-const cloudinary        = require('cloudinary')
+const express             = require('express')
+const router              = express.Router()
+const Photo               = require('../models/photos')
+const cloudinary          = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 const multer = require('multer')
@@ -23,10 +22,10 @@ router.post('/', parser.single('image'), (req, res) => {
   let public_id
 
   cloudinary.uploader.upload(req.file.path, (result) => {
-      req.body.image = result.secure_url
-      public_id = result.public_id
-      console.log(result.public_id)
-      console.log(public_id)
+    req.body.image = result.secure_url
+    public_id = result.public_id
+    console.log(result.public_id)
+    console.log(public_id)
 
     Photo
       .create({
@@ -39,6 +38,15 @@ router.post('/', parser.single('image'), (req, res) => {
 
     // change once Submissions route fully implemented: 
     res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
+
+    const challenge = req.body.challenge
+    const photo = Photo.id
+    const creator = req.user.id // should be req.user.id if logged in
+    const newSubmission = { creator, challenge, photo }
+
+    Submission
+      .create(newSubmission)
+    console.log(Submission)
     // add following lines when auth implemented
     // req.body.image.creator = { 
     //   id: req.user._id,

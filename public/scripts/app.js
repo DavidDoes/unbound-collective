@@ -2,21 +2,16 @@
 
 const app = (function() {
 
-function showSuccessMsg(msg){
-  const listener = $('.js-success-msg')
-  listener.text(msg).show()
-  setTimeout(() => listener.fadeOut('slow'), 2000)
-}
+  function showSuccessMsg(msg){
+    const listener = $('.js-success-msg')
+    listener.text(msg).show()
+    setTimeout(() => listener.fadeOut('slow'), 2000)
+  }
 
-function showFailMsg(msg){
-  const listener = $('.js-fail-msg')
-  listener.text(msg).show()
-  setTimeout(() => listener.fadeOut('slow'), 2000)
-}
-
-// Challenges
-  const storeChallenges = {
-    challenges: []
+  function showFailMsg(msg){
+    const listener = $('.js-fail-msg')
+    listener.text(msg).show()
+    setTimeout(() => listener.fadeOut('slow'), 2000)
   }
 
   function getChallenges(){
@@ -31,13 +26,13 @@ function showFailMsg(msg){
       // },
     }
     $.ajax(settings).done((res) => {
-      storeChallenges.challenges = res.challenge
+      store.challenge = res.challenge
       displayChallenges()
     })
   }
 
   function displayChallenges(data){ 
-    const challenges = storeChallenges.challenges.map(challenge => `
+    const challenges = store.challenge.map(challenge => `
         <div class="one-third card"><img class="thumbnail" src="${challenge.thumbnail}"><h2>${challenge.title}</h2>
         </div>
         `)
@@ -48,9 +43,30 @@ function showFailMsg(msg){
     getChallenges(displayChallenges)
   }
 
-  // Submissions
-  const storeSubmissions = {
-    submissions: []
+  function submissionFormSubmit(){
+    $('.js-upload').on('submit', (event) => {
+      event.preventDefault()
+
+      const submissionId = Photo.cloudinary_id //how?
+      const newSubmissionListener = $('.js-file-input')
+
+      // api.create('/auth/users/submissions/' + submissionId )
+      //   .then(() => {
+      //     newSubmissionListener.val('')
+      //     return api.search('/auth/users/submissions/' + submissionId)
+      //   })
+      api.create('/auth/submit/')
+        .then(() => {
+          newSubmissionListener.val('')
+          return api.search('/auth/users/submissions/' + submissionId)
+        })
+
+        .then(response => {
+          store.submissions = response
+          render()
+        })
+        .catch(handleErrors)
+    })
   }
 
   function getSubmissions(){
@@ -63,13 +79,13 @@ function showFailMsg(msg){
       // headers: {}
     }
     $.ajax(settings).done((res) => {
-      storeSubmissions.submissions = res.submissions
+      store.submissions = res.submissions
       displaySubmissions()
     })
   }
 
   function displaySubmissions(){
-    const submission = storeSubmissions.submissions.map(submission => `
+    const submission = store.submissions.map(submission => `
       <div class="one-fourth"><img class="thumbnail" src="${submission.photo}">
       <p>Submitted by ${submission.creator}.</p>
       </div>
@@ -127,7 +143,9 @@ function showFailMsg(msg){
           store.authorized = true
           loginForm[0].reset()
 
-          return Promise.all([
+          showSuccessMsg(`You've been logged in.`)
+
+          return Promise.all([ // get user's submissions
             api.search('/api/users/:id/submissions')
           ])
         })
@@ -137,6 +155,7 @@ function showFailMsg(msg){
         })
     })
   }
+
 
   $(function(){
     bindEventListeners()

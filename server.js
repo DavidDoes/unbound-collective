@@ -30,6 +30,7 @@ app.use('/api/photos', uploadRouter)
 app.use('/api', authRouter)
 
 // Protected Routes
+app.use('/auth/submit', jwtAuth, uploadRouter) // ? 
 app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
 app.use('/auth/users/challenges', jwtAuth, challengesRouter) // POST to challenges
 

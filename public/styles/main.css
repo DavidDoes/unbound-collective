@@ -101,6 +101,16 @@ h1, h2, h3, form, ul, li {
   object-fit: cover;
 }
 
+.success-msg {
+  color:limegreen;
+  display:none;
+}
+
+.err-msg {
+  color: red;
+  display: none;
+}
+
 @media (max-width: 750px) and (min-width: 320px) {
 
 }
