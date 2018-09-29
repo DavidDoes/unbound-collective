@@ -24,7 +24,7 @@ function showFailMsg(msg){
     const settings = {
       async: true,
       crossDomain: true,
-      url: '/challenges',
+      url: '/api/challenges',
       method: 'GET'
       // headers: { // implement with auth
 

@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 // image should come from photo upload
 router.post('/', (req, res, next) => {
   const { challenge, image } = req.body
-  const creator = req.body.creator // should be req.user.id if logged in
+  const creator = req.user.id // should be req.user.id if logged in
   const newSubmission = { creator, challenge, image }
   console.log(req.body.challenge) // shows up
   console.log(req.user) // undefined 

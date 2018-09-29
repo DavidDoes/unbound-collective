@@ -6,9 +6,9 @@ mongoose.Promise = global.Promise
 
 var ChallengeSchema = mongoose.Schema({
   title: {type: String, required: true},
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},  
-  thumbnail: String,
-  submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
+  thumbnail: String 
+  // change to mongoose type when Photo passed to Submission, then in client-side, get image of a Submission to be the thumbnail
 })
 
 ChallengeSchema.methods.serialize = function(){

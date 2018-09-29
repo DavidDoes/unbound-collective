@@ -11,31 +11,27 @@ const app = express()
 const usersRouter = require('./routes/users')
 const submissionsRouter = require('./routes/submissions')
 const challengesRouter = require('./routes/challenges')
-const mySubmissionsRouter = require('./routes/my-submissions')
 const uploadRouter = require('./routes/photos')
 const authRouter = require('./routes/auth')
 
 mongoose.Promise = global.Promise
 
 // Middleware
-app.use(bodyParser.json())
+app.use(express.json())
 // app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'))
 
 // Public Routes
-// DON'T USE IN DEVELOPMENT:
-app.use('/users', usersRouter)
-app.use('/submissions', submissionsRouter)
-// also POSt to public submissions route?
-app.use('/challenges', challengesRouter)
-app.use('/photos', uploadRouter)
+// change to /api/
+app.use('/api/users', usersRouter)
+app.use('/api/submissions', submissionsRouter)
+app.use('/api/challenges', challengesRouter)
+app.use('/api/photos', uploadRouter)
 app.use('/api', authRouter)
-// above - rewrite w/ API/
 
 // Protected Routes
-app.use('/auth/users', usersRouter)
-app.use('/auth/users/:id/submissions', submissionsRouter)
-// above - rewrite > users/:id/submissions
+app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
+app.use('/auth/users/challenges', jwtAuth, challengesRouter) // POST to challenges
 
 const { DB_URL, PORT } = require('./config')
 

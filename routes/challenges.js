@@ -1,11 +1,9 @@
 'use strict'
 
 const express = require('express')
-const bodyParser = require('body-parser')
 const Challenge = require('../models/challenges')
-const Submission = require('../models/submissions')
+
 const router = express.Router()
-const jsonParser = bodyParser.json()
 
 router.get('/', (req, res) => {
   Challenge
@@ -23,8 +21,8 @@ router.get('/', (req, res) => {
     })
   })
 
-router.post('/', jsonParser, function (req, res) {
-  const requiredFields = ['title', 'creator', 'thumbnail']
+router.post('/', function (req, res) {
+  const requiredFields = ['title']
   const missingField = requiredFields.find(field => !(field in req.body))
 
   if (missingField) {
@@ -36,7 +34,7 @@ router.post('/', jsonParser, function (req, res) {
       location: missingField
     })
   }
-  const stringFields = ['title', 'creator', 'thumbnail']
+  const stringFields = ['title']
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   )
@@ -49,17 +47,19 @@ router.post('/', jsonParser, function (req, res) {
     })
   }
 
-  let { title, creator, thumbnail = '' } = req.body
+  console.log('>>>>>>' + req.user)
+  let { title = '' } = req.body
+  let { creator } = req.user
 
   return Challenge.create({
-      title, creator, thumbnail
+      title, creator // add thumbnail when photo is added
     })
     .then(challenge => {
       return res.status(201).json(challenge.serialize())
     })
 })
 
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
