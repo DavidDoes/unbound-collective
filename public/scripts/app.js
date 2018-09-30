@@ -47,18 +47,12 @@ const app = (function() {
     $('.js-upload').on('submit', (event) => {
       event.preventDefault()
 
-      const submissionId = Photo.cloudinary_id //how?
       const newSubmissionListener = $('.js-file-input')
 
-      // api.create('/auth/users/submissions/' + submissionId )
-      //   .then(() => {
-      //     newSubmissionListener.val('')
-      //     return api.search('/auth/users/submissions/' + submissionId)
-      //   })
       api.create('/auth/submit/')
         .then(() => {
           newSubmissionListener.val('')
-          return api.search('/auth/users/submissions/' + submissionId)
+          return api.search('/auth/users/submissions')
         })
 
         .then(response => {
@@ -101,7 +95,7 @@ const app = (function() {
 
 //
   function bindEventListeners(){
-
+    submissionFormSubmit()
     signupSubmit()
     loginSubmit()
 
@@ -162,9 +156,18 @@ const app = (function() {
     getAndDisplayChallenges()
   })
 
+  function handleErrors(err) {
+    if (err.status === 401) {
+      store.authorized = false
+      app.render()
+    }
+    showFailMsg(err.responseJSON.msg)
+  }
+
   function render(){
     $('.signup-login').toggle(!store.authorized) //unauthorized, not allowed
     // show all submissions of challenge
+
     // incomplete
     // const submissionsList = showAllSubmissions(store.submissions)
     // $('.js-submissions-list').html(submissionsList)

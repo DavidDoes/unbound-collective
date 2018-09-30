@@ -22,7 +22,6 @@ app.use(express.json())
 app.use(express.static('public'))
 
 // Public Routes
-// change to /api/
 app.use('/api/users', usersRouter)
 app.use('/api/submissions', submissionsRouter)
 app.use('/api/challenges', challengesRouter)
@@ -30,9 +29,9 @@ app.use('/api/photos', uploadRouter)
 app.use('/api', authRouter)
 
 // Protected Routes
-app.use('/auth/submit', jwtAuth, uploadRouter) // ? 
 app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
 app.use('/auth/users/challenges', jwtAuth, challengesRouter) // POST to challenges
+app.use('/auth/submit', jwtAuth, uploadRouter)
 
 const { DB_URL, PORT } = require('./config')
 

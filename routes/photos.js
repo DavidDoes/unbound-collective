@@ -3,6 +3,7 @@
 const express             = require('express')
 const router              = express.Router()
 const Photo               = require('../models/photos')
+const Submission          = require('../models/submissions')
 const cloudinary          = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
