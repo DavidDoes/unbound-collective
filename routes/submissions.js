@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 })
 
 const parser = multer({ storage: storage })
+
 cloudinary.config({
   cloud_name: 'challenge-photos',
   api_key: process.env.CLOUDINARY_API_KEY,
