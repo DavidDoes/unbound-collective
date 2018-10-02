@@ -30,7 +30,7 @@ app.use('/api', authRouter)
 
 // Protected Routes
 app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
-app.use('/auth/users/challenges', jwtAuth, challengesRouter) // POST to challenges
+app.use('/auth/users/challenges', jwtAuth, challengesRouter)
 app.use('/auth/submit', jwtAuth, uploadRouter)
 
 const { DB_URL, PORT } = require('./config')

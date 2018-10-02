@@ -4,17 +4,32 @@ const chai = require('chai')
 const chaiHttp = require('chai-http')
 const faker = require('faker')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
-const {
-  app,
-  runServer,
-  closeServer
-} = require('../server')
+const { app, runServer, closeServer } = require('../server')
 
-const { TEST_DB_URL }   = require('../config'),
-      { Challenge }     = require('../challenges/models'),
-      { Submission }    = require('../submissions/models'), 
-      { User }          = require('../users/models')
+const  { TEST_DB_URL, PORT }    = require('../config')
+const  Submission     = require('../models/submissions')
+const  User           = require('../models/users')
+const  Challenge      = require('../models/challenges')
+
+const random = Math.floor(Math.random())
+
+const seedUsers = {
+  username: faker.internet.username,
+  password: faker.internet.password
+}
+
+const seedSubmissions = {
+  challenge: Challenge.id,
+  creator: User.id,
+  photo: faker.image.imageUrl
+}
+
+const seedChallenges = {
+  title: faker.lorem.words,
+  creator: User.id
+}
 
 const should = chai.should()
 chai.use(chaiHttp)
@@ -28,46 +43,24 @@ function tearDownDb(){
   })
 }
 
-function seedChallengesData(){
-  console.info('seeding challenges')
-
-  const challengeCreator = {
-    username: 'ChallengeCreator',
-    password: 'securepass'
-  }
-
-  return User
-    .create(challengeCreator)
-    .then(function (user) {
-      return Submission
-        .create({
-          dateCreated: new Date(),
-          challenge: 'Sample Challenge Title',
-          creator: user._id
-      })
-      .then(function (submission) {
-        const seedChallenges = []
-        for (let i = 0; i <= 1; i++) {
-          seedChallenges.push({
-            title: 'Submission title',
-            description: 'Challenge description',
-            submission: submission._id,
-            creator: user._id
-          })
-        }
-        return Challenge.insertMany(seedChallenges)
-      })
-  })
-}
-
 describe('Challenges resource', function(){
+  let user
+  let token
 
   before(function () {
     return runServer(TEST_DB_URL)
   })
 
   beforeEach(function(){
-    return seedChallengesData()
+    return Promise.all([
+      User.insertMany(seedUsers),
+      Challenge.insertMany(seedChallenges),
+      Submission.insertMany(seedSubmissions)
+    ])
+    .then(([users]) => {
+      user = users[0]
+      token = jwt.sign({user}, JWT_SECRET, {subject: user.username})
+    })
   })
 
   afterEach(function(){
@@ -82,7 +75,7 @@ describe('Challenges resource', function(){
     it('Should return all existing challenges', function(){
       let res
       return chai.request(app)
-        .get('/challenges')
+        .get('/api/challenges')
         .then(_res => {
           res = _res
           res.should.have.status(200)
@@ -97,7 +90,7 @@ describe('Challenges resource', function(){
     it('Should return challenges with correct fields', function(){
       let resChallenge
       return chai.request(app)
-        .get('/challenges')
+        .get('/api/challenges')
         .then(function(res){
           res.should.have.status(200)
           res.should.be.json
@@ -130,7 +123,7 @@ describe('Challenges resource', function(){
       }
       // console.log('>>>>>>>>>>>>>>>>>>>' + newChallenge.description)
       return chai.request(app)
-        .post('/challenges')
+        .post('/api/challenges')
         .send(newChallenge)
         .then(function(res){
           res.should.have.status(201)
@@ -154,8 +147,7 @@ describe('Challenges resource', function(){
       const updateData = {
         title: 'string',
         creator: 'string',
-        description: 'string',
-        numSubmissions: Number
+        description: 'string'
       }
 
       return Challenge
@@ -164,7 +156,7 @@ describe('Challenges resource', function(){
           updateData.id = challenge.id
 
           return chai.request(app)
-            .put(`/challenges/${challenge.id}`)
+            .put(`api/challenges/${challenge.id}`)
             .send(updateData)
         })
         .then(res => {
@@ -188,7 +180,7 @@ describe('Challenges resource', function(){
         .findOne()
         .then(_challenge => {
           challenge = _challenge
-          return chai.request(app).delete(`/challenges/${challenge.id}`)
+          return chai.request(app).delete(`api/challenges/${challenge.id}`)
         })
         .then(res => {
           res.should.have.status(204)

@@ -11,7 +11,7 @@ const {
   closeServer
 } = require('../server')
 const { TEST_DB_URL } = require('../config')
-const { User } = require('../users/models')
+const { User } = require('../models/users')
 
 const should = chai.should();
 chai.use(chaiHttp)

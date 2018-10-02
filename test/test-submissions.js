@@ -12,9 +12,9 @@ const {
 } = require('../server')
 
 const { TEST_DB_URL }   = require('../config'), 
-      { Submission }    = require('../submissions/models'), 
-      { User }          = require('../users/models'),
-      { Challenge }     = require('../challenges/models')
+      { Submission }    = require('../models/submissions'), 
+      { User }          = require('../models/users'),
+      { Challenge }     = require('../models/challenges')
 
 const should = chai.should()
 chai.use(chaiHttp)

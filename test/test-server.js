@@ -5,7 +5,7 @@ const chaiHttp = require('chai-http')
 
 const { app, runServer, closeServer } = require('../server')
 const { CHALLENGES_DB_URL } = require('../config')
-const { User } = require('../users')
+const { User } = require('../models/users')
 
 const expect = chai.expect
 chai.use(chaiHttp)
