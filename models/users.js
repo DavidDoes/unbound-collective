@@ -27,16 +27,4 @@ UserSchema.statics.hashPassword = function(password){
 
 const User = mongoose.model('User', UserSchema);
 
-const username = 'UserTwo';
-const password = 'securepass';
-
-User.hashPassword(password)
-  .then(hash => {
-    const newUser = {
-      username, 
-      password: hash
-    }
-    return User.create(newUser)
-  })
-
 module.exports = User

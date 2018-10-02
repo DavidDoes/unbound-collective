@@ -1,8 +1,9 @@
 'use strict'
 
-const mongoose = require('mongoose')
-const multer = require('multer')
+const mongoose            = require('mongoose')
+const multer              = require('multer')
 const cloudinary          = require('cloudinary')
+const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 mongoose.Promise = global.Promise
 
@@ -35,8 +36,14 @@ PhotoSchema.methods.uploadImage = () => {
     req.body.image = result.secure_url
     public_id = result.public_id
   })
+  return { 
+    cloudinary_id: public_id,
+    url: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+  }
 }
 
 const Photo = mongoose.model('Photo', PhotoSchema)
+
+Photo.create(cloudinary_id, url)
 
 module.exports = Photo

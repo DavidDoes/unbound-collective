@@ -3,22 +3,17 @@
 const express             = require('express')
 const router              = express.Router()
 const Photo               = require('../models/photos')
-const cloudinary          = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
 
 router.post('/', parser.single('image'), (req, res) => {
-    Photo
-      .create({
-        cloudinary_id: public_id,
-        url: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-    }).catch(err => {
-      console.error(err)
-      res.status(500).json({ error: 'Internal server error' })
-    })
-    res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
+  Photo
+    .create()
+    .catch(err => {
+    console.error(err)
+    res.status(500).json({ error: 'Internal server error' })
   })
+  res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
 })
-
 
 // GET BY ID Route only for development
 router.get('/:id', (req, res) => {
