@@ -10,7 +10,6 @@ const app = express()
 const usersRouter = require('./routes/users')
 const submissionsRouter = require('./routes/submissions')
 const challengesRouter = require('./routes/challenges')
-const uploadRouter = require('./routes/photos')
 const authRouter = require('./routes/auth')
 
 mongoose.Promise = global.Promise

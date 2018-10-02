@@ -23,32 +23,28 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-function validateChallengeId(challenge, creator) {
-  if (challenge === undefined) {
-    return Promise.resolve();
-  }
-  if (!mongoose.Types.ObjectId.isValid(challenge)) {
-    const err = new Error('That `challenge` is not a valid ObjectId.')
-    err.status = 400;
-    return Promise.reject(err)
-  }
-}
 // POST to /users/:id/submissions
-router.post('/', parser.single('image'), (req, res, next) => {
+router.post('/', parser.single('image'), (req, res) => {
+  let public_id
+
+  cloudinary.uploader.upload(req.file.path, (result) => {
+      req.body.image = result.secure_url
+      public_id = result.public_id
+      console.log(result.public_id)
+      console.log(public_id)
+
   Submission
     .create()
     // .then(result => { 
       // res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // redirects to custom url 
     // })
     .catch(err => {
-      if (err === 'InvalidChallenge'){
-        err = new Error('That challenge is invalid.')
-        err.status = 400
-      }
+      console.error(err)
+      res.status(500).json({ error: 'Internal server error' 
+      })
       res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
     })
-    // next(err)
-    // })
+  })
 })
 
 router.get('/', (req, res) => {
