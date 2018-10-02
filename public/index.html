@@ -5,15 +5,17 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>Challenge.photos</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <meta name='description' content='Push your self to think outside the grid with these user-contributed photography challenges.'>
+  <meta name='description' content='Push yourself to think outside the grid with these user-contributed photography challenges.'>
   <meta name='author' content='David Clark, @DavidDoes___'>
 
-  <link rel='stylesheet' type='text/css' media='screen' href='styles/main.css'/>
+  <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css'/>
+
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" 
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous">
   </script>
+
 </head>
 <body>
   <header role='banner' class='hero-image'>
@@ -28,6 +30,7 @@
       <ul>
         <li><a href='#login'>Login</a></li>
         <li><a href='/dashboard.html'>Dashboard</a></li>
+        <li><a href='#upload'>Submit</a></li>
         <li><a href='#about'>How Does it Work?</a></li>
       </ul>
     </div>
@@ -46,17 +49,62 @@
     <p>The idea is that it's all open-ended. Really, all you need is your camera and the challenge title.</p>
   </div>
 
-  <div class='container' id='login'>
-    <form role='form' class='js-login'>
-      <legend>Enter username and password.</legend>
-      <input aria-label="username" type="text">
-      <input aria-label="password" type="password">
-      <button aria-label="submit" type="submit">LOGIN</button>
-      <p><a href="#">Forgot password.</a></p>
-      <p><a href="#">Register.</a></p>
+  <section class='signup-login'>
+    <form role='form' id='signup-form' class='js-signup-form'>
+      <fieldset>
+        <legend>Signup</legend>
+        <div>
+          <label for="username">Username</label>
+          <input name="username" class="js-username-entry" aria-label="username" type="text">
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="password" class="js-password-entry">
+        </div>
+          <button aria-label="submit" type="submit">SIGNUP</button>
+      </fieldset>
+
+    </form>
+
+    <form role='form' id="login-form" class='js-login-form'>
+      <fieldset>
+        <legend>Login</legend>
+        <div>
+          <label for="username">Username</label>
+          <input name="username" class="js-username-entry" aria-label="username" type="text">
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="password" class="js-password-entry">
+        </div>
+        <button aria-label="submit" type="submit">LOGIN</button>
+        <p><a href="#">Forgot password.</a></p>
+      </fieldset>
+
+    </form>
+  </section>
+
+  <div class='container' id='upload'>
+    <form role='form' class='js-upload'>
+      <!-- action='/api/submissions' method='POST' enctype='multipart/form-data' -->
+      <legend>Upload a Photo</legend>
+      <div>
+        <input type='file' name='image' id='image' class='js-file-input' accept='image/*' required>
+        <label for='image' class='file-label'>Choose a file</label>
+      </div>
+      <input type='submit' value='Submit' class='button'>
     </form>
   </div>
 
-  <script src="app.js"></script>
+  <footer>
+    <div class='success-msg js-success-msg'></div>
+    <div class='err-msg js-err-msg'></div>
+  </footer>
+
+  <script src='./scripts/app.js'></script>
+  <script src='./scripts/api.js'></script>
+  <script src='./scripts/index.js'></script>
+  <script src='./scripts/submissions.js'></script>
+
 </body>
 </html>
