@@ -9,13 +9,13 @@ const router              = express.Router()
 
 const cloudinary          = require('cloudinary')
 const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
-const multer              = require('multer')
+
+const multer = require('multer')
 
 const storage = multer.diskStorage({
   cloudinary: cloudinary,
   allowedFormats: ['jpg', 'jpeg', 'png']
 })
-
 const parser = multer({ storage: storage })
 
 cloudinary.config({
@@ -24,27 +24,26 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-// POST to /users/:id/submissions
 router.post('/', parser.single('image'), (req, res) => {
   let public_id
 
   cloudinary.uploader.upload(req.file.path, (result) => {
-      req.body.image = result.secure_url
-      public_id = result.public_id
-      console.log(result.public_id)
-      console.log(public_id)
+    req.body.image = result.secure_url
+    public_id = result.public_id
+    console.log(result.public_id)
+    console.log(public_id)
 
-  Submission
-    .create()
-    // .then(result => { 
-      // res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // redirects to custom url 
-    // })
-    .catch(err => {
+    Submission
+      .create({
+        cloudinary_id: public_id,
+        image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+    }).catch(err => {
       console.error(err)
-      res.status(500).json({ error: 'Internal server error' 
-      })
-      res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
+      res.status(500).json({ error: 'Internal server error' })
     })
+
+    // change once Submissions route fully implemented: 
+    res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
   })
 })
 

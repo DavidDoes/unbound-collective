@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users')
 const submissionsRouter = require('./routes/submissions')
 const challengesRouter = require('./routes/challenges')
 const authRouter = require('./routes/auth')
+const uploadRouter = require('./routes/photos')
 
 mongoose.Promise = global.Promise
 
@@ -24,6 +25,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/submissions', submissionsRouter)
 app.use('/api/challenges', challengesRouter)
 app.use('/api', authRouter)
+app.use('/api/submit', uploadRouter)
 
 // Protected Routes
 app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
