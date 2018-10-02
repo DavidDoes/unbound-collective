@@ -37,26 +37,26 @@ router.get('/', (req, res) => {
 
 // POST to /users/:id/submissions
 // image should come from photo upload
-// router.post('/', (req, res, next) => {
-//   const challenge = req.body.challenge
-//   const creator = req.user.id // should be req.user.id if logged in
-//   const newSubmission = { creator, challenge, photo }
+router.post('/', (req, res, next) => {
+  const challenge = req.body.challenge
+  const creator = req.user.id // should be req.user.id if logged in
+  const newSubmission = { creator, challenge, photo }
 
-//   Promise.all([
-//     validateChallengeId(creator, challenge, photo)
-//   ])
-//     .then(() => 
-//       Submission.create(newSubmission))
-//     .then(result => { 
-//       res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // sets custom url 
-//     })
-//     .catch(err => {
-//       if (err === 'InvalidChallenge'){
-//         err = new Error('That challenge is invalid.')
-//         err.status = 400
-//       }
-//       next(err)
-//     })
-// })
+  Promise.all([
+    validateChallengeId(creator, challenge, photo)
+  ])
+    .then(() => 
+      Submission.create(newSubmission))
+    .then(result => { 
+      res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // sets custom url 
+    })
+    .catch(err => {
+      if (err === 'InvalidChallenge'){
+        err = new Error('That challenge is invalid.')
+        err.status = 400
+      }
+      next(err)
+    })
+})
 
 module.exports = router
