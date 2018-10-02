@@ -2,11 +2,26 @@
 
 const express             = require('express')
 const mongoose            = require('mongoose')
+const Submission          = require('../models/submissions')
+const Challenge           = require('../models/challenges')
 
 const router              = express.Router()
 
-const Submission      = require('../models/submissions')
-const Challenge       = require('../models/challenges')
+const cloudinary          = require('cloudinary')
+const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
+const multer              = require('multer')
+
+const storage = multer.diskStorage({
+  cloudinary: cloudinary,
+  allowedFormats: ['jpg', 'jpeg', 'png']
+})
+
+const parser = multer({ storage: storage })
+cloudinary.config({
+  cloud_name: 'challenge-photos',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 function validateChallengeId(challenge, creator) {
   if (challenge === undefined) {
@@ -18,6 +33,23 @@ function validateChallengeId(challenge, creator) {
     return Promise.reject(err)
   }
 }
+// POST to /users/:id/submissions
+router.post('/', parser.single('image'), (req, res, next) => {
+  Submission
+    .create()
+    // .then(result => { 
+      // res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // redirects to custom url 
+    // })
+    .catch(err => {
+      if (err === 'InvalidChallenge'){
+        err = new Error('That challenge is invalid.')
+        err.status = 400
+      }
+      res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
+    })
+    // next(err)
+    // })
+})
 
 router.get('/', (req, res) => {
   Submission
@@ -35,28 +67,6 @@ router.get('/', (req, res) => {
     })
   })
 
-// POST to /users/:id/submissions
-// image should come from photo upload
-router.post('/', (req, res, next) => {
-  const challenge = req.body.challenge
-  const creator = req.user.id // should be req.user.id if logged in
-  const newSubmission = { creator, challenge, photo }
 
-  Promise.all([
-    validateChallengeId(creator, challenge, photo)
-  ])
-    .then(() => 
-      Submission.create(newSubmission))
-    .then(result => { 
-      res.location(`${req.originalUrl}/submission/${result.id}`).status(201).json(result) // sets custom url 
-    })
-    .catch(err => {
-      if (err === 'InvalidChallenge'){
-        err = new Error('That challenge is invalid.')
-        err.status = 400
-      }
-      next(err)
-    })
-})
 
 module.exports = router

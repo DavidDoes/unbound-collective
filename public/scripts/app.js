@@ -140,7 +140,7 @@ const app = (function() {
           showSuccessMsg(`You've been logged in.`)
 
           return Promise.all([ // get user's submissions
-            api.search('/api/users/:id/submissions')
+            api.search(`/api/users/${req.user.id}/submissions`)
           ])
         })
         .then(([submissions]) => {

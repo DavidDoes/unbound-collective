@@ -7,7 +7,8 @@ mongoose.Promise = global.Promise
 var SubmissionSchema = mongoose.Schema({
   challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-  photo: {type: mongoose.Schema.Types.ObjectId, ref: 'Photo', required: true}
+  cloudinary_id: {type: String, required: true},
+  photoUrl: {type: String, required: true}
 })
 
 SubmissionSchema.methods.serialize = function(){
@@ -15,7 +16,8 @@ SubmissionSchema.methods.serialize = function(){
     id: this._id,
     challenge: this.challenge,
     creator: this.creator,
-    photo: this.photo
+    cloudinary_id: this.cloudinary_id,
+    photoUrl: this.photo
   }
 }
 

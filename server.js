@@ -2,7 +2,6 @@
 
 require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const jwtAuth = require('./middleware/jwt-auth')
 
@@ -25,13 +24,12 @@ app.use(express.static('public'))
 app.use('/api/users', usersRouter)
 app.use('/api/submissions', submissionsRouter)
 app.use('/api/challenges', challengesRouter)
-app.use('/api/photos', uploadRouter)
 app.use('/api', authRouter)
 
 // Protected Routes
 app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
 app.use('/auth/users/challenges', jwtAuth, challengesRouter)
-app.use('/auth/submit', jwtAuth, uploadRouter)
+app.use('/auth/submit', jwtAuth, submissionsRouter)
 
 const { DB_URL, PORT } = require('./config')
 
