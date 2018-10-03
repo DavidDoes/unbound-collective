@@ -8,7 +8,7 @@ var SubmissionSchema = mongoose.Schema({
   challenge: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
   cloudinary_id: {type: String, required: true},
-  photoUrl: {type: String, required: true}
+  image: {type: String, required: true}
 })
 
 SubmissionSchema.methods.serialize = function(){
@@ -17,7 +17,7 @@ SubmissionSchema.methods.serialize = function(){
     challenge: this.challenge,
     creator: this.creator,
     cloudinary_id: this.cloudinary_id,
-    photoUrl: this.photo
+    image: this.photo
   }
 }
 

@@ -4,6 +4,8 @@ const express             = require('express')
 const mongoose            = require('mongoose')
 const Submission          = require('../models/submissions')
 const Challenge           = require('../models/challenges')
+const jwtAuth             = require('../middleware/jwt-auth')
+const ObjectId            = require('mongodb').ObjectID
 
 const router              = express.Router()
 
@@ -24,17 +26,21 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-router.post('/', parser.single('image'), (req, res) => {
+router.post('/', parser.single('image'), jwtAuth, (req, res) => {
   let public_id
 
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     public_id = result.public_id
-    console.log(result.public_id)
-    console.log(public_id)
+    console.log('result.public_id: ' + result.public_id)
+    console.log('public_id: ' + public_id)
+    console.log('req.user._id: ' + req.user._id)
+    console.log('req.params.id: ' + req.params.id)
 
     Submission
       .create({
+        creator: req.user._id,
+        challenge: ObjectId(req.params.id),
         cloudinary_id: public_id,
         image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
     }).catch(err => {
