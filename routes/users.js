@@ -4,6 +4,7 @@ const express         = require('express')
 const mongoose = require("mongoose");
 
 const User            = require('../models/users')
+const Submission      = require('../models/submissions')
 const jwtAuth         = require('../middleware/jwt-auth')
 const router          = express.Router()
 
@@ -104,7 +105,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id', jwtAuth, (req, res, next) => {
   const {id} = req.params;
-  const {password} = req.body;
+  const {newPassword} = req.body;
   const userId = req.user.id;
 
   if(!mongoose.Types.ObjectId.isValid(id)){
@@ -113,23 +114,27 @@ router.put('/:id', jwtAuth, (req, res, next) => {
     return next(err);
   }
 
-  if(!password){
+  if(!newPassword){
     const err = new Error('missing `password` in request body.')
     err.status = 400;
     return next(err);
   }
 
-  const updatePassword = {userId, password};
-
-  User
-    .findByIdAndUpdate(id, updatePassword, {new: true})
-      .then(result => {
-        if(result){
-          res.json(result);
-        } else {
-          next();
-        }
-      })
+  User.hashPassword(newPassword)
+    .then(hash => {
+      const updateUser = {
+        userId, 
+        password: hash
+      }
+      return User
+        .findByIdAndUpdate(id, updateUser, {new: true})
+          .then(result => {
+            if(result){
+              res.json(result);
+            } else {
+              next();
+            }
+          })
       .catch(err =>{
         if (err.code === 11000){
           err = new Error('Password must be more than 10 characters.');
@@ -137,25 +142,36 @@ router.put('/:id', jwtAuth, (req, res, next) => {
         }
         next(err);
       });
+    });
 });
 
-router.delete('/:id', (req, res) => {
-  User
-    .remove({ User: req.params.id })
+router.delete('/:id', jwtAuth, (req, res, ext) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    const err = new Error('The provided `id` is invalid.');
+    err.status = 400;
+    return next(err);
+  }
+
+  const userRemovePromise = User.findOneAndRemove({_id: id, userId});
+
+  const submissionUpdatePromise = Note.updateMany(
+    { creator: id, userId },
+    { $pull: { creator: id }}
+  );
+
+  Promise.all([userRemovePromise, submissionUpdatePromise])
     .then(() => {
-      User
-        .findByIdAndRemove(req.params.id)
-        .then(() => {
-          res.status(204).json({ message: 'success' })
-        })
+      res.status(204).end();
     })
     .catch(err => {
-      console.error(err)
-      res.status(500).json({ err: 'Internal server error' })
-    })
-})
+      next(err);
+    });
+});
 
-// FOR DEVELOPMENT ONLY
+// FOR DEVELOPMENT ONLY - DELETE REMOVE
 router.get('/', (req, res) => {
   User
     .find()
