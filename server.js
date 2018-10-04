@@ -17,21 +17,17 @@ mongoose.Promise = global.Promise
 
 // Middleware
 app.use(express.json())
-// app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'))
 
 // Public Routes
-app.use('/api/users', usersRouter)
-app.use('/api/submissions', submissionsRouter)
-app.use('/api/challenges', challengesRouter)
-app.use('/api', authRouter)
-app.use('/api/submit', uploadRouter)
+app.use('/api', authRouter) // login & refresh
+app.use('/api/users', usersRouter) 
+app.use('/api/challenges', challengesRouter) 
 
 // Protected Routes
-app.use('/auth/users/:id/submissions', jwtAuth, submissionsRouter)
-app.use('/auth/users/challenges', jwtAuth, challengesRouter)
-app.use('/auth/challenge/:id', submissionsRouter)
-// app.use('/auth/submit', submissionsRouter)
+app.use('/api/users/:id/submissions', jwtAuth, submissionsRouter) 
+app.use('/api/users/:id', jwtAuth, usersRouter)
+app.use('/api/challenge/:id', submissionsRouter)
 
 const { DB_URL, PORT } = require('./config')
 

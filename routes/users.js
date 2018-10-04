@@ -1,8 +1,10 @@
 'use strict'
 
 const express         = require('express')
-const User            = require('../models/users')
+const mongoose = require("mongoose");
 
+const User            = require('../models/users')
+const jwtAuth         = require('../middleware/jwt-auth')
 const router          = express.Router()
 
 router.post('/', (req, res) => {
@@ -100,42 +102,42 @@ router.post('/', (req, res) => {
     })
 })
 
-// router.put('/:id', jsonParser, (req, res) => {
-//   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-//     res.status(400).json({
-//       error: 'Request path id and request body id values must match'
-//     });
-//   }
+router.put('/:id', jwtAuth, (req, res, next) => {
+  const {id} = req.params;
+  const {password} = req.body;
+  const userId = req.user.id;
 
-//   const updated = {};
-//   const updateableFields = ['username', 'password'];
-//   updateableFields.forEach(field => {
-//     if (field in req.body) {
-//       updated[field] = req.body[field];
-//     }
-//   });
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    const err = new Error('The provided `id` is invalid.')
+    err.status = 400;
+    return next(err);
+  }
 
-//   User
-//     .findOne({ username: updated.username })
-//     .then(user => {
-//       if(user) {
-//         const message = `Username is already taken`;
-//         console.error(message);
-//         return res.status(400).send(message);
-//       }
-//       else {
-//         User
-//           .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-//           .then(updatedUser => {
-//             res.status(200).json({
-//               id: updatedUser.id,
-//               username: `${updatedUser.username}`,
-//             });
-//           })
-//           .catch(err => res.status(500).json({ message: err }));
-//       }
-//     });
-// });
+  if(!password){
+    const err = new Error('missing `password` in request body.')
+    err.status = 400;
+    return next(err);
+  }
+
+  const updatePassword = {userId, password};
+
+  User
+    .findByIdAndUpdate(id, updatePassword, {new: true})
+      .then(result => {
+        if(result){
+          res.json(result);
+        } else {
+          next();
+        }
+      })
+      .catch(err =>{
+        if (err.code === 11000){
+          err = new Error('Password must be more than 10 characters.');
+          err.status = 400;
+        }
+        next(err);
+      });
+});
 
 router.delete('/:id', (req, res) => {
   User

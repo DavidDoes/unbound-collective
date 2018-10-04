@@ -5,7 +5,6 @@ const User = require('../models/users')
 
 function localAuth(req, res, next) {
   const { username, password } = req.body
-  console.log('>>>>' + req.body)
 
   if (!username && !password) {
     const err = new Error('No credentials provided. Please try again.')
@@ -24,8 +23,6 @@ function localAuth(req, res, next) {
         err.location = 'username'
         return Promise.reject(err)
       }
-      console.log('>>> password:' + password)
-      console.log('>>> user.password:' + user.password)
 
       return bcrypt.compare(password, user.password)
     })
