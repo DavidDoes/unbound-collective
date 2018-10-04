@@ -148,6 +148,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 router.delete('/:id', jwtAuth, (req, res, ext) => {
   const { id } = req.params;
   const userId = req.user.id;
+  const password = req.body;
 
   if(!mongoose.Types.ObjectId.isValid(id)){
     const err = new Error('The provided `id` is invalid.');
@@ -155,9 +156,15 @@ router.delete('/:id', jwtAuth, (req, res, ext) => {
     return next(err);
   }
 
+  if(!password){
+    const err = new Error('missing `password` in request body.')
+    err.status = 400;
+    return next(err);
+  }
+
   const userRemovePromise = User.findOneAndRemove({_id: id, userId});
 
-  const submissionUpdatePromise = Note.updateMany(
+  const submissionUpdatePromise = Submission.updateMany(
     { creator: id, userId },
     { $pull: { creator: id }}
   );
