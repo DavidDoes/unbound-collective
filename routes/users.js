@@ -1,7 +1,7 @@
 'use strict'
 
 const express         = require('express')
-const mongoose = require("mongoose");
+const mongoose        = require("mongoose");
 
 const User            = require('../models/users')
 const Submission      = require('../models/submissions')
@@ -115,7 +115,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
   }
 
   if(!newPassword){
-    const err = new Error('missing `password` in request body.')
+    const err = new Error('missing `newPassword` in request body.')
     err.status = 400;
     return next(err);
   }
@@ -176,6 +176,35 @@ router.delete('/:id', jwtAuth, (req, res, ext) => {
     .catch(err => {
       next(err);
     });
+});
+
+router.get('/:id/submissions', jwtAuth, (req, res, next) => {
+  const {id} = req.params;
+  const creator = req.params.id;
+
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    const err = new Error('The provided `id` is invalid.');
+    err.status = 400;
+    return next(err);
+  }
+
+  Submission
+    .find({creator})
+    .then(submissions => {
+      res.json({
+        submissions: submissions.map(
+          (submissions) => submissions.serialize())
+      }) // responds with empty array
+    })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+router.delete('/:id/submissions', jwtAuth, (req, res) => {
+
 });
 
 // FOR DEVELOPMENT ONLY - DELETE REMOVE
