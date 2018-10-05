@@ -32,10 +32,6 @@ router.post('/', parser.single('image'), jwtAuth, (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
     req.body.image = result.secure_url
     public_id = result.public_id
-    console.log('result.public_id: ' + result.public_id)
-    console.log('public_id: ' + public_id)
-    console.log('req.user._id: ' + req.user._id)
-    console.log('req.params.id: ' + req.params.id)
 
     Submission
       .create({
@@ -50,6 +46,34 @@ router.post('/', parser.single('image'), jwtAuth, (req, res) => {
 
     // change once Submissions route fully implemented: 
     res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
+  })
+})
+
+router.delete('/', jwtAuth, (req, res) => {
+  // delete from Challenge as well
+  Submission
+    .findById(req.params.id)
+    .then(image => {
+      cloudinary.v2.uploader
+      .destroy(image.cloudinary_id, (err) => {
+        res.status(204).json({ message: 'Successfully deleted from Cloudinary' })
+      })
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    })
+    .remove({ Submission: req.params.id })
+    .then(() => {
+      Submission
+        .findByIdAndRemove(req.params.id)
+        .then(() => {
+          res.status(204).json({ message: 'Successfully deleted from database' })
+      })
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).json({ err: 'Internal server error' })
   })
 })
 

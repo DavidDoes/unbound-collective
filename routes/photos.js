@@ -41,8 +41,6 @@ router.post('/', parser.single('image'), (req, res) => {
   cloudinary.uploader.upload(req.file.path, (result) => {
       req.body.image = result.secure_url
       public_id = result.public_id
-      console.log(result.public_id)
-      console.log(public_id)
 
     Photo
       .create({
@@ -72,7 +70,6 @@ router.delete('/:id', (req, res) => {
     .then(photo => {
       cloudinary.v2.uploader
       .destroy(photo.cloudinary_id, (err, result) => {
-        console.log(result, err)
       })
     })
     .catch(err => {
@@ -100,7 +97,6 @@ router.get('/', (req, res) => {
     .find()
     .then(photo => {
       res.send(photo)
-      console.log(photo[0].cloudinary_id)
     })
     .catch(err => {
       console.error(err)

@@ -21,6 +21,16 @@ router.get('/', (req, res) => {
     })
   })
 
+router.get('/:id', (req, res) => {
+  Challenge
+    .findById(req.params.id)
+    .then(challenge => {
+      res.json({
+      
+      })
+    })
+})
+
 router.post('/', function (req, res) {
   const requiredFields = ['title']
   const missingField = requiredFields.find(field => !(field in req.body))
