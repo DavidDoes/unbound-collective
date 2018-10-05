@@ -49,34 +49,6 @@ router.post('/', parser.single('image'), jwtAuth, (req, res) => {
   })
 })
 
-router.delete('/', jwtAuth, (req, res) => {
-  // delete from Challenge as well
-  Submission
-    .findById(req.params.id)
-    .then(image => {
-      cloudinary.v2.uploader
-      .destroy(image.cloudinary_id, (err) => {
-        res.status(204).json({ message: 'Successfully deleted from Cloudinary' })
-      })
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    })
-    .remove({ Submission: req.params.id })
-    .then(() => {
-      Submission
-        .findByIdAndRemove(req.params.id)
-        .then(() => {
-          res.status(204).json({ message: 'Successfully deleted from database' })
-      })
-    })
-    .catch(err => {
-      console.error(err)
-      res.status(500).json({ err: 'Internal server error' })
-  })
-})
-
 router.get('/', (req, res) => {
   Submission
     .find()

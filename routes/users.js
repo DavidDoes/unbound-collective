@@ -6,6 +6,8 @@ const mongoose        = require("mongoose");
 const User            = require('../models/users')
 const Submission      = require('../models/submissions')
 const jwtAuth         = require('../middleware/jwt-auth')
+const cloudinary      = require('cloudinary')
+
 const router          = express.Router()
 
 router.post('/', (req, res) => {
@@ -194,7 +196,7 @@ router.get('/:id/submissions', jwtAuth, (req, res, next) => {
       res.json({
         submissions: submissions.map(
           (submissions) => submissions.serialize())
-      }) // responds with empty array
+      }) 
     })
     .catch(
       err => {
@@ -203,8 +205,34 @@ router.get('/:id/submissions', jwtAuth, (req, res, next) => {
     });
 });
 
-router.delete('/:id/submissions', jwtAuth, (req, res) => {
+router.delete('/:userId/submissions/:subId', jwtAuth, (req, res) => {
+  console.log(req.params.userId)
+  console.log(req.params.subId)
+  const creator = req.params.userId;
+  const submission = req.params.subId;
 
+  if(!mongoose.Types.ObjectId.isValid(creator, submission)){
+    const err = new Error('The provided `id` is invalid.');
+    err.status = 400;
+    return next(err);
+  }
+
+  Submission
+    .findById(submission)
+    .then(image => {
+      cloudinary.v2.uploader.destroy(image.cloudinary_id)
+      .then(() => {
+        Submission
+          .findByIdAndRemove(submission)
+          .then(() => {
+            res.status(204).json({ message: 'Successfully deleted from database' })
+        })
+      })
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).json({ err: 'Internal server error' })
+  })
 });
 
 // FOR DEVELOPMENT ONLY - DELETE REMOVE
