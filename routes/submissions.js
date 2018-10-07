@@ -1,70 +1,64 @@
-'use strict'
+'use strict';
 
-const express             = require('express')
-const mongoose            = require('mongoose')
-const Submission          = require('../models/submissions')
-const Challenge           = require('../models/challenges')
-const jwtAuth             = require('../middleware/jwt-auth')
-const ObjectId            = require('mongodb').ObjectID
+const express = require('express');
+const mongoose = require('mongoose');
+const Submission = require('../models/submissions');
+const jwtAuth = require('../middleware/jwt-auth');
 
-const router              = express.Router()
-
-const cloudinary          = require('cloudinary')
-const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL
-
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-  cloudinary: cloudinary,
-  allowedFormats: ['jpg', 'jpeg', 'png']
-})
-const parser = multer({ storage: storage })
-
-cloudinary.config({
-  cloud_name: 'challenge-photos',
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-})
-
-router.post('/', parser.single('image'), jwtAuth, (req, res) => {
-  let public_id
-
-  cloudinary.uploader.upload(req.file.path, (result) => {
-    req.body.image = result.secure_url
-    public_id = result.public_id
-
-    Submission
-      .create({
-        creator: req.user._id,
-        challenge: ObjectId(req.params.id),
-        cloudinary_id: public_id,
-        image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-    }).catch(err => {
-      console.error(err)
-      res.status(500).json({ error: 'Internal server error' })
-    })
-
-    // change once Submissions route fully implemented: 
-    res.send('photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id)
-  })
-})
+const router = express.Router();
 
 router.get('/', (req, res) => {
-  Submission
-    .find()
-    .then(submission => {
-      res.json({
-        submission: submission.map(
-          (submission) => submission.serialize())
-      });
-    })
-    .catch(
-      err => {
-        console.error(err);
-        res.status(500).json({message: 'Internal server error'});
-    })
-  })
+	Submission.find()
+		.then(submission => {
+			res.json({
+				submission: submission.map(submission => submission.serialize())
+			});
+		})
+		.catch(err => {
+			console.error(err);
+			res.status(500).json({ message: 'Internal server error' });
+		});
+});
 
+const cloudinary = require('cloudinary');
 
+cloudinary.config({
+	cloud_name: 'challenge-photos',
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-module.exports = router
+// Delete user's Submission
+router.delete('/:id', jwtAuth, (req, res, next) => {
+  const creator = req.user._id;
+  const id = req.params.id;
+  console.log(id)
+
+	if (!mongoose.Types.ObjectId.isValid(creator)) {
+		const err = new Error('You do not have permission to delete this submission.');
+		err.status = 400;
+		return next(err);
+  }
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+		const err = new Error('The provided `id` is invalid.');
+		err.status = 400;
+		return next(err);
+	}
+
+	Submission.findById(id)
+		.then(image => {
+			cloudinary.v2.uploader.destroy(image.cloudinary_id).then(() => {
+				Submission.findByIdAndRemove({ _id: id, creator }).then(() => {
+					res.status(204).json({
+						message: 'Successfully deleted from database'
+					});
+				});
+			});
+		})
+		.catch(err => {
+			next(err);
+		});
+});
+
+module.exports = router;
