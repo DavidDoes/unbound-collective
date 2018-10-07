@@ -32,7 +32,6 @@ cloudinary.config({
 router.delete('/:id', jwtAuth, (req, res, next) => {
   const creator = req.user._id;
   const id = req.params.id;
-  console.log(id)
 
 	if (!mongoose.Types.ObjectId.isValid(creator)) {
 		const err = new Error('You do not have permission to delete this submission.');
