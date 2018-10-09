@@ -10,9 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
 	Challenge.find()
 		.then(challenge => {
-			res.json({
-				challenge: challenge.map(challenge => challenge.serialize())
-			});
+			res.json(challenge.map(challenge => challenge.serialize()));
 		})
 		.catch(err => {
 			console.error(err);

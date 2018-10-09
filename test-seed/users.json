@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "333333333333333333333300",
+    "username": "UserOne",
+    "password": "$87e897e3b54a405da144968b2ca19b45"
+  },
+  {
+    "_id": "333333333333333333333301",
+    "username": "UserTwo",
+    "password": "$aee67d9bb569ad1562f7b67cfccbd2ef"
+  },
+  {
+    "_id": "333333333333333333333302",
+    "username": "UserThree",
+    "password": "$3dc94727dbba08bdd21d7b318b410600"
+  }
+]

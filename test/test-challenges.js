@@ -1,201 +1,161 @@
-'use strict'
+'use strict';
 
-const chai = require('chai')
-const chaiHttp = require('chai-http')
-const faker = require('faker')
-const mongoose = require('mongoose')
+const chai      = require('chai'),
+      chaiHttp  = require('chai-http'),
+      mongoose  = require('mongoose'),
+      jwt       = require('jsonwebtoken');
 
-const {
-  app,
-  runServer,
-  closeServer
-} = require('../server')
+const { app, runServer, closeServer } = require('../server');
+const { TEST_DB_URL, JWT_SECRET }     = require('../config');
 
-const { TEST_DB_URL }   = require('../config'),
-      { Submission }    = require('../models/submissions'), 
-      { User }          = require('../models/users'),
-      { Challenge }     = require('../models/challenges')
+const User      = require('../models/users'),
+	    Challenge = require('../models/challenges');
 
-const should = chai.should()
-chai.use(chaiHttp)
+const seedUsers       = require('../test-seed/users');
+const seedChallenges  = require('../test-seed/challenges');
 
-function tearDownDb(){
-  return new Promise((resolve, reject) => {
-    console.warn('Deleting database')
-    mongoose.connection.dropDatabase()
-      .then(result => resolve(result))
-      .catch(err => reject(err))
-  })
+const expect = chai.expect;
+chai.use(chaiHttp);
+
+function tearDownDb() {
+	return new Promise((resolve, reject) => {
+		console.warn('Deleting database');
+		mongoose.connection
+			.dropDatabase()
+			.then(result => resolve(result))
+			.catch(err => reject(err));
+	});
 }
 
-function seedChallengesData(){
-  console.info('seeding challenges')
+describe('Challenges resource', function() {
+	let user;
+	let token;
 
-  const challengeCreator = {
-    username: faker.internet.username,
-    password: faker.internet.password
-  }
+	before(function() {
+		return runServer(TEST_DB_URL);
+	});
 
-  return User
-    .create(challengeCreator)
-    .then(function (user) {
-      return Submission
-        .create({
-          dateCreated: new Date(),
-          challenge: 'Sample Challenge Title',
-          creator: user._id
-      })
-      .then(function (submission) {
-        const seedChallenges = []
-        for (let i = 0; i <= 1; i++) {
-          seedChallenges.push({
-            title: 'Submission title',
-            description: 'Challenge description',
-            submission: submission._id,
-            creator: user._id
-          })
-        }
-        return Challenge.insertMany(seedChallenges)
-      })
-  })
-}
+	beforeEach(function() {
+		console.info('seeding Users and Challenges');
+		return Promise.all([
+			User.insertMany(seedUsers),
+			Challenge.insertMany(seedChallenges),
+			Challenge.createIndexes()
+    ])
+    .then(([users]) => {
+			user = users[0];
+			token = jwt.sign({ user }, JWT_SECRET, { subject: user.username });
+		});
+	});
 
-describe('Challenges resource', function(){
+	afterEach(function() {
+		return tearDownDb();
+	});
 
-  before(function () {
-    return runServer(TEST_DB_URL)
-  })
+	after(function() {
+		return closeServer();
+	});
 
-  beforeEach(function(){
-    return seedChallengesData()
-  })
+	describe('GET /api/challenges', function() {
+		
+		it('Should return all existing challenges', function() {
+			const dbPromise = Challenge.find();
+			const apiPromise = chai
+				.request(app)
+				.get('/api/challenges')
+				.set('Authorization', `Bearer ${token}`);
 
-  afterEach(function(){
-    return tearDownDb()
-  })
+			return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
+				expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(data.length);
+			});
+		});
+		// neither object nor array work
+		it('Should return challenges with correct fields', function() {
+      const dbPromise = Challenge.find();
+			const apiPromise = chai
+				.request(app)
+				.get('/api/challenges')
+				.set('Authorization', `Bearer ${token}`);
 
-  after(function () {
-    return closeServer()
-  })
+			return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
 
-  describe('Challenges GET endpoint', function(){
-    it('Should return all existing challenges', function(){
-      let res
-      return chai.request(app)
-        .get('/challenges')
-        .then(_res => {
-          res = _res
-          res.should.have.status(200)
-          res.body.should.have.lengthOf.at.least(1)
-          return Challenge.count()
-        })
-        .then(count => {
-          res.body.should.have.lengthOf(count)
-        })
-    })
+				res.body.forEach(function(challenge, i) {
+					expect(challenge).to.have.all.keys('id', 'title', 'creator');
+					expect(challenge.id).to.equal(data[i].id);
+					expect(challenge.title).to.equal(data[i].title);
+				});
+			});
+			// this test doesn't run due to previous not finishing
+			it('Should return challenge of provided id', function() {
+				let data;
+				return Challenge.findOne({ id: req.params.id })
+					.then(_data => {
+						data = _data;
+						return chai
+							.request(app)
+							.get(`/api/challenges/${data.id}`)
+							.set('Authorization', `Bearer ${token}`);
+					})
+					.then(res => {
+						expect(res).to.have.status(200);
+						expect(res).to.be.json;
+						expect(res.body).to.be.an('object');
+						expect(res.body).to.have.all.keys('id', 'title', 'creator');
+						expect(res.body.id).to.equal(data.id);
+						expect(res.body.title).to.equal(data.title);
+					});
+			});
+		});
+	});
 
-    it('Should return challenges with correct fields', function(){
-      let resChallenge
-      return chai.request(app)
-        .get('/api/challenges')
-        .then(function(res){
-          res.should.have.status(200)
-          res.should.be.json
-          res.body.should.be.a('array')
-          res.body.should.have.lengthOf.at.least(1)
+	describe('POST /api/challenges', function() {
+		it('Should add a new challenge', function() {
+			const newChallenge = { title: 'newChallenge' };
+			let body;
+			return chai
+				.request(app)
+				.post('/api/challenges')
+				.set('Authorization', `Bearer ${token}`)
+				.send(newChallenge)
+				.then(function(res) {
+					body = res.body;
+					expect(res).to.have.status(201);
+					expect(res).to.be.json;
+					expect(body).to.be.an('object');
+					expect(body).to.have.all.keys('id', 'title', 'creator');
+					return Challenge.findOne({ _id: body.id, creator: user.id });
+				})
+				.then(function(challenge) {
+					expect(body.id).to.equal(challenge.id);
+					expect(body.title).to.equal(challenge.title);
+				});
+		});
+	});
 
-          res.body.forEach(function(challenge){
-            challenge.should.be.a('object')
-            challenge.should.include.keys('id', 'title', 'creator', 'description', 'thumbnail')
-          })
-          resChallenge = res.body[0]
-          return Challenge.findById(resChallenge.id)
-        })
-        .then(challenge => {
-          resChallenge.id.should.equal(challenge.id)
-          resChallenge.title.should.equal(challenge.title)
-          resChallenge.creator.should.equal(challenge.creator)
-          resChallenge.description.should.equal(challenge.description)
-          resChallenge.thumbnail.should.equal(challenge.thumbnail)
-        })
-    })
-  })
+	describe('DELETE /api/challenges/:id', function() {
+		it('Should delete challenge of provided id', function() {
+			let challenge;
 
-  describe('Challenges POST endpoint', function(){
-    it('Should add new challenge', function(){
-      const newChallenge = {
-        title: faker.lorem.words(),
-        creator: faker.internet.userName(),
-        description: faker.lorem.paragraph()
-      }
-      // console.log('>>>>>>>>>>>>>>>>>>>' + newChallenge.description)
-      return chai.request(app)
-        .post('/api/challenges')
-        .send(newChallenge)
-        .then(function(res){
-          res.should.have.status(201)
-          res.should.be.json
-          res.body.should.be.a('object')
-          res.body.should.include.keys('id', 'title', 'creator')
-          res.body.title.should.equal(newChallenge.title)
-          res.body.creator.should.equal(newChallenge.creator)
-          res.body.id.should.not.be.null
-          return Challenge.findById(res.body.id)
-        })
-        .then(function(challenge){
-          challenge.title.should.equal(newChallenge.title)
-          challenge.creator.should.equal(newChallenge.creator)
-        })
-    })
-  })
-
-  describe('Challenges PUT endpoint', function(){
-    it('Should update fields sent over', function(){
-      const updateData = {
-        title: 'string',
-        creator: 'string',
-        description: 'string'
-      }
-
-      return Challenge
-        .findOne()
-        .then(challenge => {
-          updateData.id = challenge.id
-
-          return chai.request(app)
-            .put(`/challenges/${challenge.id}`)
-            .send(updateData)
-        })
-        .then(res => {
-          res.should.have.status(200)
-          return Challenge.findById(updateData.id)
-        })
-        .then(challenge => {
-          challenge.title.should.equal(updateData.title)
-          // challenge.creator.should.equal(updateData.creator)
-          challenge.description.should.equal(updateData.description)
-          // challenge.numSubmissions.should.equal(updateData.numSubmissions)
-        })
-    })
-  })
-
-  describe('Challenges DELETE endpoint', function(){
-    it('Should update fields sent over', function(){
-      let challenge
-
-      return Challenge
-        .findOne()
-        .then(_challenge => {
-          challenge = _challenge
-          return chai.request(app).delete(`/challenges/${challenge.id}`)
-        })
-        .then(res => {
-          res.should.have.status(204)
-          return Challenge.findById(challenge.id)
-        })
-        .then(_challenge => {
-          should.not.exist(_challenge)
-        })
-    })
-  })
-})
+			return Challenge.findOne({ creator: user.id })
+				.then(_challenge => {
+					challenge = _challenge;
+					return chai
+						.request(app)
+						.delete(`/api/challenges/${challenge.id}`)
+						.set('Authorization', `Bearer ${token}`);
+				})
+				.then(function(res) {
+					expect(res).to.have.status(204);
+					expect(res.body).to.be.empty;
+					return Challenge.findById(challenge.id);
+				})
+				.then((challenge) => {
+					expect(challenge).to.be.null;
+				});
+		});
+	});
+});

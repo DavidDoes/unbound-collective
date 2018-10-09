@@ -10,9 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
 	Submission.find()
 		.then(submission => {
-			res.json({
-				submission: submission.map(submission => submission.serialize())
-			});
+			res.json(submission.map(submission => submission.serialize()));
 		})
 		.catch(err => {
 			console.error(err);

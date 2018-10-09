@@ -1,0 +1,32 @@
+{
+  "env": {
+      "es6": true,
+      "node": true
+  },
+  "parserOptions": {
+      "sourceType": "module"
+  },
+  "plugins": [
+    "mocha"
+  ],
+  "rules": {
+      "no-const-assign": 1,
+      "no-extra-semi": 1,
+      "semi": 1,
+      "no-fallthrough": 0,
+      "no-empty": 0,
+      "no-mixed-spaces-and-tabs": 1,
+      "no-redeclare": 1,
+      "no-this-before-super": 1,
+      "no-undef": 1,
+      "no-unreachable": 1,
+      "no-unused-vars": 1,
+      "no-use-before-define": 1,
+      "constructor-super": 1,
+      "curly": 0,
+      "eqeqeq": 0,
+      "func-names": 0,
+      "valid-typeof": 1,
+      "mocha/no-exclusive-tests": "error"
+  }
+}

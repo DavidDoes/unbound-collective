@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "000000000000000000000000",
+    "challenge": "111111111111111111111100",
+    "creator": "333333333333333333333302",
+    "cloudinary_id": "abcde",
+    "image": "https://res.cloudinary.com/challenge-photos/image/upload/testImage01.jpeg"
+  },
+  {
+    "_id": "000000000000000000000001",
+    "challenge": "111111111111111111111101",
+    "creator": "333333333333333333333301",
+    "cloudinary_id": "fghij",
+    "image": "https://res.cloudinary.com/challenge-photos/image/upload/testImage02.jpeg"
+  },
+  {
+    "_id": "000000000000000000000002",
+    "challenge": "111111111111111111111102",
+    "creator": "333333333333333333333300",
+    "cloudinary_id": "klmno",
+    "image": "https://res.cloudinary.com/challenge-photos/image/upload/testImage03.jpeg"
+  }
+]
