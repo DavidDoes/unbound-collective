@@ -9,5 +9,5 @@ const store = (function() {
     thumbnail: [],
 
     authToken: ''
-  }
-})
+  };
+}());

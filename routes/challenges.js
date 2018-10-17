@@ -52,7 +52,7 @@ router.post('/', jwtAuth, function(req, res) {
 
 	return Challenge.create({
 		title: req.body.title,
-		creator: req.user._id
+		creator: req.user.id
 	}).then(challenge => {
 		return res.status(201).json(challenge.serialize());
 	});
@@ -146,7 +146,7 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
     public_id = result.public_id;
 
 		Submission.create({
-			creator: req.user._id,
+			creator: req.user.id,
 			challenge: ObjectId(req.params.id),
 			cloudinary_id: public_id,
 			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id

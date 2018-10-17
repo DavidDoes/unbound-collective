@@ -5,7 +5,7 @@ const TEST_PORT = 1337;
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost/challenge-photos'
 
-const PORT = process.env.PORT || 27017
+const PORT = process.env.PORT || 8080
 
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRY = process.env.JWT_EXPIRY
