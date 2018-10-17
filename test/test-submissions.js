@@ -98,7 +98,7 @@ describe('Submissions resource', function() {
 	});
 
 	describe('POST Submission to /api/challenges/:id/submissions', function() {
-		it('Should add new submission with valid data', function() {
+		it.only('Should add new submission with valid data', function() {
 			let res;
       let id;
       
@@ -116,10 +116,10 @@ describe('Submissions resource', function() {
 					.post(`/api/challenges/${id}/submissions`)
           .set('Authorization', `Bearer ${token}`)
           .type('form')
-          .field('Content-Type', 'multipart/form-data')
-          .field('challenge', id)
-          .field('creator', 'string')
-          .field('cloudinary_id', 'string')
+          // .field('Content-Type', 'multipart/form-data')
+          // .field('challenge', id)
+          // .field('creator', 'string')
+          // .field('cloudinary_id', 'string')
           .attach('image', 'test/test-image.png')
           // .send(newSubmission)
           })
@@ -147,7 +147,7 @@ describe('Submissions resource', function() {
 						expect(res.body.challenge).to.equal(submission.challenge);
 						expect(res.body.creator).to.equal(submission.creator);
 						expect(res.body.cloudinary_id).to.equal(submission.cloudinary_id);
-						expect(res.body.image).to.equal(submission.image);
+            expect(res.body.image).to.equal(submission.image);
 					});
 			});
 		});
