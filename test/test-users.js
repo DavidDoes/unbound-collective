@@ -1,173 +1,114 @@
-// 'use strict'
+'use strict';
 
-// const chai = require('chai')
-// const chaiHttp = require('chai-http')
-// const faker = require('faker')
-// const mongoose = require('mongoose')
+const chai = require('chai'),
+	    chaiHttp = require('chai-http'),
+      mongoose = require('mongoose'),
+      jwt = require('jsonwebtoken');
 
-// const {
-//   app,
-//   runServer,
-//   closeServer
-// } = require('../server')
-// const { TEST_DB_URL } = require('../config')
-// const { User } = require('../models/users')
+const { app, runServer, closeServer } = require('../server');
+const { TEST_DB_URL, TEST_PORT, JWT_SECRET, JWT_EXPIRY } = require('../config');
 
-// const should = chai.should();
-// chai.use(chaiHttp)
+const User = require('../models/users');
 
-// function tearDownDb(){
-//   return new Promise((resolve, reject) => {
-//     console.warn('Deleting database')
-//     mongoose.connection.dropDatabase()
-//       .then(result => resolve(result))
-//       .catch(err => reject(err))
-//   })
-// }
+const seedUsers = require('../test-seed/users');
 
-// function seedUsersData(){
-//   console.info('seeding user data')
-//   const seedData = []
-//   for (let i = 1; i<= 10; i++){
-//     seedData.push({
-//       id: faker.random.number(),
-//       username: faker.internet.userName(),
-//       password: faker.internet.password()
-//     })
-//   }
-//   return User.insertMany(seedData)
-// }
+const expect = chai.expect;
+chai.use(chaiHttp);
 
-// describe('Users resource', function () {
+function tearDownDb() {
+	return new Promise((resolve, reject) => {
+		console.warn('Deleting database');
+		mongoose.connection
+			.dropDatabase()
+			.then(result => resolve(result))
+			.catch(err => reject(err));
+	});
+}
 
-//   before(function () {
-//     return runServer(TEST_DB_URL)
-//   })
+describe('Users resources', function() {
+  const username = 'testUser';
+  const password = 'testPass10';
 
-//   beforeEach(function(){
-//     return seedUsersData()
-//   })
+  let user = {}
+  let token;
 
-//   afterEach(function(){
-//     return tearDownDb()
-//   })
+	before(function() {
+		return runServer(TEST_DB_URL, TEST_PORT);
+	});
 
-//   after(function () {
-//     return closeServer()
-//   })
+	beforeEach(function() {
+    return Promise.all([
+      User.insertMany(seedUsers),
+      User.createIndexes(seedUsers)
+    ])
+    .then(([users]) => {
+			user = users[0];
+			token = jwt.sign({ user }, JWT_SECRET, { subject: user.username });
+    });
+  });
 
+	afterEach(function() {
+		return tearDownDb();
+	});
 
-//   describe('GET endpoint', function () {
-//     it('Should return all existing users', function () {
-//       let res
-//       return chai.request(app)
-//         .get('/users')
-//         .then(_res => {
-//           res = _res
-//           res.should.have.status(200)
-//           res.body.should.have.lengthOf.at.least(1)
-//           return User.count()
-//         })
-//         .then(count => {
-//           res.body.should.have.lengthOf(count)
-//         })
-//     })
+	after(function() {
+		return closeServer();
+	});
 
-//     it('Should return users with correct field', function(){
-//       let resUser
-//       return chai.request(app)
-//         .get('/users')
-//         .then(function(res){
-//           res.should.have.status(200)
-//           res.should.be.json
-//           res.body.should.be.a('array')
-//           res.body.should.have.lengthOf.at.least(1)
+  describe('POST /api/users', function () {
+    it('Should create new user', function () {
 
-//           res.body.forEach(function(user){
-//             user.should.be.a('object')
-//             user.should.include.keys('id', 'username')
-//           })
-//           resUser = res.body[0]
-//           return User.findById(resUser.id)
-//         })
-//         .then(user => {
-//           resUser.id.should.equal(user.id)
-//           resUser.username.should.equal(user.username)
-//         })
-//     })
-//   })
+      let res;
+      
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ username, password })
+        .then(_res => {
+          res = _res;
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('id', 'username');
+          expect(res.body.id).to.exist;
+          expect(res.body.username).to.equal(username);
+          return User.findOne({ username });
+        })
+        .then(user => {
+          expect(user).to.exist;
+          expect(user.id).to.equal(res.body.id);
+          return user.validatePassword(password);
+        })
+        .then(isValid => {
+          expect(isValid).to.be.true;
+        });
+      });
+    });
 
-//   describe('POST endpoint', function(){
-//     it('Should add new user', function(){
-//       const newUser = {
-//         username: faker.internet.userName(),
-//         password: faker.internet.password()
-//       }
-//       return chai.request(app)
-//         .post('/users')
-//         .send(newUser)
-//         .then(function(res){
-//           // console.log(res.body)
-//           res.should.have.status(201)
-//           res.should.be.json
-//           res.body.should.be.a('object')
-//           res.body.should.include.keys('id', 'username')
-//           res.body.username.should.equal(newUser.username)
-//           res.body.id.should.not.be.null
-//           res.body.username.should.equal( 
-//             `${newUser.username}`
-//           )
-//           return User.findById(res.body.id)
-//         })
-//         .then(function(user){
-//           user.username.should.equal(newUser.username)
-//         })
-//     })
-//   })
+  describe('DELETE /api/users/:id', function(){
+    it('Should delete user by id', function(){
+      let data;
 
-//   describe('PUT endpoint', function(){
-//     it('Should update fields sent over', function(){
-//       const updateData = {
-//         username: 'string',
-//         password: 'string'
-//       }
-
-//       return User
-//         .findOne()
-//         .then(user => {
-//           updateData.id = user.id
-
-//           return chai.request(app)
-//             .put(`/users/${user.id}`)
-//             .send(updateData)
-//         })
-//         .then(res => {
-//           res.should.have.status(200)
-//           return User.findById(updateData.id)
-//         })
-//         .then(user => {
-//           user.username.should.equal(updateData.username)
-//         })
-//     })
-//   })
-
-//   describe('DELETE endpoint', function(){
-//     it('Should delete user by id', function(){
-//       let user
-
-//       return User
-//         .findOne()
-//         .then(_user => {
-//           user = _user
-//           return chai.request(app).delete(`/users/${user.id}`)
-//         })
-//         .then(res => {
-//           res.should.have.status(204)
-//           return User.findById(user.id)
-//         })
-//         .then(_user => {
-//           should.not.exist(_user)
-//         })
-//     })
-//   })
-// })
+      return User
+        .findOne()
+        .then(_data => {
+          data = _data;
+          return chai
+            .request(app)
+            .delete(`/api/users/${data.id}`)
+            .send({ username, password })
+            .set('Authorization', `Bearer ${token}`);
+        })
+        .then(res => {
+          console.log('>>> data: ' + data)
+          console.log('>>> status: ' + res.status)
+          expect(res).to.have.status(204);
+          expect(res.body).to.be.empty;
+          return User.findById(data.id);
+        })
+        .then((user) => {
+          console.log('>>> user: ' + user)
+          expect(user).to.be.null;
+      });
+    });
+  });
+});

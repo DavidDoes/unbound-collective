@@ -27,12 +27,30 @@ app.use('/api/challenges', challengesRouter);
 // Protected Routes
 app.use('/api/users/:id/submissions', jwtAuth, submissionsRouter);
 app.use('/api/users/:id', jwtAuth, usersRouter);
-app.use('/api/challenge/:id', submissionsRouter);
+app.use('/api/challenge/:id/submissions', submissionsRouter);
 
 const { DB_URL, PORT } = require('./config');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+// Custom 404 Not Found route handler
+app.use((req, res, next) => {
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// Custom Error Handler
+app.use((err, req, res, next) => {
+  if (err.status) {
+    const errBody = Object.assign({}, err, { message: err.message });
+    res.status(err.status).json(errBody);
+  } else {
+    res.status(500).json({ message: "Internal Server Error" });
+    console.error(err);
+  }
 });
 
 let server;

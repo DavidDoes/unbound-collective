@@ -20,7 +20,7 @@ const createAuthToken = function (user) {
     })
   })
 }
-// /auth/login
+
 router.post('/login', localAuth, (req, res, next) => {
   createAuthToken(req.user)
     .then(authToken => {
@@ -30,7 +30,7 @@ router.post('/login', localAuth, (req, res, next) => {
       next(err)
     })
 })
-// /auth/refresh - for getting new JWT with existing valid JWT
+
 router.post('/refresh', jwtAuth, (req, res, next) => {
   createAuthToken(req.user)
     .then(authToken => {

@@ -152,7 +152,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 	});
 });
 
-router.delete('/:id', jwtAuth, (req, res, ext) => {
+router.delete('/:id', jwtAuth, (req, res, next) => {
 	const { id } = req.params;
 	const userId = req.user.id;
 	const password = req.body;
@@ -170,18 +170,16 @@ router.delete('/:id', jwtAuth, (req, res, ext) => {
 	}
 
 	const userRemovePromise = User.findOneAndRemove({
-		_id: id,
-		userId
+		_id: userId
 	});
 
 	const submissionUpdatePromise = Submission.updateMany(
 		{
-			creator: id,
-			userId
+			creator: userId
 		},
 		{
-			$pull: {
-				creator: id
+			$unset: {
+				creator: userId
 			}
 		}
 	);
@@ -225,10 +223,6 @@ router.get('/:id/submissions', jwtAuth, (req, res, next) => {
 router.get('/', (req, res) => {
 	User.find()
 		.then(user => {
-			// res.json({
-			//   user: user.map(
-			//     (user) => user.serialize())
-			// })
 			res.send(user);
 		})
 		.catch(err => {

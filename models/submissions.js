@@ -17,7 +17,7 @@ SubmissionSchema.methods.serialize = function(){
     challenge: this.challenge,
     creator: this.creator,
     cloudinary_id: this.cloudinary_id,
-    image: this.photo
+    image: this.image
   }
 }
 

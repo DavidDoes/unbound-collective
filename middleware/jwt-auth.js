@@ -7,7 +7,7 @@ function jwtAuth(req, res, next){
   const auth = req.header('Authorization')
 
   if(!auth){
-    const err = new error("No 'Authorization' header found.")
+    const err = new Error("No 'Authorization' header found.")
     err.status = 401
     return next(err)
   }

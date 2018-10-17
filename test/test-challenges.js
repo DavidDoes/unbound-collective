@@ -1,18 +1,18 @@
 'use strict';
 
-const chai      = require('chai'),
-      chaiHttp  = require('chai-http'),
-      mongoose  = require('mongoose'),
-      jwt       = require('jsonwebtoken');
+const chai = require('chai'),
+	chaiHttp = require('chai-http'),
+	mongoose = require('mongoose'),
+	jwt = require('jsonwebtoken');
 
 const { app, runServer, closeServer } = require('../server');
-const { TEST_DB_URL, JWT_SECRET }     = require('../config');
+const { TEST_DB_URL, JWT_SECRET, TEST_PORT } = require('../config');
 
-const User      = require('../models/users'),
-	    Challenge = require('../models/challenges');
+const User = require('../models/users'),
+	Challenge = require('../models/challenges');
 
-const seedUsers       = require('../test-seed/users');
-const seedChallenges  = require('../test-seed/challenges');
+const seedUsers = require('../test-seed/users');
+const seedChallenges = require('../test-seed/challenges');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -28,21 +28,21 @@ function tearDownDb() {
 }
 
 describe('Challenges resource', function() {
-	let user;
+	let user = {};
 	let token;
 
 	before(function() {
-		return runServer(TEST_DB_URL);
+		return runServer(TEST_DB_URL, TEST_PORT);
 	});
 
 	beforeEach(function() {
 		console.info('seeding Users and Challenges');
 		return Promise.all([
 			User.insertMany(seedUsers),
+			User.createIndexes(seedUsers),
 			Challenge.insertMany(seedChallenges),
 			Challenge.createIndexes()
-    ])
-    .then(([users]) => {
+		]).then(([users]) => {
 			user = users[0];
 			token = jwt.sign({ user }, JWT_SECRET, { subject: user.username });
 		});
@@ -57,31 +57,27 @@ describe('Challenges resource', function() {
 	});
 
 	describe('GET /api/challenges', function() {
-		
 		it('Should return all existing challenges', function() {
 			const dbPromise = Challenge.find();
-			const apiPromise = chai
-				.request(app)
-				.get('/api/challenges')
-				.set('Authorization', `Bearer ${token}`);
+			const apiPromise = chai.request(app).get('/api/challenges');
 
 			return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
 				expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body.length).to.equal(data.length);
+				expect(res).to.be.json;
+				expect(res.body).to.be.an('array');
+				expect(res.body.length).to.equal(data.length);
 			});
 		});
-		// neither object nor array work
+
 		it('Should return challenges with correct fields', function() {
-      const dbPromise = Challenge.find();
-			const apiPromise = chai
-				.request(app)
-				.get('/api/challenges')
-				.set('Authorization', `Bearer ${token}`);
+			const dbPromise = Challenge.find();
+			const apiPromise = chai.request(app).get('/api/challenges');
 
 			return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array');
+				expect(res).to.have.status(200);
+				expect(res).to.be.json;
+				expect(res.body).to.be.an('array');
+				expect(res.body.length).to.equal(data.length);
 
 				res.body.forEach(function(challenge, i) {
 					expect(challenge).to.have.all.keys('id', 'title', 'creator');
@@ -89,49 +85,50 @@ describe('Challenges resource', function() {
 					expect(challenge.title).to.equal(data[i].title);
 				});
 			});
-			// this test doesn't run due to previous not finishing
-			it('Should return challenge of provided id', function() {
-				let data;
-				return Challenge.findOne({ id: req.params.id })
-					.then(_data => {
-						data = _data;
-						return chai
-							.request(app)
-							.get(`/api/challenges/${data.id}`)
-							.set('Authorization', `Bearer ${token}`);
-					})
-					.then(res => {
-						expect(res).to.have.status(200);
-						expect(res).to.be.json;
-						expect(res.body).to.be.an('object');
-						expect(res.body).to.have.all.keys('id', 'title', 'creator');
-						expect(res.body.id).to.equal(data.id);
-						expect(res.body.title).to.equal(data.title);
-					});
-			});
+		});
+	});
+
+	describe('GET /api/challenges/:id', function() {
+		it('Should return challenge of provided id', function() {
+			let challenge;
+			return Challenge.findOne()
+				.then(_challenge => {
+					challenge = _challenge;
+					return chai.request(app).get(`/api/challenges/${challenge.id}`);
+				})
+				.then(res => {
+					expect(res).to.have.status(200);
+					expect(res).to.be.json;
+					expect(res.body).to.be.an('object');
+					expect(res.body).to.have.all.keys('id', 'title', 'creator');
+					expect(res.body.id).to.equal(challenge.id);
+					expect(res.body.title).to.equal(challenge.title);
+					expect(res.body.creator).to.equal(challenge.creator.toString());
+				});
 		});
 	});
 
 	describe('POST /api/challenges', function() {
 		it('Should add a new challenge', function() {
-			const newChallenge = { title: 'newChallenge' };
-			let body;
+			const newChallenge = {
+				title: 'New Challenge'
+			};
+			console.log('>>> ' + newChallenge);
 			return chai
 				.request(app)
 				.post('/api/challenges')
 				.set('Authorization', `Bearer ${token}`)
 				.send(newChallenge)
 				.then(function(res) {
-					body = res.body;
 					expect(res).to.have.status(201);
 					expect(res).to.be.json;
-					expect(body).to.be.an('object');
-					expect(body).to.have.all.keys('id', 'title', 'creator');
-					return Challenge.findOne({ _id: body.id, creator: user.id });
+					expect(res.body).to.be.an('object');
+					expect(res.body).to.have.all.keys('id', 'title', 'creator');
+					return Challenge.findOne({ _id: res.body.id, creator: user.id });
 				})
 				.then(function(challenge) {
-					expect(body.id).to.equal(challenge.id);
-					expect(body.title).to.equal(challenge.title);
+					expect(res.body.id).to.equal(challenge.id);
+					expect(res.body.title).to.equal(challenge.title);
 				});
 		});
 	});
@@ -153,7 +150,7 @@ describe('Challenges resource', function() {
 					expect(res.body).to.be.empty;
 					return Challenge.findById(challenge.id);
 				})
-				.then((challenge) => {
+				.then(challenge => {
 					expect(challenge).to.be.null;
 				});
 		});

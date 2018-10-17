@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
 	Challenge.findById(req.params.id).then(challenge => {
-		res.json({});
+		res.json(challenge.serialize());
 	});
 });
 
@@ -97,7 +97,7 @@ router.put('/:id', (req, res) => {
 			})
 		);
 });
-
+// FOR DEVELOPMENT ONLY - REMOVE DELETE
 router.delete('/:id', (req, res) => {
 	Challenge.remove({
 		Challenge: req.params.id
@@ -138,12 +138,12 @@ cloudinary.config({
 });
 
 // New Submission for this Challenge
-router.post('/:id', parser.single('image'), jwtAuth, (req, res) => {
+router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
 		req.body.image = result.secure_url;
-		public_id = result.public_id;
+    public_id = result.public_id;
 
 		Submission.create({
 			creator: req.user._id,

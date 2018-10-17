@@ -18,7 +18,7 @@ function localAuth(req, res, next) {
       user = _user
 
       if (!user) {
-        const err = new Error('Invalid credentials. Please try again.')
+        const err = new Error('Invalid username. Please try again.')
         err.status = 401;
         err.location = 'username'
         return Promise.reject(err)
@@ -29,7 +29,7 @@ function localAuth(req, res, next) {
     .then(isValid => {
 
       if (!isValid) {
-        const err = new Error('Invalid credentials. Please try again.')
+        const err = new Error('Invalid password. Please try again.')
         err.status = 401;
         err.location = 'password'
         return Promise.reject(err)
