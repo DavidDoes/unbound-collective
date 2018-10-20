@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const mongoose = require('mongoose');
 const Challenge = require('../models/challenges');
 const Submission = require('../models/submissions')
 const jwtAuth = require('../middleware/jwt-auth');
@@ -90,44 +91,62 @@ router.post('/', parser.single('image'), jwtAuth, (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
-	if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-		res.status(400).json({
-			error: 'Request path id and request body id values must match'
-		});
-	}
+router.put('/:id', jwtAuth, (req, res, next) => {
+  const { id } = req.params;
+  const { newTitle } = req.body;
 
-	const updated = {};
-	const updateableFields = ['title'];
-	updateableFields.forEach(field => {
-		if (field in req.body) {
-			updated[field] = req.body[field];
-		}
-	});
+  console.log(newTitle)
 
-	Challenge.findOne({
-		title: updated.title
-	});
-	Challenge.findByIdAndUpdate(
-		req.params.id,
-		{
-			$set: updated
-		},
-		{
-			new: true
-		}
-	)
-		.then(updatedChallenge => {
-			res.status(200).json({
-				id: updatedChallenge.id,
-				title: updatedChallenge.title
-			});
-		})
-		.catch(err =>
-			res.status(500).json({
-				message: err
-			})
-		);
+  if(!req.user.id === req.body.creator){
+    const err = new Error('You do not have permission to modify this Challenge.');
+    error.status = 400;
+    return next(err);
+  }
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+		const err = new Error('The provided `id` is invalid.');
+		err.status = 400;
+		return next(err);
+  }
+  
+  Challenge.findByIdAndUpdate(id, {title: newTitle, new: true})
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+		.catch(err => {
+			next(err);
+    });
+
+
+  // const updated = {};
+	// const updateableFields = ['title'];
+	// updateableFields.forEach(field => {
+	// 	if (field in req.body) {
+  //     updated[field] = req.body[field];
+	// 	}
+  // });
+
+	// Challenge.findByIdAndUpdate(
+	// 	req.params.id,
+	// 	{
+	// 		$set: updated
+	// 	},
+	// 	{
+	// 		new: true
+	// 	}
+	// )
+	// 	.then(updatedChallenge => {
+	// 		res.status(200).json(updatedChallenge);
+	// 	})
+	// 	.catch(err =>
+	// 		res.status(500).json({
+	// 			message: err
+	// 		})
+  //   );
 });
 // FOR DEVELOPMENT ONLY - REMOVE DELETE
 router.delete('/:id', (req, res) => {
