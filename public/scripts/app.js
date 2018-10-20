@@ -1,6 +1,6 @@
 'use strict';
 
-console.log('app.js has run')
+console.log('app.js has run');
 
 $(document).ready(function() {
 	function showSuccessMsg(msg) {
@@ -13,43 +13,46 @@ $(document).ready(function() {
 		const listener = $('.js-fail-msg');
 		listener.text(msg).show();
 		setTimeout(() => listener.fadeOut('slow'), 2000);
-  }
-  
+	}
+
 	function handleErrors(err) {
 		if (err.status === 401) {
 			store.authorized = false;
 			app.render();
 		}
 		showFailMsg(err.responseJSON.msg);
-  }
+	}
 
-  function render(){
-    const challenges = displayChallenges(store.challenges);
-    $('.js-challenges').html(challenges);
+	function render() {
+		const challenges = displayChallenges(store.challenges);
+		$('.js-challenges').html(challenges);
+	}
 
-    console.log(store.challenges);
-  }
+	$(function() {
+		render();
+		getChallenges();
+	});
 
-  function getChallenges(){
-    console.log('getChallenges invoked')
-    return api.search('/api/challenges')
-    .then(res => {
-      store.challenges = res;
+	return {
+		render: render,
+		bindEventListeners: bindEventListeners
+	};
 
-      function getThumbnail(){
+	function getChallenges() {
+		console.log('getChallenges invoked');
 
-      }
+		return api.search('/api/challenges').then(res => {
+			store.challenges = res;
 
-      render();
-    })
-  }
+			render();
+		});
+	}
 
 	function displayChallenges(challenges) {
-    console.log('displayChallenges invoked')
-		const challengeItems = challenges.map(challenge => `
-        <div class="one-third card"><img class="thumbnail" src="${
-					challenge.thumbnail
-				}"><h2>${challenge.title}</h2>
+		console.log('displayChallenges invoked');
+		const challengeItems = challenges.map(
+			challenge => `
+        <div class="one-third card"><img class="thumbnail" src="${challenge.image}"><h2>${challenge.title}</h2>
         </div>
         `
 		);
@@ -171,16 +174,6 @@ $(document).ready(function() {
 		});
 	}
 
-	$(function() {
-    render();
-    getChallenges();
-	});
-  
-  return {
-    redner: render,
-    bindEventListeners: bindEventListeners
-  };
-
 	function showAllSubmissions(submissions) {
 		const allSubmissions = submissions.map(
 			submission => `
@@ -190,5 +183,5 @@ $(document).ready(function() {
 		);
 		$('.js-all-submissions').html(allSubmissions);
 		// include this in challenge display
-  }
+	}
 });
