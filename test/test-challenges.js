@@ -112,23 +112,24 @@ describe('Challenges resource', function() {
 		it('Should add a new challenge', function() {
 			const newChallenge = {
 				title: 'New Challenge'
-			};
-			console.log('>>> ' + newChallenge);
+      };
+      let body;
 			return chai
 				.request(app)
 				.post('/api/challenges')
 				.set('Authorization', `Bearer ${token}`)
 				.send(newChallenge)
 				.then(function(res) {
+          body = res.body;
 					expect(res).to.have.status(201);
 					expect(res).to.be.json;
-					expect(res.body).to.be.an('object');
-					expect(res.body).to.have.all.keys('id', 'title', 'creator');
-					return Challenge.findOne({ _id: res.body.id, creator: user.id });
+					expect(body).to.be.an('object');
+					expect(body).to.have.all.keys('id', 'title', 'creator');
+					return Challenge.findOne({ _id: body.id, creator: user.id });
 				})
-				.then(function(challenge) {
-					expect(res.body.id).to.equal(challenge.id);
-					expect(res.body.title).to.equal(challenge.title);
+				.then(challenge => {
+					expect(body.id).to.equal(challenge.id);
+					expect(body.title).to.equal(challenge.title);
 				});
 		});
 	});

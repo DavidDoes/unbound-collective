@@ -7,6 +7,25 @@ const jwtAuth = require('../middleware/jwt-auth');
 
 const router = express.Router();
 
+const ObjectId = require('mongodb').ObjectID;
+
+const cloudinary = require('cloudinary');
+const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL;
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	cloudinary: cloudinary,
+	allowedFormats: ['jpg', 'jpeg', 'png']
+});
+const parser = multer({ storage: storage });
+
+cloudinary.config({
+	cloud_name: 'challenge-photos',
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 router.get('/', (req, res) => {
 	Challenge.find()
 		.then(challenge => {
@@ -24,7 +43,7 @@ router.get('/:id', (req, res) => {
 	});
 });
 
-router.post('/', jwtAuth, function(req, res) {
+router.post('/', parser.single('image'), jwtAuth, (req, res) => {
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -48,14 +67,27 @@ router.post('/', jwtAuth, function(req, res) {
 			message: 'Incorrect field type: expected string',
 			location: nonStringField
 		});
-	}
+  }
+  
+  let public_id;
 
-	return Challenge.create({
-		title: req.body.title,
-		creator: req.user.id
-	}).then(challenge => {
-		return res.status(201).json(challenge.serialize());
-	});
+	cloudinary.uploader.upload(req.file.path, result => {
+		req.body.image = result.secure_url;
+    public_id = result.public_id;
+
+		Challenge.create({
+			creator: req.user.id,
+			title: req.body.title,
+			cloudinary_id: public_id,
+      image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+    }).then(challenge => {
+      res.status(201)
+      .send( challenge.serialize() );
+		}).catch(err => {
+			console.error(err);
+			res.status(500).json({ error: 'Internal server error' });
+    });
+  });
 });
 
 router.put('/:id', (req, res) => {
@@ -103,7 +135,8 @@ router.delete('/:id', (req, res) => {
 		Challenge: req.params.id
 	})
 		.then(() => {
-			Challenge.findByIdAndRemove(req.params.id).then(() => {
+      Challenge.findByIdAndRemove(req.params.id)
+      .then(() => {
 				res.status(204).json({
 					message: 'success'
 				});
@@ -114,32 +147,12 @@ router.delete('/:id', (req, res) => {
 			res.status(500).json({
 				err: 'Internal server error'
 			});
-		});
-});
-
-
-const ObjectId = require('mongodb').ObjectID;
-
-const cloudinary = require('cloudinary');
-const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL;
-
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-	cloudinary: cloudinary,
-	allowedFormats: ['jpg', 'jpeg', 'png']
-});
-const parser = multer({ storage: storage });
-
-cloudinary.config({
-	cloud_name: 'challenge-photos',
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET
-});
+    });
+  });
 
 // New Submission for this Challenge
 router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
-	let public_id;
+  let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
 		req.body.image = result.secure_url;
@@ -149,17 +162,15 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 			creator: req.user.id,
 			challenge: ObjectId(req.params.id),
 			cloudinary_id: public_id,
-			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+      image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+    }).then(submission => {
+      res.status(201)
+      .send( submission.serialize() );
 		}).catch(err => {
 			console.error(err);
 			res.status(500).json({ error: 'Internal server error' });
-		});
-
-		// change once Submissions route fully implemented:
-		res.send(
-			'photo uploaded to ' + CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-		);
-	});
+    });
+  });
 });
 
 module.exports = router;

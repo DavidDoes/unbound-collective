@@ -1,12 +1,5 @@
 'use strict'
 
-const store = (function() {
-  return {
-    submissions: [],
-    authToken: ""
-  }
-})
-
 const api = (function(){
   const create = function(path, obj){
     return $.ajax({

@@ -1,8 +1,9 @@
-'use strict';
+// 'use strict';
 
-$(document).ready(function() {
-	app.bindEventListeners();
-	app.render();
-});
+// $(document).ready(function() {
+// 	app.bindEventListeners();
+//   app.render();
+//   app.getChallenges();
+// });
  
-// was getting error, `cannot read 'bindEventListeners' of undefined`
+// // was getting error, `cannot read 'bindEventListeners' of undefined`

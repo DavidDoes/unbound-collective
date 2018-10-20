@@ -3,7 +3,7 @@
 const store = (function() {
   return {
     creator: [],
-    challenge: [],
+    challenges: [],
     submissions: [],
     photo: [],
     thumbnail: [],

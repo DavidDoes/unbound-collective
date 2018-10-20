@@ -1,6 +1,8 @@
 'use strict';
 
-const app = (function() {
+console.log('app.js has run')
+
+$(document).ready(function() {
 	function showSuccessMsg(msg) {
 		const listener = $('.js-success-msg');
 		listener.text(msg).show();
@@ -13,27 +15,45 @@ const app = (function() {
 		setTimeout(() => listener.fadeOut('slow'), 2000);
   }
   
-  function errorHandler(err){
-    if(err.status === 401){
-      listener.text(msg).show();
-      setTimeout(() => listener.fadeout('slow'), 2000);
-    }
+	function handleErrors(err) {
+		if (err.status === 401) {
+			store.authorized = false;
+			app.render();
+		}
+		showFailMsg(err.responseJSON.msg);
   }
 
   function render(){
-    const challenges = displayChallenges(store.challenge);
+    const challenges = displayChallenges(store.challenges);
     $('.js-challenges').html(challenges);
+
+    console.log(store.challenges);
   }
 
-	function displayChallenges(challenge) {
-		const challenges = challenge.map(challenge => `
+  function getChallenges(){
+    console.log('getChallenges invoked')
+    return api.search('/api/challenges')
+    .then(res => {
+      store.challenges = res;
+
+      function getThumbnail(){
+
+      }
+
+      render();
+    })
+  }
+
+	function displayChallenges(challenges) {
+    console.log('displayChallenges invoked')
+		const challengeItems = challenges.map(challenge => `
         <div class="one-third card"><img class="thumbnail" src="${
 					challenge.thumbnail
 				}"><h2>${challenge.title}</h2>
         </div>
         `
 		);
-		$('#challenges').append(challenges);
+		$('#challenges').append(challengeItems);
 	}
 
 	function submissionFormSubmit() {
@@ -152,17 +172,9 @@ const app = (function() {
 	}
 
 	$(function() {
-		bindEventListeners();
-		getAndDisplayChallenges();
+    render();
+    getChallenges();
 	});
-
-	function handleErrors(err) {
-		if (err.status === 401) {
-			store.authorized = false;
-			app.render();
-		}
-		showFailMsg(err.responseJSON.msg);
-  }
   
   return {
     redner: render,
@@ -178,4 +190,5 @@ const app = (function() {
 		);
 		$('.js-all-submissions').html(allSubmissions);
 		// include this in challenge display
-	};
+  }
+});

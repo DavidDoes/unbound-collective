@@ -41,7 +41,8 @@ describe('Submissions resource', function() {
 		return Promise.all([
 			User.insertMany(seedUsers),
 			User.createIndexes(),
-
+			Submission.insertMany(seedSubmissions),
+			Submission.createIndexes(),
 			Challenge.insertMany(seedChallenges),
 			Challenge.createIndexes()
 		]).then(([users]) => {
@@ -82,7 +83,6 @@ describe('Submissions resource', function() {
 				expect(res.body.length).to.equal(data.length);
 
 				res.body.forEach(function(submission, i) {
-					console.log(submission);
 					expect(submission).to.have.all.keys(
 						'id',
 						'challenge',
@@ -98,86 +98,62 @@ describe('Submissions resource', function() {
 	});
 
 	describe('POST Submission to /api/challenges/:id/submissions', function() {
-		it.only('Should add new submission with valid data', function() {
-			let res;
-      let id;
-      
-      const newSubmission = {
-				challenge: id,
-				creator: 'string',
-        cloudinary_id: 'string'
-      };
+		it('Should add new submission with valid data', function() {
+			this.timeout(5000);
 
-			return Challenge.findOne().then(_challenge => {
-        id = _challenge.id;
-        console.log('>>>' + id)
+			return Challenge.findOne().then(data => {
+
 				return chai
 					.request(app)
-					.post(`/api/challenges/${id}/submissions`)
-          .set('Authorization', `Bearer ${token}`)
-          .type('form')
-          // .field('Content-Type', 'multipart/form-data')
-          // .field('challenge', id)
-          // .field('creator', 'string')
-          // .field('cloudinary_id', 'string')
-          .attach('image', 'test/test-image.png')
-          // .send(newSubmission)
-          })
-					.then(function(_res) {
-						res = _res;
+					.post(`/api/challenges/${data.id}/submissions`)
+					.set('Authorization', `Bearer ${token}`)
+					.field('Content-Type', 'multipart/form-data')
+					.field('creator', user.id)
+					.field('challenge', data.id)
+					.attach('image', './test/test-image.png')
+
+					.then(res => {
 						expect(res).to.have.status(201);
 						expect(res).to.be.json;
 						expect(res.body).to.be.an('object');
 						expect(res.body).to.have.all.keys(
 							'id',
-							'challenge',
 							'creator',
+							'challenge',
 							'cloudinary_id',
 							'image'
 						);
-						expect(res.body.challenge).to.equal(newSubmission.challenge);
-						expect(res.body.creator).to.equal(newSubmission.creator);
-						expect(res.body.cloudinary_id).to.equal(
-							newSubmission.cloudinary_id
-						);
-						expect(res.body.image).to.equal(newSubmission.image);
-						return Submission.findOne({ _id: res.body.id });
-					})
-					.then(submission => {
-						expect(res.body.challenge).to.equal(submission.challenge);
-						expect(res.body.creator).to.equal(submission.creator);
-						expect(res.body.cloudinary_id).to.equal(submission.cloudinary_id);
-            expect(res.body.image).to.equal(submission.image);
+
+						return Submission.findById(res.body.id);
 					});
 			});
 		});
 	});
 
-	describe('DELETE Submission /api/submissions/:id', function() {
-		it('Should delete Submission', function() {
-      let data;
-      return Submission
-        .findOne({ creator: user.id })
-        .then(_data => {
-          data = _data;
-          console.log('>>> data: ' + data)
+  describe('DELETE Submission /api/submissions/:id', function() {
+    it.only('Should delete Submission', function() {
+      let submission;
+      console.log('>>> ' + user)
 
+      return Submission.findOne({ creator: user.id })
+        .then(submission => {
+          console.log('>>>' + submission)
           return chai
             .request(app)
-            .delete(`/api/submissions/${data.id}`)
+            .delete(`/api/submissions/${submission.id}`)
             .set('Authorization', `Bearer ${token}`);
         })
-        .then(res => {
+        .then(function(res) {
           expect(res).to.have.status(204);
           expect(res.body).to.be.empty;
-          return Submission.findById(data.id);
+          return Submission.findById(submission.id);
         })
         .then(submission => {
           expect(submission).to.be.null;
         });
     });
 	});
-
+});
 
 // let submission;
 

@@ -11,18 +11,17 @@ var ChallengeSchema = mongoose.Schema({
 		ref: 'User',
 		required: true
 	},
-	thumbnail: { 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Submission'
-   }
+	cloudinary_id: { type: String, required: true },
+	image: { type: String, required: true }
 });
 
 ChallengeSchema.methods.serialize = function() {
 	return {
 		id: this._id,
 		title: this.title,
-		creator: this.creator,
-		photo: this.thumbnail
+    creator: this.creator,
+    cloudinary_id: this.cloudinary_id,
+		image: this.image
 	};
 };
 
