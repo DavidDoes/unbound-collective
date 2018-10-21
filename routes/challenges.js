@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Challenge = require('../models/challenges');
-const Submission = require('../models/submissions')
+const Submission = require('../models/submissions');
 const jwtAuth = require('../middleware/jwt-auth');
 
 const router = express.Router();
@@ -39,9 +39,14 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-	Challenge.findById(req.params.id).then(challenge => {
-		res.json(challenge.serialize());
-	});
+	Challenge.findById(req.params.id)
+		.then(id => {
+      id = req.params.id
+      Submission.find({ challenge: id })
+        .then(submissions => {
+          res.json(submissions)
+			});
+		});
 });
 
 router.post('/', parser.single('image'), jwtAuth, (req, res) => {
@@ -68,85 +73,59 @@ router.post('/', parser.single('image'), jwtAuth, (req, res) => {
 			message: 'Incorrect field type: expected string',
 			location: nonStringField
 		});
-  }
-  
-  let public_id;
+	}
+
+	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
 		req.body.image = result.secure_url;
-    public_id = result.public_id;
+		public_id = result.public_id;
 
 		Challenge.create({
 			creator: req.user.id,
 			title: req.body.title,
 			cloudinary_id: public_id,
-      image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-    }).then(challenge => {
-      res.status(201)
-      .send( challenge.serialize() );
-		}).catch(err => {
-			console.error(err);
-			res.status(500).json({ error: 'Internal server error' });
-    });
-  });
+			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+		})
+			.then(challenge => {
+				res.status(201).send(challenge.serialize());
+			})
+			.catch(err => {
+				console.error(err);
+				res.status(500).json({ error: 'Internal server error' });
+			});
+	});
 });
 
 router.put('/:id', jwtAuth, (req, res, next) => {
-  const { id } = req.params;
-  const { newTitle } = req.body;
+	const { id } = req.params;
+	const { newTitle } = req.body;
 
-  console.log(newTitle)
+	if (!req.user.id === req.body.creator) {
+		const err = new Error(
+			'You do not have permission to modify this Challenge.'
+		);
+		error.status = 400;
+		return next(err);
+	}
 
-  if(!req.user.id === req.body.creator){
-    const err = new Error('You do not have permission to modify this Challenge.');
-    error.status = 400;
-    return next(err);
-  }
-  
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+	if (!mongoose.Types.ObjectId.isValid(id)) {
 		const err = new Error('The provided `id` is invalid.');
 		err.status = 400;
 		return next(err);
-  }
-  
-  Challenge.findByIdAndUpdate(id, {title: newTitle, new: true})
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
+	}
+
+	Challenge.findByIdAndUpdate(id, { title: newTitle, new: true })
+		.then(result => {
+			if (result) {
+				res.json(result);
+			} else {
+				next();
+			}
+		})
 		.catch(err => {
 			next(err);
-    });
-
-
-  // const updated = {};
-	// const updateableFields = ['title'];
-	// updateableFields.forEach(field => {
-	// 	if (field in req.body) {
-  //     updated[field] = req.body[field];
-	// 	}
-  // });
-
-	// Challenge.findByIdAndUpdate(
-	// 	req.params.id,
-	// 	{
-	// 		$set: updated
-	// 	},
-	// 	{
-	// 		new: true
-	// 	}
-	// )
-	// 	.then(updatedChallenge => {
-	// 		res.status(200).json(updatedChallenge);
-	// 	})
-	// 	.catch(err =>
-	// 		res.status(500).json({
-	// 			message: err
-	// 		})
-  //   );
+		});
 });
 // FOR DEVELOPMENT ONLY - REMOVE DELETE
 router.delete('/:id', (req, res) => {
@@ -154,8 +133,7 @@ router.delete('/:id', (req, res) => {
 		Challenge: req.params.id
 	})
 		.then(() => {
-      Challenge.findByIdAndRemove(req.params.id)
-      .then(() => {
+			Challenge.findByIdAndRemove(req.params.id).then(() => {
 				res.status(204).json({
 					message: 'success'
 				});
@@ -166,30 +144,31 @@ router.delete('/:id', (req, res) => {
 			res.status(500).json({
 				err: 'Internal server error'
 			});
-    });
-  });
+		});
+});
 
 // New Submission for this Challenge
 router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
-  let public_id;
+	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
 		req.body.image = result.secure_url;
-    public_id = result.public_id;
+		public_id = result.public_id;
 
 		Submission.create({
 			creator: req.user.id,
 			challenge: ObjectId(req.params.id),
 			cloudinary_id: public_id,
-      image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-    }).then(submission => {
-      res.status(201)
-      .send( submission.serialize() );
-		}).catch(err => {
-			console.error(err);
-			res.status(500).json({ error: 'Internal server error' });
-    });
-  });
+			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+		})
+			.then(submission => {
+				res.status(201).send(submission.serialize());
+			})
+			.catch(err => {
+				console.error(err);
+				res.status(500).json({ error: 'Internal server error' });
+			});
+	});
 });
 
 module.exports = router;
