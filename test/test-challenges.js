@@ -80,7 +80,7 @@ describe('Challenges resource', function() {
 				expect(res.body.length).to.equal(data.length);
 
 				res.body.forEach(function(challenge, i) {
-					expect(challenge).to.have.all.keys('id', 'title', 'creator');
+					expect(challenge).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
 					expect(challenge.id).to.equal(data[i].id);
 					expect(challenge.title).to.equal(data[i].title);
 				});
@@ -100,7 +100,7 @@ describe('Challenges resource', function() {
 					expect(res).to.have.status(200);
 					expect(res).to.be.json;
 					expect(res.body).to.be.an('object');
-					expect(res.body).to.have.all.keys('id', 'title', 'creator');
+					expect(res.body).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
 					expect(res.body.id).to.equal(challenge.id);
 					expect(res.body.title).to.equal(challenge.title);
 					expect(res.body.creator).to.equal(challenge.creator.toString());
@@ -110,21 +110,24 @@ describe('Challenges resource', function() {
 
 	describe('POST /api/challenges', function() {
 		it('Should add a new challenge', function() {
-			const newChallenge = {
-				title: 'New Challenge'
-      };
+      this.timeout(5000);
+
       let body;
 			return chai
 				.request(app)
 				.post('/api/challenges')
-				.set('Authorization', `Bearer ${token}`)
-				.send(newChallenge)
+        .set('Authorization', `Bearer ${token}`)
+        .field('Content-Type', 'multipart/form-data')
+        .field('creator', user.id)
+        .field('title', 'Title')
+        .attach('image', './test/test-image.png')
+
 				.then(function(res) {
           body = res.body;
 					expect(res).to.have.status(201);
 					expect(res).to.be.json;
 					expect(body).to.be.an('object');
-					expect(body).to.have.all.keys('id', 'title', 'creator');
+					expect(body).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
 					return Challenge.findOne({ _id: body.id, creator: user.id });
 				})
 				.then(challenge => {

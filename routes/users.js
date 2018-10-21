@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const User = require('../models/users');
 const Submission = require('../models/submissions');
 const jwtAuth = require('../middleware/jwt-auth');
-const cloudinary = require('cloudinary');
 
 const router = express.Router();
 

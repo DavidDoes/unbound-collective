@@ -2,16 +2,22 @@
   {
     "_id": "111111111111111111111100",
     "title": "Challenge A",
-    "creator": "333333333333333333333300"
+    "creator": "333333333333333333333300",
+    "cloudinary_id": "cc01",
+    "image": "challengeImageUrl01"
   },
   {
     "_id": "111111111111111111111101",
     "title": "Challenge B",
-    "creator": "333333333333333333333301"
+    "creator": "333333333333333333333301",
+    "cloudinary_id": "cc02",
+    "image": "challengeImageUrl02"
   },
   {
     "_id": "111111111111111111111102",
     "title": "Challenge C",
-    "creator": "333333333333333333333302"
+    "creator": "333333333333333333333302",
+    "cloudinary_id": "cc03",
+    "image": "challengeImageUrl03"
   }
 ]

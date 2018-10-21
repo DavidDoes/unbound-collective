@@ -39,8 +39,6 @@ $(document).ready(function() {
 	};
 
 	function getChallenges() {
-		console.log('getChallenges invoked');
-
 		return api.search('/api/challenges').then(res => {
 			store.challenges = res;
 
@@ -49,7 +47,6 @@ $(document).ready(function() {
 	}
 
 	function displayChallenges(challenges) {
-		console.log('displayChallenges invoked');
 		const challengeItems = challenges.map(
 			challenge => `
         <div class="one-third card"><img class="thumbnail" src="${challenge.image}"><h2>${challenge.title}</h2>
@@ -57,7 +54,15 @@ $(document).ready(function() {
         `
 		);
 		$('#challenges').append(challengeItems);
-	}
+  }
+  
+  function getSubmissions(){
+
+  }
+
+  function displaySubmissions(){
+
+  }
 
 	function submissionFormSubmit() {
 		$('.js-upload').on('submit', event => {

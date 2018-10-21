@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const Submission = require('../models/submissions');
 const jwtAuth = require('../middleware/jwt-auth');
 
+const cloudinary = require('cloudinary');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -18,42 +20,6 @@ router.get('/', (req, res) => {
 		});
 });
 
-// Delete user's Submission
-// router.delete('/:id', jwtAuth, (req, res, next) => {
-// 	const creator = req.user.id;
-// 	const id = req.params.id;
-
-// 	if (!mongoose.Types.ObjectId.isValid(creator)) {
-// 		const err = new Error(
-// 			'You do not have permission to delete this submission.'
-// 		);
-// 		err.status = 400;
-// 		return next(err);
-// 	}
-
-// 	if (!mongoose.Types.ObjectId.isValid(id)) {
-// 		const err = new Error('The provided `id` is invalid.');
-// 		err.status = 400;
-// 		return next(err);
-// 	}
-
-// 	Submission.findById(id)
-// 		.then(image => {
-//       cloudinary.v2.uploader.destroy(image.cloudinary_id)
-//       .then(() => {
-//         Submission.findByIdAndRemove(id)
-//         .then((res) => {
-//           res.status(204).json({
-//              message: 'successfully deleted' 
-//             })
-// 				})
-// 			})
-// 		})
-// 		.catch(err => {
-// 			next(err);
-// 		});
-// });
-
 router.delete('/:id', jwtAuth, (req, res) => {
 	if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
 		const err = new Error(
@@ -63,29 +29,23 @@ router.delete('/:id', jwtAuth, (req, res) => {
 		return next(err);
 	}
 
-	if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-		const err = new Error('The provided `id` is invalid.');
-		err.status = 400;
-		return next(err);
-	}
-
   Submission
     .findById(req.params.id)
-    .then(image => {
+    .then(submission => {
       cloudinary.v2.uploader
-      .destroy(image.cloudinary_id, (err) => {
-        res.status(204).json({ message: 'Successfully deleted from Cloudinary' })
+      .destroy(submission.cloudinary_id, (err) => {
+        return res.status(204).end();
       })
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).end();
     })
     .then(() => {
       Submission
         .findByIdAndRemove(req.params.id)
         .then(() => {
-          res.status(204).json({ message: 'Successfully deleted from database' })
+          return res.status(204).end();
       })
     })
     .catch(err => {
