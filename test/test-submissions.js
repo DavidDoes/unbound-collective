@@ -157,22 +157,3 @@ describe('Submissions resource', function() {
     });
 	});
 });
-
-// let submission;
-
-// return Submission.findOne({ creator: user.id })
-//   .then(_submission => {
-//     submission = _submission;
-//     return chai
-//       .request(app)
-//       .delete(`/api/submissions/${submission.id}`)
-//       .set('Authorization', `Bearer ${token}`);
-//   })
-//   .then(function(res) {
-//     expect(res).to.have.status(204);
-//     expect(res.body).to.be.empty;
-//     return Submission.findById(submission.id);
-//   })
-//   .then((submission) => {
-//     expect(submission).to.be.null;
-//   });
