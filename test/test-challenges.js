@@ -89,21 +89,19 @@ describe('Challenges resource', function() {
 	});
 
 	describe('GET /api/challenges/:id', function() {
-		it('Should return challenge of provided id', function() {
+		it('Should return submissions of provided challenge id', function() {
 			let challenge;
 			return Challenge.findOne()
 				.then(_challenge => {
 					challenge = _challenge;
-					return chai.request(app).get(`/api/challenges/${challenge.id}`);
+          return chai.
+            request(app)
+            .get(`/api/challenges/${challenge.id}`);
 				})
 				.then(res => {
 					expect(res).to.have.status(200);
 					expect(res).to.be.json;
-					expect(res.body).to.be.an('object');
-					expect(res.body).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
-					expect(res.body.id).to.equal(challenge.id);
-					expect(res.body.title).to.equal(challenge.title);
-					expect(res.body.creator).to.equal(challenge.creator.toString());
+					expect(res.body).to.be.an('array');
 				});
 		});
 	});

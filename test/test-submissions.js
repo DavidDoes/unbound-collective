@@ -45,13 +45,15 @@ describe('Submissions resource', function() {
 			// Submission.createIndexes(),
 			Challenge.insertMany(seedChallenges),
 			Challenge.createIndexes()
-		]).then(([users]) => {
-			user = users[0];
-      token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-      return user;
-		}).catch((err) => {
-      console.log('<<< ' + err);
-    })
+		])
+			.then(([users]) => {
+				user = users[0];
+				token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+				return user;
+			})
+			.catch(err => {
+				console.log('<<< ' + err);
+			});
 	});
 
 	afterEach(function() {
@@ -105,7 +107,6 @@ describe('Submissions resource', function() {
 			this.timeout(5000);
 
 			return Challenge.findOne().then(data => {
-
 				return chai
 					.request(app)
 					.post(`/api/challenges/${data.id}/submissions`)
@@ -133,27 +134,25 @@ describe('Submissions resource', function() {
 		});
 	});
 
-  describe('DELETE Submission /api/submissions/:id', function() {
-    it.only('Should delete Submission of id', function() {
-      let userId = user.id;
+	describe('DELETE Submission /api/submissions/:id', function() {
+		it('Should delete Submission of id', function() {
+			let userId = user.id;
 
-      Submission
-      .findOne({ creator: userId })
-        .then(submission => {
-
-          return chai
-            .request(app)
-            .delete(`/api/submissions/${submission.id}`)
-            .set('Authorization', `Bearer ${token}`);
-        })
-        .then((res) => {
-          expect(res).to.have.status(204);
-          expect(res.body).to.be.empty;
-          return Submission.findById(submission);
-        })
-        .then(submission => {
-          expect(submission).to.be.null;
-        });
-    });
+			Submission.findOne({ creator: userId })
+				.then(submission => {
+					return chai
+						.request(app)
+						.delete(`/api/submissions/${submission.id}`)
+						.set('Authorization', `Bearer ${token}`);
+				})
+				.then(res => {
+					expect(res).to.have.status(204);
+					expect(res.body).to.be.empty;
+					return Submission.findById(submission);
+				})
+				.then(submission => {
+					expect(submission).to.be.null;
+				});
+		});
 	});
 });

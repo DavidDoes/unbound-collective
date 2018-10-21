@@ -57,7 +57,11 @@ $(document).ready(function() {
   }
   
   function getSubmissions(){
+    return api.search('/api/challenges/:id').then(res => {
+      store.submissions = res;
 
+      render();
+    })
   }
 
   function displaySubmissions(){
