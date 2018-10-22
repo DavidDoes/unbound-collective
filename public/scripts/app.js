@@ -62,24 +62,20 @@ $(document).ready(function() {
   function challengeClickListener(){
     $('.container').on('click', '.card', event => {
       const propId = $(event.currentTarget).prop('id');
-      console.log('property id: ', propId);
-
+      
       // convert to ObjectId:
       const challengeId = { "$oid": `${propId}` }
+      const id = challengeId.$oid
 
-      getSubmissions(challengeId);
+      getSubmissions(id);
     });
   }
   
-  function getSubmissions(challengeId){
+  function getSubmissions(id){
     console.log('getSubmissions() invoked')
-    // const currentChallenge = $(this).attr('id');
-    // store.currentChallenge = $(this).prop('id');
-    console.log(challengeId);
-
-    console.log('getSubmissions called');
+    console.log(id);
     
-    return api.search(`/api/challenges/${challengeId.$oid}`).then(res => {
+    return api.search(`/api/challenges/${id}`).then(res => {
       store.submissions = res;
       console.log(res);
 
