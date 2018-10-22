@@ -96,14 +96,11 @@ describe('Users resources', function() {
 						.set('Authorization', `Bearer ${token}`);
 				})
 				.then(res => {
-					console.log('>>> data: ' + data);
-					console.log('>>> status: ' + res.status);
 					expect(res).to.have.status(204);
 					expect(res.body).to.be.empty;
 					return User.findById(data.id);
 				})
 				.then(user => {
-					console.log('>>> user: ' + user);
 					expect(user).to.be.null;
 				});
 		});

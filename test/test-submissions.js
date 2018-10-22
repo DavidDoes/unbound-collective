@@ -135,7 +135,7 @@ describe('Submissions resource', function() {
 	});
 
 	describe('DELETE Submission /api/submissions/:id', function() {
-		it('Should delete Submission of id', function() {
+		it.only('Should delete Submission of id', function() {
 			let userId = user.id;
 
 			Submission.findOne({ creator: userId })

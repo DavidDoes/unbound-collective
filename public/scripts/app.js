@@ -55,20 +55,36 @@ $(document).ready(function() {
         <div class="one-third card" id="${challenge.id}"><img class="thumbnail" src="${challenge.image}"><h2>${challenge.title}</h2>
         </div>
         `
-		);
+    )
 		$('#challenges').append(challengeItems);
+  }
+
+  function challengeClickListener(){
+    $('.container').on('click', '.card', event => {
+      const propId = $(event.currentTarget).prop('id');
+      console.log('property id: ', propId);
+
+      // convert to ObjectId:
+      const challengeId = { "$oid": `${propId}` }
+
+      getSubmissions(challengeId);
+    });
   }
   
   function getSubmissions(challengeId){
+    console.log('getSubmissions() invoked')
+    // const currentChallenge = $(this).attr('id');
+    // store.currentChallenge = $(this).prop('id');
+    console.log(challengeId);
 
     console.log('getSubmissions called');
     
-    // return api.search(`/api/challenges/${challengeId}`).then(res => {
-    //   store.submissions = res;
-    //   console.log(res);
+    return api.search(`/api/challenges/${challengeId.$oid}`).then(res => {
+      store.submissions = res;
+      console.log(res);
 
-    //   render();
-    // })
+      render();
+    })
   }
 
   // function displaySubmissions(){
@@ -80,27 +96,6 @@ $(document).ready(function() {
   //   );
   //   $('#submissions').append(submissionItems);
   // }
-
-  function challengeClickListener(){
-    $(document)
-    .on('click', '.card', () => {
-      console.log('challenge card clicked');
-
-      console.log($(this).attr('id'))
-
-      
-      // const currentChallenge = $(this).attr('id');
-      // store.currentChallenge = $(this).attr('id');
-
-      // // convert to ObjectId:
-      // const challengeId = { "$oid": `${currentChallenge}` }
-      // console.log(challengeId);
-
-
-      // console.log('currentChallenge: ', currentChallenge);
-      // getSubmissions(currentChallenge);
-    });
-  }
 
 	function submissionFormSubmit() {
 		$('.js-upload').on('submit', event => {
