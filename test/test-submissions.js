@@ -103,7 +103,7 @@ describe('Submissions resource', function() {
 	});
 
 	describe('POST Submission to /api/challenges/:id/submissions', function() {
-		it('Should add new submission with valid data', function() {
+		it.only('Should add new submission with valid data', function() {
 			this.timeout(5000);
 
 			return Challenge.findOne().then(data => {
@@ -117,6 +117,7 @@ describe('Submissions resource', function() {
 					.attach('image', './test/test-image.png')
 
 					.then(res => {
+            console.log(res.body.cloudinary_id);
 						expect(res).to.have.status(201);
 						expect(res).to.be.json;
 						expect(res.body).to.be.an('object');
