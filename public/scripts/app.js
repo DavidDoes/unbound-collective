@@ -101,10 +101,7 @@ $(document).ready(function() {
 	  );
 	  $('#submissions').append(submissionItems);
   }
-  // not getting invoked - see cloudinary doc
-  // `js-new-challenge`
-
-
+  
   function challengeFormSubmit(){
     $('.js-new-challenge').on('submit', event => {
       event.preventDefault();
