@@ -12,6 +12,23 @@ const api = (function() {
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
 	};
+	const upload = function(path) {
+    const formData = new FormData(this)
+    // $.each(files, (key, value) => {
+    //   formData.append(key, value)
+    // })
+
+		return $.ajax({
+			type: 'POST',
+			url: path,
+      dataType: 'json',
+      contenType: false,
+      processData: false,
+      cache: false,
+      data: formData,
+			headers: { Authorization: `Bearer ${store.authToken}` }
+		});
+	};
 	const search = function(path, query) {
 		return $.ajax({
 			type: 'GET',
@@ -39,7 +56,8 @@ const api = (function() {
 		});
 	};
 	return {
-		create,
+    create,
+    upload,
 		update,
 		remove,
 		search

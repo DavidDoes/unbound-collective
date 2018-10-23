@@ -1,6 +1,17 @@
 'use strict';
-
+// const app = (function () {
+  
 $(document).ready(function() {
+  render();
+
+  // const files;
+
+  // $('input[type=file]').on('change', prepareUpload);
+
+  // function prepareUpload(event){
+  //   files = event.target.files;
+  // }
+
 	function showSuccessMsg(msg) {
 		const listener = $('.js-success-msg');
 		listener.text(msg).show();
@@ -27,21 +38,18 @@ $(document).ready(function() {
 
 		// const submissions = displaySubmissions(store.submissions);
 		// $('.js-submissions').html(submissions);
-	}
+  }
 
 	$(function() {
 		render();
 		challengeClickListener();
     getChallenges();
     submissionFormSubmit();
+    challengeFormSubmit();
 		signupSubmit();
-		loginSubmit();
-	});
+    loginSubmit();
+  });
 
-	// return {
-	// 	render: render,
-	// 	bindEventListeners: bindEventListeners
-	// };
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -68,18 +76,19 @@ $(document).ready(function() {
 
 	function challengeClickListener() {
 		$('.container').on('click', '.card', event => {
-			const challengeId = $(event.currentTarget).prop('id');
+      const challengeId = $(event.currentTarget).prop('id');
+      console.log(challengeId);
 
 			getSubmissions(challengeId);
 		});
 	}
 
 	function getSubmissions(challengeId) {
+    console.log('getSubmissions')
 		return api.search(`/api/challenges/${challengeId}`).then(res => {
 			store.submissions = res;
 			console.log(res);
 
-			render();
 		});
 	}
 
@@ -91,7 +100,38 @@ $(document).ready(function() {
 	    `
 	  );
 	  $('#submissions').append(submissionItems);
-	}
+  }
+  // not getting invoked - see cloudinary doc
+  // `js-new-challenge`
+
+
+  function challengeFormSubmit(){
+    $('.js-new-challenge').on('submit', event => {
+      event.preventDefault();
+      console.log('challengeFormSubmit() invoked')
+
+      const newChallengeTitle = $('.js-title');
+      const newChallengeImage = $('.js-file-input');
+
+			api
+				.upload('/api/challenges', {
+          title: newChallengeTitle.val(),
+          image: newChallengeImage.val() 
+        })
+				.then(() => {
+          newChallengeTitle.val('');
+					newChallengeImage.val('');
+					return api.search(`/api/challenges/`);
+				})
+
+				.then(res => {
+          console.log(res);
+					store.challenges = res;
+					render();
+				})
+				.catch(handleErrors);
+		});
+  }
 
 	function submissionFormSubmit() {
 		$('.js-upload').on('submit', event => {
@@ -150,6 +190,7 @@ $(document).ready(function() {
 			api
 				.create('/api/login', loginUser)
 				.then(res => {
+          console.log('res: ', res);
 					store.authToken = res.authToken;
 					store.authorized = true;
 					loginForm[0].reset();
@@ -158,13 +199,26 @@ $(document).ready(function() {
 
 					return Promise.all([
 						// get user's submissions
-						api.search(`/api/users/${req.user.id}/submissions`)
+						api.search(`/api/submissions/`)
 					]);
 				})
 				.then(([submissions]) => {
-					store.submissions = submissions;
+          console.log(submissions);
+
+          store.submissions = submissions;
 					render();
 				});
 		});
-	}
+  }
+  
+  // function bindEventListeners(){
+  //   submissionFormSubmit();
+  //   challengeFormSubmit();
+  // }
+
+	// return {
+	// 	render: render,
+	// 	bindEventListeners: bindEventListeners
+	// };
+// }());
 });

@@ -79,10 +79,11 @@
   </section>
 
   <div class='container' id='upload'>
-    <form role='form' class='js-upload'>
-      <legend>Upload a Photo</legend>
+    <form role='form' class='js-new-challenge'>
+      <legend>Create a New Challenge</legend>
       <div>
-        <input type='file' name='image' id='image' class='js-file-input' accept='image/*' required>
+        <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
+        <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
         <label for='image' class='file-label'>Choose a file</label>
       </div>
       <input type='submit' value='Submit' class='button'>

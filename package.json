@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "blueimp-file-upload": "^9.24.0",
     "cloudinary": "^1.11.0",
+    "cloudinary-jquery-file-upload": "^2.5.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "json-parser": "^1.1.5",
