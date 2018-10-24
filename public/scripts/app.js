@@ -27,7 +27,7 @@ $(document).ready(function() {
 	function handleErrors(err) {
 		if (err.status === 401) {
 			store.authorized = false;
-			app.render();
+			render();
 		}
 		showFailMsg(err.responseJSON.msg);
 	}
@@ -107,8 +107,8 @@ $(document).ready(function() {
       event.preventDefault();
       console.log('challengeFormSubmit() invoked')
 
-      const newChallengeTitle = $('.js-title');
-      const newChallengeImage = $('.js-file-input');
+      const newChallengeTitle = $('.js-title-input');
+      const newChallengeImage = $('.js-challenge-upload');
 
 			api
 				.upload('/api/challenges', {
@@ -203,7 +203,7 @@ $(document).ready(function() {
           console.log(submissions);
 
           store.submissions = submissions;
-					render();
+					// render();
 				});
 		});
   }
