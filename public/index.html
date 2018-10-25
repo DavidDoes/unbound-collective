@@ -9,6 +9,7 @@
   <meta name='author' content='David Clark, @DavidDoes___'>
 
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css'/>
+  <link rel="stylesheet" type='text/css' media='screen' href='./styles/modal.css'/>
 
 </head>
 <body>
@@ -16,18 +17,66 @@
     <div class='hero-text' role='group'>
       <h1>Push your inner photographer to its outer limits!</h1>
     </div>
+    <div class='container'>
+      <nav class='main-nav' role='navigation'>
+        <ul>
+          <li><a class='nav-login' href="#0">Login</a></li>
+          <li><a class="nav-signup" href="#0">Sign up</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <div class='container'>
-    <div class='navbar-space'></div>
-    <div class='navbar' role='navigation'>
-      <ul>
-        <li><a href='#login'>Login</a></li>
-        <li><a href='/dashboard.html'>Dashboard</a></li>
-        <li><a href='#upload'>Submit</a></li>
-        <li><a href='#about'>How Does it Work?</a></li>
-      </ul>
+  <div class='modal-form'>
+    <div class='modal-wrapper'>
+      <ul class="modal-tabs">
+          <li><a href='#0'>Login</a></li>
+          <li><a href='#0'>Signup</a></li>
+        </ul>
+        
+        <div id='login-form' class='modal-login-form'>
+          <form role='form' class='form' id='js-login-form'>
+            <fieldset>
+              <legend>Login</legend>
+              <div>
+                <label for="username">Username</label>
+                <input name="username" id="login-username" aria-label="username" type="text" class='full-width has-padding has-border'>
+              </div>
+              <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="login-password" class='full-width has-padding has-border'>
+                <a href="#0" class="hide-password">Hide</a>
+              </div>
+              <button aria-label="submit" type="submit">LOGIN</button>
+              <p><a id='forgot-password' href="#0">Forgot password.</a></p>
+            </fieldset>
+          </form>
+        </div>
+        <a href='#0' class='close-form'>Close</a>
+
+        <div id='signup-form' class='modal-signup-form'>
+          <form role='form' class='form' id='js-signup-form'>
+            <fieldset>
+              <legend>Signup</legend>
+              <div>
+                <label for="username">Username</label>
+                <input name="username" id="signup-username" aria-label="username" type="text" class='full-width has-padding has-border'>
+              </div>
+              <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="signup-password" class='full-width has-padding has-border'>
+                <a href="#0" class="hide-password">Hide</a>
+              </div>
+                <button aria-label="submit" type="submit">SIGNUP</button>
+            </fieldset>
+          </form>
+        </div>
     </div>
+  </div>
+
+  <div class='container' id='about'>
+    <h1>Challenges for every photographer.</h1>
+    <p>Choose a challenge, get out there, submit your photo.</p>
   </div>
 
   <main role='main' aria-live='assertive'>
@@ -36,59 +85,29 @@
     </div>
   </main>
 
-  <div class='container' id='about'>
-    <h2>So, how does this work?</h2>
-    <p>It's simple, really. We, or users like you, submit challenges every so often, and you submit photos to them.</p>
-    <p>Each challenge has a short description. The idea, though, is that the challenge is whatever the challenge's name is. If we have a challenge for, say, <b>Struggle</b>, a user submits a photo corresponding to that word. It could be a photo of a tree growing on an incline, or of an ant carrying a piece of food.</p>
-    <p>The idea is that it's all open-ended. Really, all you need is your camera and the challenge title.</p>
-  </div>
-
-  <section class='signup-login'>
-    <form role='form' id='signup-form' class='js-signup-form'>
-      <fieldset>
-        <legend>Signup</legend>
-        <div>
-          <label for="username">Username</label>
-          <input name="username" class="js-username-entry" aria-label="username" type="text">
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" name="password" class="js-password-entry">
-        </div>
-          <button aria-label="submit" type="submit">SIGNUP</button>
-      </fieldset>
-
-    </form>
-
-    <form role='form' id="login-form" class='js-login-form'>
-      <fieldset>
-        <legend>Login</legend>
-        <div>
-          <label for="username">Username</label>
-          <input name="username" class="js-username-entry" aria-label="username" type="text">
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" name="password" class="js-password-entry">
-        </div>
-        <button aria-label="submit" type="submit">LOGIN</button>
-        <p><a href="#">Forgot password.</a></p>
-      </fieldset>
-
-    </form>
-  </section>
-
-  <div class='container' id='upload'>
+  <div class='container' id='challenge-upload'>
     <form role='form' class='js-new-challenge'>
       <legend>Create a New Challenge</legend>
       <div>
-        <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
-        <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
+        <input type='text' name='challenge-title' id='challenge-title' class='js-title-input' placeholder='Please enter a title' required>
+        <input type='file' name='challenge-image' id='challenge-image' class='js-challenge-upload' accept='image/*' required>
         <label for='image' class='file-label'>Choose a file</label>
       </div>
       <input type='submit' value='Submit' class='button'>
     </form>
   </div>
+
+  <div class='container' id='submission-upload' hidden>
+      <form role='form' class='js-new-submission'>
+        <legend>Submit a Photo</legend>
+        <div>
+          <input type='text' name='submission-title' id='submission-title' class='js-title-input' placeholder='Please enter a title' required>
+          <input type='file' name='submission-image' id='submission-image' class='js-submission-upload' accept='image/*' required>
+          <label for='image' class='file-label'>Choose a file</label>
+        </div>
+        <input type='submit' value='Submit' class='button'>
+      </form>
+    </div>
 
   <footer>
     <div class='success-msg js-success-msg'></div>
@@ -105,6 +124,7 @@
   <script type='text/javascript' src='./scripts/api.js'></script>
   <script type='text/javascript' src='./scripts/index.js'></script>
   <script type='text/javascript' src='./scripts/store.js'></script>
+  <script type='text/javascript' src='./scripts/login-signup.js'></script>
 
 </body>
 </html>

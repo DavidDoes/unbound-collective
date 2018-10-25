@@ -65,9 +65,11 @@ $(document).ready(function() {
 				`
         <div class="one-third card" id="${
 					challenge.id
-				}"><img class="thumbnail" src="${challenge.image}"><h2>${
+        }"><div class="content-overlay"></div>
+        <img class="thumbnail content-image" src="${challenge.image}">
+        <div class="content-details fadeIn-top">${
 					challenge.title
-				}</h2>
+				}</div>
         </div>
         `
 		);
@@ -99,7 +101,8 @@ $(document).ready(function() {
 	      </div
 	    `
 	  );
-	  $('#submissions').append(submissionItems);
+    $('#submissions').append(submissionItems);
+    $('#submission-upload').show();
   }
   
   function challengeFormSubmit(){
@@ -152,14 +155,14 @@ $(document).ready(function() {
 	}
 
 	function signupSubmit() {
-		$('.js-signup-form').on('submit', event => {
+		$('#js-signup-form').on('submit', event => {
       alert('hello');
 			event.preventDefault();
 
 			const signupForm = $(event.currentTarget);
 			const newUser = {
-				username: signupForm.find('.js-username-entry').val(),
-				password: signupForm.find('.js-password-entry').val()
+				username: signupForm.find('#signup-username').val(),
+				password: signupForm.find('#signup-password').val()
 			}; // in api.js
 			api
 				.create('/api/users', newUser)
@@ -175,14 +178,14 @@ $(document).ready(function() {
 	}
 
 	function loginSubmit() {
-		$('.js-login-form').on('submit', event => {
+		$('#js-login-form').on('submit', event => {
 			event.preventDefault();
 			console.log('hello from loginSubmit()');
 
 			const loginForm = $(event.currentTarget);
 			const loginUser = {
-				username: loginForm.find('.js-username-entry').val(),
-				password: loginForm.find('.js-password-entry').val()
+				username: loginForm.find('#login-username').val(),
+				password: loginForm.find('#login-password').val()
 			};
 			api
 				.create('/api/login', loginUser)

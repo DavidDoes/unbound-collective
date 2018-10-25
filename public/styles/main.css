@@ -1,3 +1,55 @@
+/* https://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+  line-height: 1.25;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* ----------------------------- */
+/* -----------Primary----------- */
+/* ----------------------------- */
+
+
 body, html {
   height: 100%;
   width: 100%;
@@ -5,8 +57,16 @@ body, html {
   padding: 0; /* remove white space  */
 }
 
+a {
+  color: #453A49;
+  text-decoration: none;
+}
+
 body {
-  font-size: 16px;
+  font-size: 100%;
+  font-family: "PT Sans", sans-serif;
+  color: black;
+  background-color: white;
 }
 
 header {
@@ -16,9 +76,26 @@ header {
   padding: 0;
 }
 
+main { 
+  padding: .5em 0;
+}
+
 h1, h2, h3, form, ul, li {
   font-weight: 500;
 }
+
+input, textarea {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+  font-size: 1rem;
+}
+input::-ms-clear, textarea::-ms-clear {
+  display: none;
+}
+
+/* ----------------------------- */
+/* -------Main Components------- */
+/* ----------------------------- */
 
 .container {
   position: relative;
@@ -26,6 +103,7 @@ h1, h2, h3, form, ul, li {
   flex-wrap: wrap;
   width: 100%;
   margin: 0 auto;
+  padding: 60px 20px 0 20px;
   box-sizing: border-box;
 }
 
@@ -45,21 +123,19 @@ h1, h2, h3, form, ul, li {
 }
 
 .hero-image {
-  /* The image used */
   background-image: url('../images/hero-image.jpg');
-
-  /* Set a specific height */
   height: 100%;
   width: 100%;
 
-  /* Create the parallax scrolling effect */
+  /* parallax scrolling effect */
   background-attachment: fixed;
   background-position: center;
   background-size: cover;  
 }
 
 .hero-text {
-  max-width: 400px;
+  font-size: 150%;
+  max-width: 800px;
   text-align: center;
   position: absolute;
   top: 50%;
@@ -68,28 +144,25 @@ h1, h2, h3, form, ul, li {
   color:white;
 }
 
-/* hero text background */
-/* .hero-text::before {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  margin-left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: -1;
-  opacity: 0.6;
-} */
-
 .one-third {
   position: relative;
+  align-content: space-between;
   width: 30.6666666667%;
-  height: 20em;
+  height: 100%;
   display: inline-block;
   box-sizing: border-box;
   margin: 0 .5em;
 }
 
-#challenges h2 {
+#challenges h3 {
+  text-align: center;
+}
+
+#submissions {
+  display: none;
+}
+
+#about {
   text-align: center;
 }
 
@@ -111,6 +184,6 @@ h1, h2, h3, form, ul, li {
   display: none;
 }
 
-@media (max-width: 750px) and (min-width: 320px) {
+/* @media (max-width: 750px) and (min-width: 320px) {
 
-}
+} */
