@@ -9,6 +9,7 @@ const store = (function() {
     photo: [],
     thumbnail: [],
 
-    authToken: ''
+    authToken: localStorage.getItem('authToken') || ''
+
   };
 }());

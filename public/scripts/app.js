@@ -1,16 +1,16 @@
 'use strict';
 // const app = (function () {
-  
+
 $(document).ready(function() {
-  render();
+	render();
 
-  // const files;
+	// const files;
 
-  // $('input[type=file]').on('change', prepareUpload);
+	// $('input[type=file]').on('change', prepareUpload);
 
-  // function prepareUpload(event){
-  //   files = event.target.files;
-  // }
+	// function prepareUpload(event){
+	//   files = event.target.files;
+	// }
 
 	function showSuccessMsg(msg) {
 		const listener = $('.js-success-msg');
@@ -38,18 +38,30 @@ $(document).ready(function() {
 
 		// const submissions = displaySubmissions(store.submissions);
 		// $('.js-submissions').html(submissions);
-  }
+	}
 
 	$(function() {
-		render();
+    render();
 		challengeClickListener();
     getChallenges();
-    submissionFormSubmit();
-    challengeFormSubmit();
+    
+		submissionFormSubmit();
+		challengeFormSubmit();
 		signupSubmit();
-    loginSubmit();
+		loginSubmit();
   });
+  
+  if(isLoggedIn()){
+    hideHero()
+  } // showHero() if logged out?
 
+  function isLoggedIn(){
+    return store.authToken ? true : false;
+  }
+
+  function hideHero(){
+    $('hero-image').hide('slow');
+  }
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -63,13 +75,13 @@ $(document).ready(function() {
 		const challengeItems = challenges.map(
 			challenge =>
 				`
-        <div class="one-third card" id="${
+        <div class="one-third" id="${
 					challenge.id
-        }"><div class="content-overlay"></div>
+				}"><div class="content-overlay"></div>
         <img class="thumbnail content-image" src="${challenge.image}">
-        <div class="content-details fadeIn-top">${
-					challenge.title
-				}</div>
+        <div class="content-details fadeIn-top">
+        <h3>${challenge.title}</h3>
+        </div>
         </div>
         `
 		);
@@ -77,61 +89,72 @@ $(document).ready(function() {
 	}
 
 	function challengeClickListener() {
-		$('.container').on('click', '.card', event => {
-      const challengeId = $(event.currentTarget).prop('id');
-      console.log(challengeId);
+		$('.container').on('click', '.one-third', event => {
+			const challengeId = $(event.currentTarget).prop('id');
+			console.log(challengeId);
 
 			getSubmissions(challengeId);
 		});
 	}
 
 	function getSubmissions(challengeId) {
-    console.log('getSubmissions')
+		console.log('getSubmissions');
 		return api.search(`/api/challenges/${challengeId}`).then(res => {
 			store.submissions = res;
 			console.log(res);
-
 		});
 	}
 
-	function displaySubmissions(){
-	  const submissionItems = submissions.map(
-	    submission => `
-	      <div class="on-third card"><img class="thumbnail" src="${submission.image}"><p>Uploaded by ${submission.creator}</p>
-	      </div
-	    `
-	  );
-    $('#submissions').append(submissionItems);
-    $('#submission-upload').show();
-  }
-  
-  function challengeFormSubmit(){
-    $('.js-new-challenge').on('submit', event => {
-      event.preventDefault();
-      console.log('challengeFormSubmit() invoked')
+	function displaySubmissions() {
+		const submissionItems = submissions.map(
+			submission =>
+				`
+      <div class="one-third" id="${
+				submission.id
+			}"><div class="content-overlay"></div>
+      <img class="thumbnail content-image" src="${submission.image}">
+      <div class="content-details fadeIn-top">
+      <h3>${submission.creator}</h3>
+      </div>
+      </div>
+      `
+		);
+		$('#submissions').append(submissionItems);
+    $('#submission-upload').show('slow');
+    $('#challenges').hide('slow');
+	}
 
-      const newChallengeTitle = $('.js-title-input');
+	function challengeFormSubmit() {
+		$('.js-new-challenge').on('submit', event => {
+			event.preventDefault();
+			console.log('challengeFormSubmit() invoked');
+
+			const newChallengeTitle = $('.js-title-input');
       const newChallengeImage = $('.js-challenge-upload');
+      
+      const formData = new FormData();
+            formData.append('image', $('input[type=file]')[0].files[0]);
+      console.log(formData);
 
 			api
 				.upload('/api/challenges', {
-          title: newChallengeTitle.val(),
-          image: newChallengeImage.val() 
-        })
+					title: newChallengeTitle.val(),
+					image: newChallengeImage.val()
+				})
 				.then(() => {
-          newChallengeTitle.val('');
+					newChallengeTitle.val('');
 					newChallengeImage.val('');
 					return api.search(`/api/challenges/`);
 				})
 
 				.then(res => {
-          console.log(res);
+					console.log(res);
 					store.challenges = res;
 					render();
 				})
 				.catch(handleErrors);
 		});
-  }
+	}
 
 	function submissionFormSubmit() {
 		$('.js-upload').on('submit', event => {
@@ -156,7 +179,7 @@ $(document).ready(function() {
 
 	function signupSubmit() {
 		$('#js-signup-form').on('submit', event => {
-      alert('hello');
+			console.log('signupSubmit() invoked')
 			event.preventDefault();
 
 			const signupForm = $(event.currentTarget);
@@ -190,8 +213,9 @@ $(document).ready(function() {
 			api
 				.create('/api/login', loginUser)
 				.then(res => {
-          console.log('res: ', res);
-					store.authToken = res.authToken;
+					console.log('res: ', res);
+          store.authToken = res.authToken;
+          localStorage.setItem('authToken', res.authToken);
 					store.authorized = true;
 					loginForm[0].reset();
 
@@ -203,22 +227,23 @@ $(document).ready(function() {
 					]);
 				})
 				.then(([submissions]) => {
-          console.log(submissions);
+          $('.modal-overlay').removeClass('is-visible');
+					console.log(submissions);
 
-          store.submissions = submissions;
+					store.submissions = submissions;
 					// render();
 				});
 		});
-  }
-  
-  // function bindEventListeners(){
-  //   submissionFormSubmit();
-  //   challengeFormSubmit();
-  // }
+	}
+
+	// function bindEventListeners(){
+	//   submissionFormSubmit();
+	//   challengeFormSubmit();
+	// }
 
 	// return {
 	// 	render: render,
 	// 	bindEventListeners: bindEventListeners
 	// };
-// }());
+	// }());
 });

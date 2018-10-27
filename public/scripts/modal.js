@@ -1,5 +1,5 @@
 $(document).ready(function($){
-	var $form_modal = $('.modal-form'),
+	const $form_modal = $('.modal-overlay'),
 		$form_login = $form_modal.find('.modal-login-form'),
 		$form_signup = $form_modal.find('.modal-signup-form'),
 		$form_forgot_password = $form_modal.find('#forgot-password'),
@@ -19,7 +19,7 @@ $(document).ready(function($){
 			// on mobile open the submenu
 			$(this).children('ul').toggleClass('is-visible');
 		} else {
-      console.log('.modal-form opened')
+      console.log('.modal-overlay opened')
 			// on mobile close submenu
 			$main_nav.children('ul').removeClass('is-visible');
 			//show modal layer
@@ -30,34 +30,21 @@ $(document).ready(function($){
 
 	});
 
-	//close modal
-	$('.modal-form').on('click', function(event){
-		if( $(event.target).is($form_modal) || $(event.target).is('.close-form') ) {
-			$form_modal.removeClass('is-visible');
-		}	
-	});
-	//close modal when clicking the esc keyboard button
+	// close modal when clicking the esc keyboard button
 	$(document).keyup(function(event){
-    	if(event.which=='27'){
-    		$form_modal.removeClass('is-visible');
-	    }
-    });
+    if(event.which == '27'){
+      $form_modal.removeClass('is-visible');
+    }
+  });
+  // close modal on click outside modal
+  $('.modal-overlay').click(function(event){
+    $('.modal-overlay').removeClass('is-visible');
+  });
 
 	//switch from a tab to another
 	$form_modal_tab.on('click', function(event) {
 		event.preventDefault();
 		( $(event.target).is( $tab_login ) ) ? login_selected() : signup_selected();
-	});
-
-	//hide or show password
-	$('.hide-password').on('click', function(){
-		var $this= $(this),
-			$password_field = $this.prev('input');
-		
-		( 'password' == $password_field.attr('type') ) ? $password_field.attr('type', 'text') : $password_field.attr('type', 'password');
-		( 'Hide' == $this.text() ) ? $this.text('Show') : $this.text('Hide');
-		//focus and move cursor to the end of input field
-		$password_field.putCursorAtEnd();
 	});
 
 	//show forgot-password form 

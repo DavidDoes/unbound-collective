@@ -12,18 +12,20 @@ const api = (function() {
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
 	};
-	const upload = function(path, img) {
-    console.log(path, img);
+	const upload = function(path, obj) {
+    console.log('obj', obj);
 
 		 return $.ajax({
 			type: 'POST',
 			url: path,
       dataType: 'json',
-      contentType: false,
+      contentType: false, // otherwise, Boundary string will be missing
       processData: false,
       cache: false,
-      data: img,
-      headers: { Authorization: `Bearer ${store.authToken}` }
+      data: obj,
+      headers: { 
+        Authorization: `Bearer ${store.authToken}`,
+      }
     });
 	};
 	const search = function(path, query) {

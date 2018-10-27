@@ -1,57 +1,4 @@
-
-*, *:before, *:after{
-  margin: 0;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing:border-box;
-  box-sizing: border-box;
-}
-
-body{
-  background: #f9f9f9;
-  font-size: 16px;
-}
-
-.main-title{
-  color: #2d2d2d;
-  text-align: center;
-  text-transform: capitalize;
-  padding: 0.7em 0;
-}
-
-.container{
-  padding: 1em 0;
-  float: left;
-  width: 50%;
-}
-@media screen and (max-width: 640px){
-  .container{
-    display: block;
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 900px){
-  .container{
-    width: 33.33333%;
-  }
-}
-
-.container .title{
-  color: #1a1a1a;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.content {
-  position: relative;
-  width: 90%;
-  max-width: 400px;
-  margin: auto;
-  overflow: hidden;
-}
-
-.content .content-overlay {
+.content-overlay {
   background: rgba(0,0,0,0.7);
   position: absolute;
   height: 99%;
@@ -61,13 +8,14 @@ body{
   bottom: 0;
   right: 0;
   opacity: 0;
+  cursor: pointer;
   -webkit-transition: all 0.4s ease-in-out 0s;
   -moz-transition: all 0.4s ease-in-out 0s;
   transition: all 0.4s ease-in-out 0s;
 }
 
-.content:hover .content-overlay{
-  opacity: 1;
+.one-third:hover .content-overlay{
+  opacity: .7;
 }
 
 .content-image{
@@ -91,7 +39,7 @@ body{
   transition: all 0.3s ease-in-out 0s;
 }
 
-.content:hover .content-details{
+.one-third:hover .content-details{
   top: 50%;
   left: 50%;
   opacity: 1;
@@ -103,11 +51,6 @@ body{
   letter-spacing: 0.15em;
   margin-bottom: 0.5em;
   text-transform: uppercase;
-}
-
-.content-details p{
-  color: #fff;
-  font-size: 0.8em;
 }
 
 .fadeIn-top{

@@ -49,7 +49,8 @@ router.get('/:id', (req, res) => {
 		});
 });
 
-router.post('/', parser.single('image'), jwtAuth, (req, res) => {
+router.post('/', jwtAuth, parser.single('image'), (req, res) => {
+  console.log(req.body);
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 

@@ -123,14 +123,14 @@ input::-ms-clear, textarea::-ms-clear {
 }
 
 .hero-image {
-  background-image: url('../images/hero-image.jpg');
+  background: linear-gradient(rgba(0,0,0,0.20), rgba(0,0,0,0.20)), url('../images/hero-image.jpg') no-repeat center center fixed;
   height: 100%;
   width: 100%;
 
   /* parallax scrolling effect */
   background-attachment: fixed;
   background-position: center;
-  background-size: cover;  
+  background-size: cover;
 }
 
 .hero-text {
@@ -172,6 +172,10 @@ input::-ms-clear, textarea::-ms-clear {
   display: inline-block;
   box-sizing: border-box;
   object-fit: cover;
+}
+
+#challenge-upload {
+  margin-bottom: 2em;
 }
 
 .success-msg {

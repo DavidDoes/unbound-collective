@@ -78,7 +78,7 @@
   }
 }
 
-.modal-form {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -94,14 +94,14 @@
   -moz-transition: opacity 0.3s 0, visibility 0 0.3s;
   transition: opacity 0.3s 0, visibility 0 0.3s;
 }
-.modal-form.is-visible {
+.modal-overlay.is-visible {
   visibility: visible;
   opacity: 1;
   -webkit-transition: opacity 0.3s 0, visibility 0 0;
   -moz-transition: opacity 0.3s 0, visibility 0 0;
   transition: opacity 0.3s 0, visibility 0 0;
 }
-.modal-form.is-visible .modal-wrapper {
+.modal-overlay.is-visible .modal-wrapper {
   -webkit-transform: translateY(0);
   -moz-transform: translateY(0);
   -ms-transform: translateY(0);
@@ -206,13 +206,9 @@
   background-repeat: no-repeat;
   background-position: 50% 0;
 }
-.form label#signin-username {
-  background-image: url("../img/cd-icon-username.svg");
-}
-.form label#signin-password {
-  background-image: url("../img/cd-icon-password.svg");
-}
+
 .form input {
+  max-width: 80%;
   margin: 0;
   padding: 0;
   border-radius: 0.25em;
@@ -260,23 +256,8 @@
   background: #3599ae;
   outline: none;
 }
-.form .hide-password {
-  display: inline-block;
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 6px 15px;
-  border-left: 1px solid #d2d8d8;
-  top: 50%;
-  bottom: auto;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
-  font-size: 14px;
-  font-size: 0.875rem;
-  color: #343642;
+input.full-width {
+  width: 100%;
 }
 
 @media only screen and (min-width: 600px) {
