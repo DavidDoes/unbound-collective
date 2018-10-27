@@ -281,31 +281,10 @@ input.full-width {
   }
 }
 
-.form-message {
-  padding: 1.4em 1.4em 0;
-  font-size: 14px;
-  font-size: 0.875rem;
-  line-height: 1.4;
-  text-align: center;
-}
 @media only screen and (min-width: 600px) {
   .form-message {
     padding: 2em 2em 0;
   }
-}
-
-.form-bottom-message {
-  position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: -30px;
-  text-align: center;
-  font-size: 14px;
-  font-size: 0.875rem;
-}
-.form-bottom-message a {
-  color: #FFF;
-  text-decoration: underline;
 }
 
 .close-form {
@@ -327,11 +306,11 @@ input.full-width {
   }
 }
 
-#login-form, #nav-signup, #forgot-password {
+#modal-login-form, #modal-signup-form, #forgot-password {
   display: none;
 }
 
-#login-form.is-selected, #nav-signup.is-selected, #forgot-password.is-selected {
+#modal-login-form.is-selected, #modal-signup-form.is-selected, #forgot-password.is-selected {
   display: block;
   z-index: 9999;
 }
