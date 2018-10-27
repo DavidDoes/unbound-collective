@@ -122,6 +122,26 @@ input::-ms-clear, textarea::-ms-clear {
   align-items: center;
 }
 
+.hidden {
+  display:none;
+}
+
+.aux-nav {
+  display: inline-block;
+  margin-left: 1em;
+  padding: .6em 1em;
+  border: 1px solid rgb(125, 93, 136);
+  border-radius: 50em;
+}
+
+.aux-nav a {
+  display: inline-block;
+  height: auto;
+  line-height: normal;
+  color: rgb(125, 93, 136);
+  background: transparent;
+}
+
 .hero-image {
   background: linear-gradient(rgba(0,0,0,0.20), rgba(0,0,0,0.20)), url('../images/hero-image.jpg') no-repeat center center fixed;
   height: 100%;

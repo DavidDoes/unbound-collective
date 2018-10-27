@@ -41,27 +41,30 @@ $(document).ready(function() {
 	}
 
 	$(function() {
-    render();
+		render();
 		challengeClickListener();
-    getChallenges();
-    
+		getChallenges();
+
 		submissionFormSubmit();
 		challengeFormSubmit();
 		signupSubmit();
 		loginSubmit();
-  });
-  
-  if(isLoggedIn()){
-    hideHero()
+	});
+
+	if (isLoggedIn()) {
+    $('#nav-logout').removeClass('hidden');
+    $('.modal-overlay').removeClass('is-visible');
+    $('.main-nav').addClass('hidden');
+    $('#dashboard').removeClass('hidden');
   } // showHero() if logged out?
 
-  function isLoggedIn(){
-    return store.authToken ? true : false;
-  }
+	function isLoggedIn() {
+		return store.authToken ? true : false;
+	}
 
-  function hideHero(){
-    $('hero-image').hide('slow');
-  }
+	function hideHero() {
+		$('hero-image').hide('slow');
+	}
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -120,8 +123,8 @@ $(document).ready(function() {
       `
 		);
 		$('#submissions').append(submissionItems);
-    $('#submission-upload').show('slow');
-    $('#challenges').hide('slow');
+		$('#submission-upload').show('slow');
+		$('#challenges').hide('slow');
 	}
 
 	function challengeFormSubmit() {
@@ -130,11 +133,11 @@ $(document).ready(function() {
 			console.log('challengeFormSubmit() invoked');
 
 			const newChallengeTitle = $('.js-title-input');
-      const newChallengeImage = $('.js-challenge-upload');
-      
-      const formData = new FormData();
-            formData.append('image', $('input[type=file]')[0].files[0]);
-      console.log(formData);
+			const newChallengeImage = $('.js-challenge-upload');
+
+			const formData = new FormData();
+			formData.append('image', $('input[type=file]')[0].files[0]);
+			console.log(formData);
 
 			api
 				.upload('/api/challenges', {
@@ -179,7 +182,7 @@ $(document).ready(function() {
 
 	function signupSubmit() {
 		$('#js-signup-form').on('submit', event => {
-			console.log('signupSubmit() invoked')
+			console.log('signupSubmit() invoked');
 			event.preventDefault();
 
 			const signupForm = $(event.currentTarget);
@@ -214,8 +217,8 @@ $(document).ready(function() {
 				.create('/api/login', loginUser)
 				.then(res => {
 					console.log('res: ', res);
-          store.authToken = res.authToken;
-          localStorage.setItem('authToken', res.authToken);
+					store.authToken = res.authToken;
+					localStorage.setItem('authToken', res.authToken);
 					store.authorized = true;
 					loginForm[0].reset();
 
@@ -227,7 +230,10 @@ $(document).ready(function() {
 					]);
 				})
 				.then(([submissions]) => {
-          $('.modal-overlay').removeClass('is-visible');
+          isLoggedIn();
+          $([document.documentElement, document.body]).animate({
+            scrollTop: $('#dashboard').offset().top
+          }, 2000)
 					console.log(submissions);
 
 					store.submissions = submissions;
@@ -235,15 +241,4 @@ $(document).ready(function() {
 				});
 		});
 	}
-
-	// function bindEventListeners(){
-	//   submissionFormSubmit();
-	//   challengeFormSubmit();
-	// }
-
-	// return {
-	// 	render: render,
-	// 	bindEventListeners: bindEventListeners
-	// };
-	// }());
 });

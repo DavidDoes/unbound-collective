@@ -23,8 +23,13 @@
     <div class='container'>
       <nav class='main-nav' role='navigation'>
         <ul>
-          <li><a class='nav-login' href="#0">Login</a></li>
-          <li><a class="nav-signup" href="#0">Sign up</a></li>
+          <li><a class='nav-login' href='#0'>Login</a></li>
+          <li><a class="nav-signup" href='#0'>Sign up</a></li>
+        </ul>
+      </nav>
+      <nav class='aux-nav' id='nav-logout hidden'>
+        <ul>
+          <li><a class='nav-logout' href='#0'>Logout</a></li>
         </ul>
       </nav>
     </div>
@@ -70,6 +75,15 @@
           </fieldset>
         </form>
       </div>
+    </div>
+  </div>
+
+  <div class='container hidden' id='dashboard'>
+    <div class='container flex' id='user-submissions'>
+      <h1>Your Submissions</h1>
+    </div>
+    <div class='container flex' id='user-challenges'>
+      <h1>Your Challenges</h1>
     </div>
   </div>
 
