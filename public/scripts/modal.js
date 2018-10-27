@@ -25,7 +25,7 @@ $(document).ready(function($){
 			//show modal layer
       $form_modal.addClass('is-visible');	
 			//show the selected form
-			( $(event.target).is('.js-signup-form') ) ? signup_selected() : login_selected();
+			( $(event.target).is('.nav-signup') ) ? signup_selected() : login_selected();
 		}
 
 	});
@@ -63,7 +63,6 @@ $(document).ready(function($){
 	});
 
 	function login_selected(){
-    console.log('login_selected()')
 		$form_login.addClass('is-selected');
 		$form_signup.removeClass('is-selected');
 		$form_forgot_password.removeClass('is-selected');
