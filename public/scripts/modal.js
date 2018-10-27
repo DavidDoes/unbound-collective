@@ -37,8 +37,11 @@ $(document).ready(function($){
     }
   });
   // close modal on click outside modal
-  $('.modal-overlay').click(function(event){
-    $('.modal-overlay').removeClass('is-visible');
+  $('.modal-overlay').on('click', function(event){
+    console.log('modal-overlay clicked')
+    if( $(event.target).is($form_modal) || $(event.target).is('.close-form')){
+      $form_modal.removeClass('is-visible');
+    }
   });
 
 	//switch from a tab to another
@@ -60,6 +63,7 @@ $(document).ready(function($){
 	});
 
 	function login_selected(){
+    console.log('login_selected()')
 		$form_login.addClass('is-selected');
 		$form_signup.removeClass('is-selected');
 		$form_forgot_password.removeClass('is-selected');
@@ -68,6 +72,8 @@ $(document).ready(function($){
 	}
 
 	function signup_selected(){
+    console.log('signup_selected()')
+
 		$form_login.removeClass('is-selected');
 		$form_signup.addClass('is-selected');
 		$form_forgot_password.removeClass('is-selected');
