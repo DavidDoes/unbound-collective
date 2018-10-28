@@ -19,6 +19,7 @@
   <header role='banner' class='hero-image'>
     <div class='hero-text' role='group'>
       <h1>Push your inner photographer to its outer limits!</h1>
+      <a class='nav-button'>Discover</a>
     </div>
     <div class='container'>
       <nav class='main-nav' role='navigation'>
@@ -27,7 +28,7 @@
           <li><a class="nav-signup" href='#0'>Sign up</a></li>
         </ul>
       </nav>
-      <nav class='aux-nav' id='nav-logout hidden'>
+      <nav class='aux-nav hidden' id='nav-logout'>
         <ul>
           <li><a class='nav-logout' href='#0'>Logout</a></li>
         </ul>
@@ -78,7 +79,7 @@
     </div>
   </div>
 
-  <div class='container hidden' id='dashboard'>
+  <div id='dashboard' class='container hidden'>
     <div class='container flex' id='user-submissions'>
       <h1>Your Submissions</h1>
     </div>
@@ -98,7 +99,7 @@
     </div>
   </main>
 
-  <div class='container' id='challenge-upload'>
+  <div class='container hidden' id='challenge-upload'>
     <form role='form' class='js-new-challenge' enctype='multipart/form-data'>
       <legend>Create a New Challenge</legend>
       <div>
@@ -109,7 +110,7 @@
     </form>
   </div>
 
-  <div class='container' id='submission-upload' hidden>
+  <div class='container hidden' id='submission-upload'>
     <form role='form' class='js-new-submission'>
       <legend>Submit a Photo</legend>
       <div>

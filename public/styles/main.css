@@ -123,10 +123,19 @@ input::-ms-clear, textarea::-ms-clear {
 }
 
 .hidden {
-  display:none;
+  visibility: hidden;
+  display: none;
 }
 
 .aux-nav {
+  width: 50%;
+  float: right;
+  text-align: center;
+
+  width: auto;
+  height: auto;
+
+  margin-top: 20px;
   display: inline-block;
   margin-left: 1em;
   padding: .6em 1em;
@@ -134,11 +143,15 @@ input::-ms-clear, textarea::-ms-clear {
   border-radius: 50em;
 }
 
+.aux-nav li {
+  display: inline-block;
+}
+
 .aux-nav a {
   display: inline-block;
   height: auto;
   line-height: normal;
-  color: rgb(125, 93, 136);
+  color: white;
   background: transparent;
 }
 
@@ -162,6 +175,18 @@ input::-ms-clear, textarea::-ms-clear {
   left: 50%;
   transform: translate(-50%, -50%);
   color:white;
+}
+
+.nav-button {
+  cursor: pointer;
+  display: inline-block;
+  line-height: normal;
+  color: white;
+  padding: .6em 1em;
+  background: #453A49;
+  border: none;
+  border-radius: 50em;
+  padding: .6em 1em;
 }
 
 .one-third {

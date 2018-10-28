@@ -2,7 +2,6 @@ $(document).ready(function($){
 	const $form_modal = $('.modal-overlay'),
 		$form_login = $form_modal.find('#modal-login-form'),
 		$form_signup = $form_modal.find('#modal-signup-form'),
-		$form_forgot_password = $form_modal.find('#forgot-password'),
 		$form_modal_tab = $('.modal-tabs'),
 		$tab_login = $form_modal_tab.children('li').eq(0).children('a'),
 		$tab_signup = $form_modal_tab.children('li').eq(1).children('a'),

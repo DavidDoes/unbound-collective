@@ -2,15 +2,7 @@
 // const app = (function () {
 
 $(document).ready(function() {
-	render();
-
-	// const files;
-
-	// $('input[type=file]').on('change', prepareUpload);
-
-	// function prepareUpload(event){
-	//   files = event.target.files;
-	// }
+	// render();
 
 	function showSuccessMsg(msg) {
 		const listener = $('.js-success-msg');
@@ -33,6 +25,7 @@ $(document).ready(function() {
 	}
 
 	function render() {
+    console.log('render()')
 		const challenges = displayChallenges(store.challenges);
 		$('.js-challenges').html(challenges);
 
@@ -41,30 +34,36 @@ $(document).ready(function() {
 	}
 
 	$(function() {
-		render();
 		challengeClickListener();
 		getChallenges();
-
+    discoverClickListener();
 		submissionFormSubmit();
 		challengeFormSubmit();
 		signupSubmit();
-		loginSubmit();
+    loginSubmit();
+    logoutListener();
 	});
 
-	if (isLoggedIn()) {
-    $('#nav-logout').removeClass('hidden');
-    $('.modal-overlay').removeClass('is-visible');
-    $('.main-nav').addClass('hidden');
-    $('#dashboard').removeClass('hidden');
-  } // showHero() if logged out?
-
 	function isLoggedIn() {
-		return store.authToken ? true : false;
+    console.log('isLoggedIn()')
+
+    return store.authToken ? true : false;
 	}
 
-	function hideHero() {
-		$('hero-image').hide('slow');
-	}
+  function logout(){
+    localStorage.removeItem('authToken');
+
+    $('.main-nav').removeClass('hidden');
+    $('.aux-nav').addClass('hidden');
+    $('#dashboard').addClass('hidden');
+  }
+
+  function logoutListener(){
+    $('.aux-nav').on('click', '.nav-logout', function() {
+
+      logout();
+    })
+  }
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -89,7 +88,16 @@ $(document).ready(function() {
         `
 		);
 		$('#challenges').append(challengeItems);
-	}
+  }
+  
+  function discoverClickListener(){
+    $('.hero-text').on('click', '.nav-button', function() {
+      console.log('nav-button clicked')
+      $([document.documentElement, document.body]).animate({
+        scrollTop: $('#challenges').offset().top
+      }, 2000)
+    })
+  }
 
 	function challengeClickListener() {
 		$('.container').on('click', '.one-third', event => {
@@ -230,15 +238,21 @@ $(document).ready(function() {
 					]);
 				})
 				.then(([submissions]) => {
+					console.log(submissions);
+
+          store.submissions = submissions
           isLoggedIn();
+
+          $('.modal-overlay').removeClass('is-visible');
+          $('#dashboard').removeClass('hidden');
+          $('.aux-nav').removeClass('hidden');
+          $('.main-nav').addClass('hidden');
+          $('#challenge-upload').removeClass('hidden');
+
           $([document.documentElement, document.body]).animate({
             scrollTop: $('#dashboard').offset().top
           }, 2000)
-					console.log(submissions);
-
-					store.submissions = submissions;
-					// render();
-				});
+        });
 		});
 	}
 });
