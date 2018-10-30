@@ -236,7 +236,8 @@ $(document).ready(function() {
           console.log('res: ', res);
           // store.user = ;
 					store.authToken = res.authToken;
-					localStorage.setItem('authToken', res.authToken);
+          localStorage.setItem('authToken', res.authToken);
+          localStorage.setItem('username', loginUser.username);
 					loginForm[0].reset();
 					showSuccessMsg(`You've been logged in.`);
 
@@ -247,9 +248,6 @@ $(document).ready(function() {
 				})
 				.then(([submissions]) => {
 					console.log(submissions);
-					store.userSubmissions = submissions;
-
-					yourSubmissionsListener(submissions);
 
 					$('.modal-overlay').removeClass('is-visible');
           $('#new-challenge').removeClass('hidden');
@@ -269,13 +267,24 @@ $(document).ready(function() {
 	function yourSubmissionsListener(submissions) {
 		$('#your-submissions').on('click', function() {
       console.log('your submissions button clicked')
-			displayUserSubmissions(submissions);
-			$([document.documentElement, document.body]).animate(
-				{
-					scrollTop: $('#challenges').offset().top
-				},
-				1000
-			);
+
+      const username = localStorage.username;
+
+      return api
+        .search(`/api/users/${username}/submissions`)
+        .then( res => {
+          console.log(res)
+        })
+        
+
+
+			// displayUserSubmissions(submissions);
+			// $([document.documentElement, document.body]).animate(
+			// 	{
+			// 		scrollTop: $('#challenges').offset().top
+			// 	},
+			// 	1000
+			// );
 		});
 	}
 
