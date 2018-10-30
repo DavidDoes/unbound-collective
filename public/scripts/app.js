@@ -192,26 +192,21 @@ $(document).ready(function() {
 
 	function signupSubmit() {
 		$('#js-signup-form').on('submit', event => {
-			event.preventDefault();
+      event.preventDefault();
 
 			const signupForm = $(event.currentTarget);
 			const newUser = {
 				username: signupForm.find('#signup-username').val(),
 				password: signupForm.find('#signup-password').val()
-			}; // in api.js
+      }; 
+
 			api
 				.create('/api/users', newUser)
 				.then(res => {
 					signupForm[0].reset(); //clear storage
-					showSuccessMsg(
-						`Thank you, ${res.username}! Signup successful. Please login.`
-					);
 					$('.modal-overlay').removeClass('is-visible');
 					$('.aux-nav').removeClass('hidden');
-					// $('.main-nav').addClass('hidden');
           $('#new-challenge').removeClass('hidden');
-          
-          // checkLoggedIn();
 
 					$([document.documentElement, document.body]).animate(
 						{
@@ -233,7 +228,7 @@ $(document).ready(function() {
 			const loginUser = {
 				username: loginForm.find('#login-username').val(),
 				password: loginForm.find('#login-password').val()
-			};
+      };
 
 			api
 				.create('/api/login', loginUser)

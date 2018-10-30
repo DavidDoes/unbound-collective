@@ -2,7 +2,7 @@
 
 const store = (function() {
   return {
-    user: [],
+    username: [],
     challenges: [],
     currentChallenge: null,
     submissions: [],

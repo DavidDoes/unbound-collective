@@ -232,4 +232,11 @@ router.get('/', (req, res) => {
 		});
 });
 
+router.get('/:id', jwtAuth, (req, res, next) => {
+	User.findById(req.user.id)
+		.then(data => {
+      res.json(data)
+		});
+})
+
 module.exports = router;
