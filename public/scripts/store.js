@@ -2,14 +2,15 @@
 
 const store = (function() {
   return {
-    creator: [],
+    user: [],
     challenges: [],
     currentChallenge: null,
     submissions: [],
+    userSubmissions: [],
+    userChallenges: [],
     photo: [],
     thumbnail: [],
 
-    authToken: localStorage.getItem('authToken') || ''
-
+    authToken: localStorage.getItem('authToken') || '',
   };
 }());

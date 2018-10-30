@@ -50,7 +50,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', jwtAuth, parser.single('image'), (req, res) => {
-  console.log(req.body);
+  console.log('>>> req.body: ', req.body);
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -69,7 +69,7 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 	if (nonStringField) {
 		return res.status(422).json({
 			code: 422,
-			reason: 'ValidatioNError',
+			reason: 'ValidationError',
 			message: 'Incorrect field type: expected string',
 			location: nonStringField
 		});

@@ -18,10 +18,6 @@
   opacity: .7;
 }
 
-.content-image{
-  width: 100%;
-}
-
 .content-details {
   position: absolute;
   text-align: center;
@@ -51,6 +47,11 @@
   letter-spacing: 0.15em;
   margin-bottom: 0.5em;
   text-transform: uppercase;
+}
+
+#submissions .content-details h3 {
+  font-size: 12px;
+  
 }
 
 .fadeIn-top{

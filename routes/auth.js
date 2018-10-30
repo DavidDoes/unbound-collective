@@ -22,8 +22,10 @@ const createAuthToken = function (user) {
 }
 
 router.post('/login', localAuth, (req, res, next) => {
-  createAuthToken(req.user)
-    .then(authToken => {
+  const user = req.user
+
+  createAuthToken(user)
+    .then((authToken) => {
       res.json({ authToken })
     })
     .catch(err => {

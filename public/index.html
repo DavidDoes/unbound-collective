@@ -19,7 +19,7 @@
   <header role='banner' class='hero-image'>
     <div class='hero-text' role='group'>
       <h1>Push your inner photographer to its outer limits!</h1>
-      <a class='nav-button'>Discover</a>
+      <a class='nav-button' id='discover'>Discover</a>
     </div>
     <div class='container'>
       <nav class='main-nav' role='navigation'>
@@ -28,34 +28,29 @@
           <li><a class="nav-signup" href='#0'>Sign up</a></li>
         </ul>
       </nav>
-      <nav class='aux-nav hidden' id='nav-logout'>
-        <ul>
-          <li><a class='nav-logout' href='#0'>Logout</a></li>
-        </ul>
-      </nav>
     </div>
   </header>
 
-  <div class='modal-overlay'>
+  <div class='modal-overlay' id='login-signup-modal-overlay'>
     <div class='modal-wrapper'>
       <ul class="modal-tabs">
         <li><a href='#0'>Login</a></li>
         <li><a href='#0'>Signup</a></li>
       </ul>
 
-      <div id='modal-login-form'>
-        <form role='form' class='form' id='js-login-form'>
-          <fieldset>
-            <legend>Login</legend>
-            <div>
-              <label for="username">Username</label>
-              <input name="username" id="login-username" aria-label="username" type="text" class='full-width has-padding has-border'>
-            </div>
-            <div>
-              <label for="password">Password</label>
-              <input type="password" name="password" id="login-password" class='full-width has-padding has-border'>
-            </div>
-            <button aria-label="submit" type="submit">LOGIN</button>
+    <div id='modal-login-form'>
+      <form role='form' class='form' id='js-login-form'>
+        <fieldset>
+          <legend>Login</legend>
+          <div>
+            <label for="username">Username</label>
+            <input name="username" id="login-username" aria-label="username" type="text" class='full-width has-padding has-border'>
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="login-password" class='full-width has-padding has-border'>
+          </div>
+          <button aria-label="submit" type="submit">LOGIN</button>
           </fieldset>
         </form>
       </div>
@@ -79,54 +74,96 @@
     </div>
   </div>
 
-  <div id='dashboard' class='container hidden'>
-    <div class='container flex' id='user-submissions'>
-      <h1>Your Submissions</h1>
-    </div>
+  <nav class='container hidden aux-nav'>
+    <ul>
+      <li><a class='nav-button' id='your-submissions'>Your Submissions</a>
+      </li>
+      <li><a class='nav-button' id='your-challenges'>Your Challenges</a>
+      </li>
+      <li><a class='nav-button' id='nav-logout' href='#0'>Logout</a></li>
+    </ul>
+
     <div class='container flex' id='user-challenges'>
-      <h1>Your Challenges</h1>
     </div>
-  </div>
+  </nav>
 
   <div class='container' id='about'>
     <h1>Challenges for every photographer.</h1>
     <p>Choose a challenge, get out there, submit your photo.</p>
   </div>
 
+  <div class='container hidden' id='new-challenge'>
+      <div>
+        <ul>
+          <li><a class='nav-button' id='new-challenge-button'>Submit a Challenge</a>
+        </ul>
+      </div>
+      <div class='modal-overlay' id='challenge-overlay'>
+        <div class='modal-wrapper'>
+          <ul class="modal-tabs">
+            <li><a href='#0'>Submit a Challenge</a></li>
+          </ul>
+  
+          <div id='modal-challenge-form hidden'>
+            <form role='form' class='form' id='js-new-challenge'>
+              <fieldset>
+                <legend>Submit a Challenge</legend>
+                <div>
+                  <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
+                  <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
+                </div>
+                <button aria-label="submit" type="submit">LOGIN</button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='container hidden' id='new-submission'>
+      <div>
+        <ul>
+          <li><a class='nav-button' id='new-submission-button'>Submit a Photo</a>
+        </ul>
+      </div>
+      <div class='modal-overlay' id='submission-overlay'>
+        <div class='modal-wrapper'>
+          <ul class="modal-tabs">
+            <li><a href='#0'>Submit a Photo</a></li>
+          </ul>
+  
+          <div id='modal-submission-form hidden'>
+            <form role='form' class='js-new-submission'>
+              <legend>Submit a Photo</legend>
+              <div>
+                <input type='file' name='submission-image' id='submission-image' class='js-submission-upload' accept='image/*'
+                  required>
+                <label for='image' class='file-label'>Choose a file</label>
+              </div>
+              <input type='submit' value='Submit' class='button'>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <main role='main' aria-live='assertive'>
+    <ul class='hidden'>
+      <a class='nav-button hidden' id='back-button' href='#0'>Back</a>
+    </ul>
+
     <div class='container flex' id='challenges' class='js-challenges'>
-      <div class='container flex' id='submissions' class='js-submissions'></div>
+    </div>
+
+    <div class='container flex hidden' id='submissions' class='js-submissions'>
     </div>
   </main>
 
-  <div class='container hidden' id='challenge-upload'>
-    <form role='form' class='js-new-challenge' enctype='multipart/form-data'>
-      <legend>Create a New Challenge</legend>
-      <div>
-        <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
-        <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
-      </div>
-      <input type='submit' value='Submit' class='button'>
-    </form>
-  </div>
-
-  <div class='container hidden' id='submission-upload'>
-    <form role='form' class='js-new-submission'>
-      <legend>Submit a Photo</legend>
-      <div>
-        <input type='text' name='submission-title' id='submission-title' class='js-title-input' placeholder='Please enter a title'
-          required>
-        <input type='file' name='submission-image' id='submission-image' class='js-submission-upload' accept='image/*'
-          required>
-        <label for='image' class='file-label'>Choose a file</label>
-      </div>
-      <input type='submit' value='Submit' class='button'>
-    </form>
+  <div class='container flex hidden' id='user-submissions'>
   </div>
 
   <footer>
-    <div class='success-msg js-success-msg'></div>
-    <div class='err-msg js-err-msg'></div>
+
   </footer>
 
 

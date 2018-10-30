@@ -1,3 +1,9 @@
+.main-nav {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .main-nav ul {
   float: left;
   margin-right: 5%;

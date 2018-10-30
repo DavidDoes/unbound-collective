@@ -17,14 +17,21 @@ const api = (function() {
 
 		 return $.ajax({
 			type: 'POST',
-			url: path,
-      dataType: 'json',
+      url: path,
+      enctype: 'multipart/form-data',
       contentType: false, // otherwise, Boundary string will be missing
+      dataType: 'json',
       processData: false,
       cache: false,
       data: obj,
       headers: { 
         Authorization: `Bearer ${store.authToken}`,
+      },
+      success: function(){
+        console.log('Success');
+      },
+      error: function(){
+        console.log('Error');
       }
     });
 	};

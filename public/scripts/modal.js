@@ -31,6 +31,7 @@ $(document).ready(function($){
       $form_modal.removeClass('is-visible');
     }
   });
+
   // close modal on click outside modal
   $('.modal-overlay').on('click', function(event){
     if( $(event.target).is($form_modal) || $(event.target).is('.close-form')){
@@ -40,8 +41,8 @@ $(document).ready(function($){
 
 	//switch from a tab to another
 	$form_modal_tab.on('click', function(event) {
-		event.preventDefault();
-		( $(event.target).is( $tab_login ) ) ? login_selected() : signup_selected();
+    event.preventDefault();
+    ( $(event.target).is( $tab_login ) ) ? login_selected() : signup_selected();
 	});
 
 	function login_selected(){
