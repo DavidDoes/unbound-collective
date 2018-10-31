@@ -149,6 +149,8 @@ router.delete('/:id', (req, res) => {
 
 // New Submission for this Challenge
 router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
+  console.log('>>> req.body: ', req.body);
+
 	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {

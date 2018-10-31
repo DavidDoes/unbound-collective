@@ -347,7 +347,6 @@ $(document).ready(function() {
 		return api.search(`/api/challenges/${challengeId}`).then(res => {
 			store.submissions = res;
 			store.currentChallenge = challengeId;
-			console.log(res);
 
 			// $('#challenges').addClass('hidden');
 			$('#submissions').removeClass('hidden');
