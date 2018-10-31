@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const User = require('../models/users');
 const Submission = require('../models/submissions');
+const Challenge = require('../models/challenges');
 const jwtAuth = require('../middleware/jwt-auth');
 
 const router = express.Router();
@@ -192,23 +193,10 @@ router.delete('/:id', jwtAuth, (req, res, next) => {
 		});
 });
 
-router.get('/:id/submissions', jwtAuth, (req, res, next) => {
-	const { id } = req.params;
-	const creator = req.params.id;
-
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		const err = new Error('The provided `id` is invalid.');
-		err.status = 400;
-		return next(err);
-	}
-
-	Submission.find({
-		creator
-	})
+router.get('/mysubmissions', jwtAuth, (req, res, next) => {
+	Submission.find({ creator: req.user.id })
 		.then(submissions => {
-			res.json({
-				submissions: submissions.map(submissions => submissions.serialize())
-			});
+			res.json(submissions);
 		})
 		.catch(err => {
 			console.error(err);
@@ -218,7 +206,19 @@ router.get('/:id/submissions', jwtAuth, (req, res, next) => {
 		});
 });
 
-// FOR DEVELOPMENT ONLY - DELETE REMOVE
+router.get('/mychallenges', jwtAuth, (req, res, next) => {
+	Challenge.find({ creator: req.user.id })
+		.then(challenges => {
+			res.json(challenges);
+		})
+		.catch(err => {
+			console.error(err);
+			res.status(500).json({
+				message: 'Internal server error'
+			});
+		});
+});
+
 router.get('/', (req, res) => {
 	User.find()
 		.then(user => {
@@ -233,10 +233,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', jwtAuth, (req, res, next) => {
-	User.findById(req.user.id)
-		.then(data => {
-      res.json(data)
-		});
-})
+	User.findById(req.user.id).then(data => {
+		res.json(data);
+	});
+});
 
 module.exports = router;

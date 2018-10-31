@@ -76,6 +76,10 @@ header {
   padding: 0;
 }
 
+nav {
+  padding: 0 0 5em 0;
+}
+
 main { 
   padding: .5em 0;
   min-height: 600px;
@@ -83,6 +87,10 @@ main {
 
 h1, h2, h3, form, ul, li {
   font-weight: 500;
+}
+
+h2 {
+  padding: .2em .5em;
 }
 
 input, textarea {
@@ -104,7 +112,6 @@ input::-ms-clear, textarea::-ms-clear {
   flex-wrap: wrap;
   width: 100%;
   margin: 0 auto;
-  /* padding: 60px 20px 0 20px; */
   box-sizing: border-box;
 }
 
@@ -230,7 +237,6 @@ input::-ms-clear, textarea::-ms-clear {
   background: #453A49;
   border: none;
   border-radius: 50em;
-  padding: .6em 1em;
   margin: 1.5em 0 0 .5em;
 }
 

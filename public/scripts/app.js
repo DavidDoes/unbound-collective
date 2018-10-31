@@ -30,7 +30,7 @@ $(document).ready(function() {
 	}
 
 	$(function() {
-    renderNav();
+		renderNav();
 		challengeClickListener();
 		getChallenges();
 		discoverClickListener();
@@ -39,27 +39,28 @@ $(document).ready(function() {
 		signupSubmit();
 		loginSubmit();
 		logoutListener();
-		yourSubmissionsListener();
-    newChallengeListener();
-    backButtonListener();
-    newSubmissionListener();
-  });
+		mySubmissionsListener();
+		myChallengesListener();
+		newChallengeListener();
+		backButtonListener();
+		newSubmissionListener();
+	});
 
-  function isLoggedIn() {
+	function isLoggedIn() {
 		return store.authToken ? true : false;
-  }
-  
-  function renderNav() {
-    if (isLoggedIn()){
-      $('.hero-image').addClass('hidden');
-      $('.main-nav').addClass('hidden');
-      $('.aux-nav').removeClass('hidden');
-    } else {
-      $('.hero-image').removeClass('hidden');
-      $('.aux-nav').addClass('hidden');
-      $('.main-nav').removeClass('hidden');
-    }
-  }
+	}
+
+	function renderNav() {
+		if (isLoggedIn()) {
+			$('.hero-image').addClass('hidden');
+			$('.main-nav').addClass('hidden');
+			$('.aux-nav').removeClass('hidden');
+		} else {
+			$('.hero-image').removeClass('hidden');
+			$('.aux-nav').addClass('hidden');
+			$('.main-nav').removeClass('hidden');
+		}
+	}
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -76,20 +77,20 @@ $(document).ready(function() {
         <div class="one-third" id="${
 					challenge.id
 				}"><div class="content-overlay"></div>
-        <img class="thumbnail" src="${challenge.image}">
-        <div class="content-details fadeIn-top">
-        <h3>${challenge.title}</h3>
-        </div>
+          <img class="thumbnail" src="${challenge.image}">
+          <div class="content-details fadeIn-top">
+          <h3>${challenge.title}</h3>
+          </div>
         </div>
         `
 		);
-    $('#challenges').append(challengeItems);
+		$('#challenges').append(challengeItems);
 
-    if (isLoggedIn()){
-      $('#new-challenge').removeClass('hidden');
-    } else {
-      $('#new-challenge').addClass('hidden');
-    }
+		if (isLoggedIn()) {
+			$('#new-challenge').removeClass('hidden');
+		} else {
+			$('#new-challenge').addClass('hidden');
+		}
 	}
 
 	function discoverClickListener() {
@@ -106,7 +107,7 @@ $(document).ready(function() {
 	function challengeClickListener() {
 		$('.container').on('click', '.one-third', event => {
 			const challengeId = $(event.currentTarget).prop('id');
-      console.log(challengeId);
+			console.log(challengeId);
 
 			getSubmissions(challengeId);
 		});
@@ -127,13 +128,13 @@ $(document).ready(function() {
 			event.preventDefault();
 
 			const newChallengeTitle = $('.js-title-input').val();
-      const newChallengeImage = $('.js-challenge-upload').val();
-      console.log('title', newChallengeTitle);
+			const newChallengeImage = $('.js-challenge-upload').val();
+			console.log('title', newChallengeTitle);
 
 			const file = document.getElementById('image').files[0];
 			const formData = new FormData();
-            formData.append('image', file);
-      // formData.append('title', newChallengeTitle);
+			formData.append('image', file);
+			// formData.append('title', newChallengeTitle);
 
 			// console.log('formData: ', formData);
 			// console.log('file: ', file);
@@ -155,28 +156,28 @@ $(document).ready(function() {
 				.catch(handleErrors());
 			$('#challenge-overlay').removeClass('is-visible is-selected');
 		});
-  }
-  
-  function newSubmissionListener() {
-    $('#new-submission').on('click', '#new-submission-button', event => {
+	}
+
+	function newSubmissionListener() {
+		$('#new-submission').on('click', '#new-submission-button', event => {
 			event.preventDefault();
 			$('#modal-submission-form').removeClass('hidden');
 			$('#modal-submission-form').addClass('is-selected');
 			$('#submission-overlay').addClass('is-visible is-selected');
 		});
-  }
+	}
 
 	function submissionFormSubmit() {
 		$('.js-new-submission').on('submit', event => {
 			event.preventDefault();
 
-      const file = document.getElementById('submission-image').files[0];
-      // console.log('file: ', file);
+			const file = document.getElementById('submission-image').files[0];
+			// console.log('file: ', file);
 
-      const challengeId = store.currentChallenge;
+			const challengeId = store.currentChallenge;
 
 			api
-				.create(`/api/challenges/${challengeId}/submissions`) 
+				.create(`/api/challenges/${challengeId}/submissions`)
 				.then(() => {
 					file.val('');
 					// return api.search('/auth/users/submissions');
@@ -185,20 +186,20 @@ $(document).ready(function() {
 					store.submissions = response;
 					render();
 				})
-        .catch(handleErrors());
-        $('#submission-overlay').removeClass('is-visible is-selected');
+				.catch(handleErrors());
+			$('#submission-overlay').removeClass('is-visible is-selected');
 		});
 	}
 
 	function signupSubmit() {
 		$('#js-signup-form').on('submit', event => {
-      event.preventDefault();
+			event.preventDefault();
 
 			const signupForm = $(event.currentTarget);
 			const newUser = {
 				username: signupForm.find('#signup-username').val(),
 				password: signupForm.find('#signup-password').val()
-      }; 
+			};
 
 			api
 				.create('/api/users', newUser)
@@ -206,7 +207,7 @@ $(document).ready(function() {
 					signupForm[0].reset(); //clear storage
 					$('.modal-overlay').removeClass('is-visible');
 					$('.aux-nav').removeClass('hidden');
-          $('#new-challenge').removeClass('hidden');
+					$('#new-challenge').removeClass('hidden');
 
 					$([document.documentElement, document.body]).animate(
 						{
@@ -214,7 +215,6 @@ $(document).ready(function() {
 						},
 						2000
 					);
-
 				})
 				.catch(handleErrors());
 		});
@@ -228,16 +228,16 @@ $(document).ready(function() {
 			const loginUser = {
 				username: loginForm.find('#login-username').val(),
 				password: loginForm.find('#login-password').val()
-      };
+			};
 
 			api
 				.create('/api/login', loginUser)
 				.then(res => {
-          console.log('res: ', res);
-          // store.user = ;
+					console.log('res: ', res);
+					// store.user = ;
 					store.authToken = res.authToken;
-          localStorage.setItem('authToken', res.authToken);
-          localStorage.setItem('username', loginUser.username);
+					localStorage.setItem('authToken', res.authToken);
+					localStorage.setItem('username', loginUser.username);
 					loginForm[0].reset();
 					showSuccessMsg(`You've been logged in.`);
 
@@ -250,10 +250,10 @@ $(document).ready(function() {
 					console.log(submissions);
 
 					$('.modal-overlay').removeClass('is-visible');
-          $('#new-challenge').removeClass('hidden');
+					$('#new-challenge').removeClass('hidden');
 
-          location.reload(); //otherwise, buttons don't return
-        
+					location.reload(); //otherwise, buttons don't return
+
 					$([document.documentElement, document.body]).animate(
 						{
 							scrollTop: $('.aux-nav').offset().top
@@ -264,32 +264,39 @@ $(document).ready(function() {
 		});
 	}
 
-	function yourSubmissionsListener(submissions) {
-		$('#your-submissions').on('click', function() {
-      console.log('your submissions button clicked')
+	function mySubmissionsListener() {
+		$('#my-submissions').on('click', function() {
+			return api.search(`/api/users/mysubmissions`).then(res => {
+				displayUserSubmissions(res);
+			});
+		});
+	}
 
-      const username = localStorage.username;
-
-      return api
-        .search(`/api/users/${username}/submissions`)
-        .then( res => {
-          console.log(res)
-        })
-        
-
-
-			// displayUserSubmissions(submissions);
-			// $([document.documentElement, document.body]).animate(
-			// 	{
-			// 		scrollTop: $('#challenges').offset().top
-			// 	},
-			// 	1000
-			// );
+	function myChallengesListener() {
+		$('#my-challenges').on('click', function() {
+			return api.search(`/api/users/mychallenges`).then(res => {
+				displayUserChallenges(res);
+			});
 		});
 	}
 
 	function displayUserSubmissions(submissions) {
-		console.log('displayUserSubmissions()');
+		$('#new-challenge').addClass('hidden');
+		$('#challenges').addClass('hidden');
+		$('#submissions').addClass('hidden');
+		$('#user-challenges').addClass('hidden');
+		$('#user-challenges').hide();
+		$('#user-submissions').removeClass('hidden');
+		$('#user-submissions').show();
+		$('#new-challenge-button').addClass('hidden');
+		$('#back-button').removeClass('hidden');
+		$('ul').removeClass('hidden');
+		$('#user-challenges').empty();
+
+		$('#user-submissions').append(`
+      <h2>My Submissions</h2>
+    `);
+
 		const submissionItems = submissions.map(
 			submission =>
 				`
@@ -303,11 +310,43 @@ $(document).ready(function() {
 		$('#user-submissions').append(submissionItems);
 	}
 
+	function displayUserChallenges(challenges) {
+		$('#new-challenge').addClass('hidden');
+		$('#challenges').addClass('hidden');
+		$('#submissions').addClass('hidden');
+		$('#user-challenges').removeClass('hidden');
+		$('#user-challenges').show();
+		$('#user-submissions').addClass('hidden');
+		$('#user-submissions').hide();
+		$('#new-challenge-button').addClass('hidden');
+		$('#back-button').removeClass('hidden');
+		$('ul').removeClass('hidden');
+		$('#user-submissions').empty();
+
+		$('#user-challenges').append(`
+    <h2>My Challenges</h2>
+  `);
+
+		const challengeItems = challenges.map(
+			challenge =>
+				`
+      <div class="one-third" id="${challenge.id}">
+      <div class="content-overlay"></div>
+        <img class="thumbnail" src="${challenge.image}">
+        <div class="content-details fadeIn-top">
+          <h3>${challenge.title}</h3>
+        </div>
+      </div>
+      `
+		);
+		$('#user-challenges').append(challengeItems);
+	}
+
 	function getSubmissions(challengeId) {
 		console.log('getSubmissions');
 		return api.search(`/api/challenges/${challengeId}`).then(res => {
-      store.submissions = res;
-      store.currentChallenge = challengeId;
+			store.submissions = res;
+			store.currentChallenge = challengeId;
 			console.log(res);
 
 			// $('#challenges').addClass('hidden');
@@ -330,42 +369,40 @@ $(document).ready(function() {
       `
 		);
 		$('#submissions').append(submissionItems);
-    $('#challenges').addClass('hidden');
-    $('main ul').removeClass('hidden');
-    $('#back-button').removeClass('hidden');
-    $('#new-challenge-button').addClass('hidden');
+		$('#challenges').addClass('hidden');
+		$('main ul').removeClass('hidden');
+		$('#back-button').removeClass('hidden');
+		$('#new-challenge-button').addClass('hidden');
 
-    if (isLoggedIn()){
-      $('#new-submission').removeClass('hidden');
-    } else {
-      $('#new-submission').addClass('hidden');
-    }
-  }
+		if (isLoggedIn()) {
+			$('#new-submission').removeClass('hidden');
+		} else {
+			$('#new-submission').addClass('hidden');
+		}
+	}
 
-  function backButtonListener() {
-    $('#back-button').on('click', function(){
-      console.log('clicked')
-      // $('main ul').addClass('hidden');
-      // $('#back-button').addClass('hidden');
-      // $('#new-submission-button').addClass('hidden');
-      // $('#submissions').addClass('hidden');
-      // $('#submissions').empty();
-      // $('#challenges').removeClass('hidden');
-      // $('new-challenge-button').removeClass('hidden');
+	function backButtonListener() {
+		$('#back-button').on('click', function() {
+			console.log('clicked');
+			// $('main ul').addClass('hidden');
+			// $('#back-button').addClass('hidden');
+			// $('#new-submission-button').addClass('hidden');
+			// $('#submissions').addClass('hidden');
+			// $('#submissions').empty();
+			// $('#challenges').removeClass('hidden');
+			// $('new-challenge-button').removeClass('hidden');
 
-      location.reload(); //otherwise, buttons don't return
-    })
-  }
+			location.reload(); //otherwise, buttons don't return
+		});
+	}
 
-	function imageClickListener() {
-
-  }
+	function imageClickListener() {}
 
 	function logout() {
-    localStorage.removeItem('authToken');
+		localStorage.removeItem('authToken');
 
-    location.reload(); //otherwise, buttons don't return
-  }
+		location.reload(); //otherwise, buttons don't return
+	}
 
 	function logoutListener() {
 		$('.aux-nav').on('click', '#nav-logout', function() {
