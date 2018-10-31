@@ -181,11 +181,8 @@ $(document).ready(function() {
           image: file
         })
 				.then(() => {
-					file.val('');
-				})
-				.then(response => {
-					store.submissions = response;
-					render();
+          file.val('');
+          render();
 				})
         .catch(err => {
           console.error(err);

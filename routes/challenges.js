@@ -166,7 +166,7 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 			})
 			.catch(err => {
 				console.error(err);
-				res.status(err).json({ error: 'Internal server error' });
+				res.status(err).json();
 			});
 	});
 });
