@@ -171,23 +171,26 @@ $(document).ready(function() {
 		$('.js-new-submission').on('submit', event => {
 			event.preventDefault();
 
-			const file = document.getElementById('submission-image').files[0];
-			// console.log('file: ', file);
+      const file = document.getElementById('submission-image').files[0];
+			console.log('file: ', file);
 
 			const challengeId = store.currentChallenge;
 
 			api
-				.create(`/api/challenges/${challengeId}/submissions`)
+				.upload(`/api/challenges/${challengeId}/submissions`, {
+          image: file
+        })
 				.then(() => {
 					file.val('');
-					// return api.search('/auth/users/submissions');
 				})
 				.then(response => {
 					store.submissions = response;
 					render();
 				})
-				.catch(handleErrors());
-			$('#submission-overlay').removeClass('is-visible is-selected');
+        .catch(err => {
+          console.error(err);
+        });
+        $('#submission-overlay').removeClass('is-visible is-selected');
 		});
 	}
 
