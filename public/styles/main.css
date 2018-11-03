@@ -135,6 +135,11 @@ input::-ms-clear, textarea::-ms-clear {
   display: none;
 }
 
+#username-heading {
+  color: black;
+  z-index: 1;
+}
+
 .aux-nav {
   position: relative;
   width: 100%;
@@ -170,6 +175,10 @@ input::-ms-clear, textarea::-ms-clear {
   line-height: normal;
   border-top: 1px solid #3b3d4b;
   color: #FFF;
+}
+
+.aux-nav-right {
+  float: right;
 }
 
 @media only screen and (min-width: 768px) {
