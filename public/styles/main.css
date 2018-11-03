@@ -302,6 +302,22 @@ input::-ms-clear, textarea::-ms-clear {
   object-fit: cover;
 }
 
+#fullscreen {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+#fullscreen img {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: block;
+  margin: 0 auto;
+}
+
 #challenge-upload {
   margin-bottom: 2em;
 }

@@ -5,11 +5,10 @@ $(document).ready(function($){
 		$form_modal_tab = $('.modal-tabs'),
 		$tab_login = $form_modal_tab.children('li').eq(0).children('a'),
 		$tab_signup = $form_modal_tab.children('li').eq(1).children('a'),
-		$main_nav = $('.main-nav');
+    $main_nav = $('.main-nav');
 
 	//open modal
 	$main_nav.on('click', function(event){
-
 		if( $(event.target).is($main_nav) ) {
       console.log('$main_nav targeted')
 			// on mobile open the submenu
@@ -22,8 +21,7 @@ $(document).ready(function($){
 			//show the selected form
 			( $(event.target).is('.nav-signup') ) ? signup_selected() : login_selected();
 		}
-
-	});
+  });
 
 	// close modal on esc
 	$(document).keyup(function(event){

@@ -31,7 +31,8 @@ $(document).ready(function() {
 
 	$(function() {
 		renderNav();
-		challengeClickListener();
+    challengeClickListener();
+    submissionClickListener();
 		getChallenges();
 		discoverClickListener();
 		submissionFormSubmit();
@@ -74,7 +75,7 @@ $(document).ready(function() {
 		const challengeItems = challenges.map(
 			challenge =>
 				`
-        <div class="one-third" id="${
+        <div class="one-third challenge-thumb" id="${
 					challenge.id
 				}"><div class="content-overlay"></div>
           <img class="thumbnail" src="${challenge.image}">
@@ -105,7 +106,7 @@ $(document).ready(function() {
 	}
 
 	function challengeClickListener() {
-		$('.container').on('click', '.one-third', event => {
+		$('.container').on('click', '.challenge-thumb', event => {
 			const challengeId = $(event.currentTarget).prop('id');
 			console.log(challengeId);
 
@@ -343,7 +344,6 @@ $(document).ready(function() {
 	}
 
 	function getSubmissions(challengeId) {
-		console.log('getSubmissions');
 		return api.search(`/api/challenges/${challengeId}`).then(res => {
 			store.submissions = res;
 			store.currentChallenge = challengeId;
@@ -357,15 +357,15 @@ $(document).ready(function() {
 	function displaySubmissions(submissions) {
 		const submissionItems = submissions.map(
 			submission =>
-				`
-      <div class="one-third" id="${submission._id}">
-        <div class="content-overlay"></div>
-        <img class="thumbnail" src="${submission.image}">
-        <div class="content-details fadeIn-top">
-          <h3>Submitted by:<br> ${submission.creator}</h3>
+        `
+        <div class="one-third submission-thumb" id="${submission._id}">
+          <div class="content-overlay"></div>
+          <img class="submission thumbnail" src="${submission.image}">
+          <div class="content-details fadeIn-top">
+            <h3>Submitted by:<br> ${submission.creator}</h3>
+          </div>
         </div>
-      </div>
-      `
+        `
 		);
 		$('#submissions').append(submissionItems);
 		$('#challenges').addClass('hidden');
@@ -378,7 +378,31 @@ $(document).ready(function() {
 		} else {
 			$('#new-submission').addClass('hidden');
 		}
-	}
+  }
+
+  function submissionClickListener(){
+    $('.container').on('click', '.submission-thumb', function(event){
+      const src = $(this).children('.thumbnail').attr('src')
+
+      $('#fullscreen').removeClass('hidden');
+      $('#fullscreen img').attr('src', src);
+      $('#fullscreen').fadeIn();
+      $('#fullscreen').css({'-webkit-transform':'translate(0px, -900px)'})
+
+      $('#fullscreen').click(function(){
+        $(this).fadeOut();
+        $(this).addClass('hidden');
+      })
+      
+      $(document).keyup(function(event){
+        if(event.which == '27'){
+          $('#fullscreen').addClass('hidden');
+        }
+      });
+    });
+  }
+  
+  
 
 	function backButtonListener() {
 		$('#back-button').on('click', function() {
@@ -409,3 +433,4 @@ $(document).ready(function() {
 		});
 	}
 });
+
