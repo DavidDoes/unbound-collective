@@ -71,7 +71,10 @@ $(document).ready(function() {
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
-			store.challenges = res;
+      store.challenges = res;
+      res.map(challenge => {
+        store.currentChallengeTitle = challenge.title;
+      })
 
 			render();
 		});
@@ -79,7 +82,7 @@ $(document).ready(function() {
 
 	function displayChallenges(challenges) {
 		const challengeItems = challenges.map(
-			challenge =>
+      challenge =>
 				`
         <div class="one-third challenge-thumb" id="${
 					challenge.id
@@ -90,8 +93,9 @@ $(document).ready(function() {
           </div>
         </div>
         `
-		);
-		$('#challenges').append(challengeItems);
+    );
+    
+    $('#challenges').append(challengeItems);
 
 		if (isLoggedIn()) {
       $('#new-challenge').removeClass('hidden');
@@ -138,11 +142,10 @@ $(document).ready(function() {
 
 			const newChallengeTitle = $('.js-title-input').val();
 			const newChallengeImage = $('.js-challenge-upload').val();
-			console.log('title', newChallengeTitle);
-
 			const file = document.getElementById('image').files[0];
-			const formData = new FormData();
-			formData.append('image', file);
+			// const formData = new FormData();
+      // formData.append('image', file);
+      // console.log(formData);
 			// formData.append('title', newChallengeTitle);
 
 			// console.log('formData: ', formData);
@@ -150,8 +153,8 @@ $(document).ready(function() {
 
 			api
 				.upload('/api/challenges', {
-					title: newChallengeTitle,
-					image: file
+					title: $('.js-title-input').val(),
+					image: document.getElementById('image').files[0]
 				})
 				.then(() => {
 					newChallengeTitle.val('');
@@ -183,7 +186,7 @@ $(document).ready(function() {
       const file = document.getElementById('submission-image').files[0];
 			console.log('file: ', file);
 
-			const challengeId = store.currentChallenge;
+      const challengeId = store.currentChallenge;
 
 			api
 				.upload(`/api/challenges/${challengeId}/submissions`, {
@@ -359,7 +362,7 @@ $(document).ready(function() {
     return api.search(`/api/challenges/${challengeId}`)
     .then(res => {
 			store.submissions = res;
-			store.currentChallenge = challengeId;
+      store.currentChallenge = challengeId;
 
 			$('#submissions').removeClass('hidden');
 			displaySubmissions(store.submissions);
@@ -374,7 +377,7 @@ $(document).ready(function() {
           <div class="content-overlay"></div>
           <img class="thumbnail" src="${submission.image}">
           <div class="content-details fadeIn-top">
-            <h3>Submitted by:<br> ${submission.creator}</h3>
+            <h3>Submitted by:<br>${submission.creator}</h3>
           </div>
         </div>
         `
@@ -405,6 +408,11 @@ $(document).ready(function() {
         $(this).fadeOut();
         $(this).addClass('hidden');
       })
+
+      $([document.documentElement, document.body]).animate(
+				{
+					scrollTop: $('#fullscreen').offset().top
+				}),
       
       $(document).keyup(function(event){
         if(event.which == '27'){

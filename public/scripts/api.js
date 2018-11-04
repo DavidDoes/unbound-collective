@@ -13,7 +13,7 @@ const api = (function() {
 		});
 	};
 	const upload = function(path, obj) {
-    console.log('obj', obj);
+    console.log('obj: ', obj);
 
 		 return $.ajax({
 			type: 'POST',

@@ -5,11 +5,10 @@ const store = (function() {
     username: [],
     challenges: [],
     currentChallenge: null,
+    ChallengeTitles: [],
     submissions: [],
     userSubmissions: [],
     userChallenges: [],
-    photo: [],
-    thumbnail: [],
 
     authToken: localStorage.getItem('authToken') || '',
   };

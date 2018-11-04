@@ -27,6 +27,7 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+
   line-height: 1.25;
 }
 ol, ul {
@@ -63,6 +64,8 @@ a {
 }
 
 body {
+  overflow: hidden;
+  /* ^ allow `float: right` on `aux-nav-right` */
   font-size: 100%;
   font-family: "PT Sans", sans-serif;
   color: black;
@@ -114,16 +117,6 @@ input::-ms-clear, textarea::-ms-clear {
   margin: 0 auto;
   box-sizing: border-box;
 }
-
-/* .container:before,
-.container:after {
-    content: "";
-    display: table;
-}
-
-.container:after {
-  clear: both;
-} */
 
 .flex {
   display: flex;
@@ -177,8 +170,8 @@ input::-ms-clear, textarea::-ms-clear {
   color: #FFF;
 }
 
-.aux-nav-right {
-  float: right;
+#username-heading {
+  cursor: default;
 }
 
 @media only screen and (min-width: 768px) {
@@ -187,6 +180,9 @@ input::-ms-clear, textarea::-ms-clear {
     height: auto;
     background: none;
     cursor: auto;
+  }
+  #aux-nav-right {
+    float: right;
   }
   .aux-nav ul {
     position: static;
@@ -341,6 +337,8 @@ input::-ms-clear, textarea::-ms-clear {
   display: none;
 }
 
-/* @media (max-width: 750px) and (min-width: 320px) {
-
-} */
+@media (max-width: 750px) and (min-width: 320px) {
+  .aux-nav {
+    max-width: 25%
+  }
+}
