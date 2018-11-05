@@ -150,27 +150,21 @@ $(document).ready(function() {
 			event.preventDefault();
 
 			const newChallengeTitle = $('.js-title-input').val();
-			const newChallengeImage = $('.js-challenge-upload').val();
-			const file = document.getElementById('image').files[0];
-			// const formData = new FormData();
-      // formData.append('image', file);
-      // console.log(formData);
-			// formData.append('title', newChallengeTitle);
+      const file = $('#image')[0].files;
+      const imgFile = file.item(0);
 
-			// console.log('formData: ', formData);
-			// console.log('file: ', file);
+      let formData = new FormData();
+      
+      formData.append('image', imgFile);
+			formData.append('title', newChallengeTitle);
 
 			api
-				.upload('/api/challenges', {
-					title: $('.js-title-input').val(),
-					image: document.getElementById('image').files[0]
-				})
+				.upload('/api/challenges', formData)
 				.then(() => {
 					newChallengeTitle.val('');
 					newChallengeImage.val('');
 				})
 				.then(res => {
-					// console.log(res);
 					store.challenges = res;
 					render();
 				})

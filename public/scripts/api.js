@@ -13,13 +13,10 @@ const api = (function() {
 		});
 	};
 	const upload = function(path, obj) {
-    console.log('obj: ', obj);
-
 		 return $.ajax({
 			type: 'POST',
       url: path,
-      enctype: 'multipart/form-data',
-      contentType: false, // otherwise, Boundary string will be missing
+      contentType: false,
       dataType: 'json',
       processData: false,
       cache: false,
