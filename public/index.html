@@ -13,6 +13,8 @@
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/modal.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/hover.css' />
 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -21,15 +23,46 @@
       <h1>Push your inner photographer to its outer limits!</h1>
       <a class='nav-button' id='discover'>Discover</a>
     </div>
-    <div class='container'>
-      <nav class='main-nav' role='navigation'>
-        <ul>
-          <li><a class='nav-login' href='#0'>Login</a></li>
-          <li><a class="nav-signup" href='#0'>Sign up</a></li>
-        </ul>
-      </nav>
-    </div>
+    <nav class='user-navbar' role='navigation'>
+      <span class='navbar-toggle js-navbar-toggle'>
+        <i class="fas fa-angle-double-down"></i>
+      </span>
+      <!-- if user not logged in -->
+      <ul class='main-nav js-menu'>
+        <li>
+          <a href="#" class='nav-links' id='home'>Home</a>
+        </li>
+        <li>
+          <a href="#" class='nav-links' id='nav-login'>Login</a>
+        </li>
+        <li>
+          <a href="#" class='nav-links' id='nav-signup'>Signup</a>
+        </li>
+      </ul>
+    </nav>
   </header>
+
+  <nav class='user-navbar hidden' id='aux-nav-wrapper' role='navigation'>
+    <!-- if user logged in -->
+    <li class='hidden' id='username-heading'></li>
+    <span class='navbar-toggle js-navbar-toggle'>
+        <i class="fas fa-angle-double-down"></i>
+    </span>
+    <ul class='aux-nav js-menu'>
+      <li>
+        <a href="#" class='nav-links' id='home'>Home</a>
+      </li>
+      <li>
+        <a href="#" class='nav-links' id='my-submissions'>My Submissions</a>
+      </li>
+      <li>
+        <a href="#" class='nav-links' id='my-challenges'>My Challenges</a>
+      </li>
+      <li>
+        <a href="#" class='nav-links' id='nav-logout'>Logout</a>
+      </li>
+    </ul>
+  </nav>
 
   <div class='modal-overlay' id='login-signup-modal-overlay'>
     <div class='modal-wrapper'>
@@ -73,19 +106,6 @@
       </div>
     </div>
   </div>
-
-  <nav class='container hidden aux-nav'>
-    <ul>
-      <li><a class='nav-button' id='my-submissions'>My Submissions</a>
-      </li>
-      <li><a class='nav-button' id='my-challenges'>My Challenges</a>
-      </li>
-    </ul>
-    <ul id='aux-nav-right'>
-      <li class='hidden' id='username-heading'></li>
-      <li><a class='nav-button' id='nav-logout' href='#0'>Logout</a></li>
-    </ul>
-  </nav>
 
   <div class='container' id='about'>
     <h1>Challenges for every photographer.</h1>
@@ -148,10 +168,6 @@
     </div>
 
   <main role='main' aria-live='assertive'>
-    <ul class='hidden'>
-      <a class='nav-button hidden' id='back-button' href='#0'>Back</a>
-    </ul>
-
     <div class='container flex' id='challenges' class='js-challenges'>
     </div>
 
@@ -162,6 +178,10 @@
     </div>
 
     <div class='container flex hidden' id='user-challenges'>
+    </div>
+
+    <div>
+      <button id='nav-up-button'>Back to Top</button>
     </div>
   </main>
 
@@ -176,7 +196,7 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous">
-    </script>
+  </script>
 
   <script type='text/javascript' src='./scripts/app.js'></script>
   <script type='text/javascript' src='./scripts/api.js'></script>

@@ -28,12 +28,15 @@ $(document).ready(function() {
     $('.js-challenges').html(challenges);
     
     $('#username-heading').append(`
-    <h2>${localStorage.username}</h2>
+    <h2>Welcome, ${localStorage.username}</h2>
   `)
 	}
 
 	$(function() {
-		renderNav();
+    renderNav();
+    topButtonClickListener();
+    topButtonScroller();
+    navbarClickListener();
     challengeClickListener();
     submissionClickListener();
 		getChallenges();
@@ -46,7 +49,7 @@ $(document).ready(function() {
 		mySubmissionsListener();
 		myChallengesListener();
 		newChallengeListener();
-		backButtonListener();
+		homeClickListener();
     newSubmissionListener();
     deleteClickListener();
 	});
@@ -59,15 +62,21 @@ $(document).ready(function() {
 		if (isLoggedIn()) {
 			$('.hero-image').addClass('hidden');
 			$('.main-nav').addClass('hidden');
-      $('.aux-nav').removeClass('hidden');
+      $('#aux-nav-wrapper').removeClass('hidden');
       $('#username-heading').removeClass('hidden');
 		} else {
 			$('.hero-image').removeClass('hidden');
-			$('.aux-nav').addClass('hidden');
+			$('#aux-nav-wrapper').addClass('hidden');
       $('.main-nav').removeClass('hidden');
-      $('#username-heading').removeClass('hidden');
+      $('#username-heading').addClass('hidden');
 		}
-	}
+  }
+  
+  function navbarClickListener() {
+    $('.js-navbar-toggle').on('click', () => {
+      $('.js-menu').toggleClass('active');
+    });
+  };
 
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
@@ -301,7 +310,6 @@ $(document).ready(function() {
 		$('#user-submissions').removeClass('hidden');
 		$('#user-submissions').show();
 		$('#new-challenge-button').addClass('hidden');
-		$('#back-button').removeClass('hidden');
 		$('ul').removeClass('hidden');
 		$('#user-challenges').empty();
 
@@ -335,7 +343,6 @@ $(document).ready(function() {
 		$('#user-submissions').addClass('hidden');
 		$('#user-submissions').hide();
 		$('#new-challenge-button').addClass('hidden');
-		$('#back-button').removeClass('hidden');
 		$('ul').removeClass('hidden');
     $('#user-submissions').empty();    
 
@@ -385,7 +392,6 @@ $(document).ready(function() {
 		$('#submissions').append(submissionItems);
 		$('#challenges').addClass('hidden');
 		$('main ul').removeClass('hidden');
-		$('#back-button').removeClass('hidden');
 		$('#new-challenge-button').addClass('hidden');
 
 		if (isLoggedIn()) {
@@ -434,20 +440,39 @@ $(document).ready(function() {
     })
   }
 
-	function backButtonListener() {
-		$('#back-button').on('click', function() {
+	function homeClickListener() {
+		$('.aux-nav').on('click', '#home', () => {
 			location.reload(); //otherwise, buttons don't return
-		});
-	}
+    });
+  }
+
+  function topButtonScroller() {
+    $(window).scroll(function(){
+      if ($(this).scrollTop() > 100) {
+        $('#nav-up-button').fadeIn();
+      } else {
+        $('#nav-up-button').fadeOut();
+      }
+    })
+  }
+  
+  function topButtonClickListener() {
+    $('#nav-up-button').on('click', () => {
+      $([document.documentElement, document.body]).animate(
+				{
+					scrollTop: $('nav').offset().top
+				})
+    })
+  }
 
 	function logout() {
-		localStorage.removeItem('authToken');
-
-		location.reload(); //otherwise, buttons don't return
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+    location.reload(); //otherwise, buttons don't return
 	}
 
 	function logoutListener() {
-		$('.aux-nav').on('click', '#nav-logout', function() {
+		$('.aux-nav').on('click', '#nav-logout', () => {
 			logout();
 		});
 	}
