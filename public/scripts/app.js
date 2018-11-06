@@ -161,14 +161,11 @@ $(document).ready(function() {
 			api
 				.upload('/api/challenges', formData)
 				.then(() => {
-					newChallengeTitle.val('');
-					newChallengeImage.val('');
-				})
-				.then(res => {
-					store.challenges = res;
-					render();
-				})
-				.catch(handleErrors());
+          location.reload();
+        })
+        .catch(err => {
+          console.error(err);
+        });
 			$('#challenge-overlay').removeClass('is-visible is-selected');
 		});
 	}
@@ -196,8 +193,7 @@ $(document).ready(function() {
           image: file
         })
 				.then(() => {
-          file.val('');
-          render();
+          location.reload();
 				})
         .catch(err => {
           console.error(err);

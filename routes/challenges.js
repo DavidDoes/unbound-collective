@@ -167,7 +167,7 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 				res.status(201).send(submission.serialize());
 			})
 			.catch(err => {
-				console.error(err);
+        console.error(err);
 				res.status(err).json();
 			});
 	});
