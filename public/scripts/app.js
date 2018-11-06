@@ -315,7 +315,7 @@ $(document).ready(function() {
 		const submissionItems = submissions.map(
 			submission =>
 				`
-        <div class="one-third submission-thumb" id="${submission.id}">
+        <div class="one-third submission-thumb" id="${submission._id}">
           <div class="content-overlay"></div>
             <img class="thumbnail" src="${submission.image}">
             <div class="content-details fadeIn-top">
@@ -324,7 +324,8 @@ $(document).ready(function() {
           </div>
         </div>
         `
-		);
+    );
+
 		$('#user-submissions').append(submissionItems);
 	}
 

@@ -15,9 +15,9 @@ $(document).ready(function($){
 			$(this).children('ul').toggleClass('is-visible');
 		} else {
 			// on mobile close submenu
-			$main_nav.children('ul').removeClass('is-visible');
+      $main_nav.children('ul').removeClass('is-visible');
 			//show modal layer
-      $form_modal.addClass('is-visible');	
+      $form_modal.addClass('is-visible');
 			//show the selected form
 			( $(event.target).is('#nav-signup') ) ? signup_selected() : login_selected();
 		}
@@ -47,15 +47,16 @@ $(document).ready(function($){
 		$form_login.addClass('is-selected');
 		$form_signup.removeClass('is-selected');
 		$tab_login.addClass('selected');
-		$tab_signup.removeClass('selected');
+    $tab_signup.removeClass('selected');
+    $('#login-username').focus();
+
 	}
 
 	function signup_selected(){
-    console.log('signup_selected()')
-
 		$form_login.removeClass('is-selected');
 		$form_signup.addClass('is-selected');
 		$tab_login.removeClass('selected');
-		$tab_signup.addClass('selected');
+    $tab_signup.addClass('selected');
+    $('#signup-username').focus();
 	}
 });

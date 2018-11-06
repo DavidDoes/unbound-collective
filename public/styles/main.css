@@ -114,12 +114,11 @@ input::-ms-clear, textarea::-ms-clear {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  margin: 0 auto;
 }
 
 .flex {
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 .hidden {
@@ -132,6 +131,8 @@ input::-ms-clear, textarea::-ms-clear {
   z-index: 1;
   cursor: default;
 }
+
+#
 
 /* ----------------------------- */
 /* ------------Navbar----------- */
