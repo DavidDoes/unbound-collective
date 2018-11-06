@@ -146,7 +146,7 @@ $(document).ready(function() {
 	}
 
 	function challengeFormSubmit() {
-		$('#js-new-challenge').on('submit', event => {
+		$('#js-new-challenge-form').on('submit', event => {
 			event.preventDefault();
 
 			const newChallengeTitle = $('.js-title-input').val();
@@ -180,24 +180,26 @@ $(document).ready(function() {
 	}
 
 	function submissionFormSubmit() {
-		$('#new-submission').on('submit', event => {
-			event.preventDefault();
-
-      const file = document.getElementById('submission-image').files[0];
-			console.log('file: ', file);
-
+		$('#js-new-submission').on('submit', event => {
+      event.preventDefault();
+      
       const challengeId = store.currentChallenge;
 
+      const file = $('#submission-image')[0].files;
+      const imgFile = file.item(0);
+
+      let formData = new FormData();
+      
+      formData.append('image', imgFile);
+
 			api
-				.upload(`/api/challenges/${challengeId}/submissions`, {
-          image: file
-        })
+				.upload(`/api/challenges/${challengeId}/submissions`, formData)
 				.then(() => {
           location.reload();
 				})
         .catch(err => {
           console.error(err);
-        });
+        })
         $('#submission-overlay').removeClass('is-visible is-selected');
 		});
 	}
