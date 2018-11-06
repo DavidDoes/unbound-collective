@@ -181,6 +181,20 @@ nav {
   display: block;
 }
 
+#discover {
+  font-size: 24px;
+  padding: 10px;
+}
+
+.nav-buttons {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav-button {
+  display: inline-block;
+}
+
 @media only screen and (min-width: 768px) {
   .user-navbar {
     display: flex;
@@ -217,6 +231,7 @@ nav {
 }
 
 .nav-button { 
+  display: inline-block;
   font-size: 18px;
   text-decoration: none;
   padding: 5px;
@@ -224,7 +239,7 @@ nav {
   background-color: #8B18B1;
   color:white;
   outline: none;
-  margin-left: .5em;
+  margin-left: 5px;
 }
 
 .nav-button:hover {
@@ -244,9 +259,9 @@ nav {
   font-size: 15px;
   text-decoration: none;
   position: fixed;
-  padding: 5px;
+  padding: 10px;
   bottom: 200px;
-  right: 20px;
+  right: 9px;
   z-index: 9999;
   display:none;
   border-style: none;
@@ -290,11 +305,14 @@ nav {
 .one-third {
   text-align: center;
   position: relative;
-  align-content: space-between;
-  width: 30.6666666667%;
-  height: 100%;
   display: inline-block;
-  margin: 0 .5em;
+  margin: 0 5px;
+}
+
+.thumbnail {
+  height: 191px;
+  width: 300px;
+  object-fit: cover;
 }
 
 #user-submissions {
@@ -308,13 +326,6 @@ nav {
 #about {
   padding: 10em 5em 5em 5em;
   text-align: center;
-}
-
-.thumbnail {
-  height: 70%;
-  width: 100%;
-  display: inline-block;
-  object-fit: cover;
 }
 
 #fullscreen {

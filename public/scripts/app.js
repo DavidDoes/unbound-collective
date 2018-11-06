@@ -49,7 +49,7 @@ $(document).ready(function() {
 		mySubmissionsListener();
 		myChallengesListener();
 		newChallengeListener();
-		homeClickListener();
+		backHomeClickListener();
     newSubmissionListener();
     deleteClickListener();
 	});
@@ -103,6 +103,8 @@ $(document).ready(function() {
         </div>
         `
     );
+
+    $('.back-button').addClass('hidden');
     
     $('#challenges').append(challengeItems);
 
@@ -303,7 +305,8 @@ $(document).ready(function() {
 		$('#user-submissions').show();
 		$('#new-challenge-button').addClass('hidden');
 		$('ul').removeClass('hidden');
-		$('#user-challenges').empty();
+    $('#user-challenges').empty();
+    $('.back-button').removeClass('hidden');
 
 		$('#user-submissions').append(`
       <h2>My Submissions</h2>
@@ -326,7 +329,6 @@ $(document).ready(function() {
 	}
 
 	function displayUserChallenges(challenges) {
-
 		$('#new-challenge').addClass('hidden');
 		$('#challenges').addClass('hidden');
 		$('#submissions').addClass('hidden');
@@ -337,6 +339,8 @@ $(document).ready(function() {
 		$('#new-challenge-button').addClass('hidden');
 		$('ul').removeClass('hidden');
     $('#user-submissions').empty();    
+    $('.back-button').removeClass('hidden');
+
 
 		$('#user-challenges').append(`
     <h2>My Challenges</h2>
@@ -384,7 +388,8 @@ $(document).ready(function() {
 		$('#submissions').append(submissionItems);
 		$('#challenges').addClass('hidden');
 		$('main ul').removeClass('hidden');
-		$('#new-challenge-button').addClass('hidden');
+    $('#new-challenge-button').addClass('hidden');
+    $('.back-button').removeClass('hidden');
 
 		if (isLoggedIn()) {
       $('#new-submission').removeClass('hidden');
@@ -423,6 +428,7 @@ $(document).ready(function() {
   function deleteClickListener(){
     $('.container').on('click', '.delete-submission', (event) => {
       const submission = $(event.currentTarget).parents('.submission-thumb').prop('id');
+      console.log($(event.currentTarget).parents('.submission-thumb').prop('id'))
 
       if (confirm('Are you sure that you would like to permanently remove this submission?')) {
         console.log(submission);
@@ -432,10 +438,18 @@ $(document).ready(function() {
     })
   }
 
-	function homeClickListener() {
+	function backHomeClickListener() {
+		$('.main-nav').on('click', '#home', () => {
+			location.reload(); //otherwise, buttons don't return
+    });
+
 		$('.aux-nav').on('click', '#home', () => {
 			location.reload(); //otherwise, buttons don't return
     });
+
+    $('#back-button').on('click', () => {
+      location.reload();
+    })
   }
 
   function topButtonScroller() {

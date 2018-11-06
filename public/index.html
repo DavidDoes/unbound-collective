@@ -112,10 +112,16 @@
     <p>Choose a challenge, get out there, submit your photo.</p>
   </div>
 
+  <div class='back-button hidden'>
+    <ul>
+      <li><a class='nav-button' id='back-button'>Back</a></li>
+    </ul>
+  </div>
+
   <div class='container hidden' id='new-challenge'>
-      <div>
+      <div class='nav-buttons'>
         <ul>
-          <li><a class='nav-button' id='new-challenge-button'>Submit a Challenge</a>
+          <li><a class='nav-button' id='new-challenge-button'>Submit a Challenge</a></li>
         </ul>
       </div>
       <div class='modal-overlay' id='challenge-overlay'>
@@ -181,7 +187,9 @@
     </div>
 
     <div>
-      <button id='nav-up-button'>Back to Top</button>
+      <button id='nav-up-button'>
+        <i class="fas fa-angle-double-up"></i>
+      </button>
     </div>
   </main>
 

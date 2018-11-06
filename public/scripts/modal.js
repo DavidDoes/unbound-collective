@@ -5,7 +5,7 @@ $(document).ready(function($){
 		$form_modal_tab = $('.modal-tabs'),
 		$tab_login = $form_modal_tab.children('li').eq(0).children('a'),
 		$tab_signup = $form_modal_tab.children('li').eq(1).children('a'),
-    $main_nav = $('.main-nav');
+    $main_nav = $('.main-nav:not(:first-child)');
 
 	//open modal
 	$main_nav.on('click', function(event){
