@@ -6,7 +6,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
-	padding: 0;
+  padding: 0;
 }
 
 html, body, div, span, applet, object, iframe,
@@ -50,6 +50,12 @@ table {
 	border-spacing: 0;
 }
 
+legend {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
 /* ----------------------------- */
 /* -----------Primary----------- */
 /* ----------------------------- */
@@ -91,7 +97,14 @@ h1, h2, h3, form, ul, li {
   font-weight: 500;
 }
 
+h1 {
+  text-align: center;
+  font-size: 32px;
+  padding: .2em .5em;
+}
+
 h2 {
+  text-align: center;
   font-size: 18px;
   padding: .2em .5em;
 }
@@ -187,13 +200,13 @@ nav {
   padding: 10px;
 }
 
-.nav-buttons {
-  overflow: hidden;
-  white-space: nowrap;
+.back-button {
+  margin-bottom: 5px;
 }
 
-.nav-button {
-  display: inline-block;
+.new-buttons {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 @media only screen and (min-width: 768px) {
@@ -232,11 +245,12 @@ nav {
 }
 
 .nav-button { 
+  box-sizing: border-box;
   display: inline-block;
   font-size: 18px;
   text-decoration: none;
   padding: 5px;
-  border-style: none;
+  border: 1px solid transparent;
   background-color: #8B18B1;
   color:white;
   outline: none;
@@ -266,7 +280,7 @@ nav {
   z-index: 9999;
   display:none;
   border-style: none;
-  background-color: #8B18B1;
+  background-color: #45137E;
   color:white;
   opacity: .8;
   outline: none;
@@ -275,9 +289,9 @@ nav {
 #nav-up-button:hover {
   cursor: pointer;
   text-decoration: none;
-  color: #8B18B1;
+  color: #45137E;
   background-color: white;
-  border: 1px solid #8B18B1;
+  border: 1px solid #45137E;
   opacity: .8;
 }
 
@@ -344,10 +358,6 @@ nav {
   display: block;
   margin: 0 auto;
   margin-top: 100px;
-}
-
-#challenge-upload {
-  margin-bottom: 2em;
 }
 
 .success-msg {

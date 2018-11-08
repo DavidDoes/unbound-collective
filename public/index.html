@@ -19,11 +19,13 @@
 
 <body>
   <header role='banner' class='hero-image'>
+    <!-- <div class='js-err-msg'></div>
+    <div class='js-success-msg'></div> -->
     <div class='hero-text' role='group'>
       <h1>Push your inner photographer to its outer limits!</h1>
       <a class='nav-button' id='discover'>Discover</a>
     </div>
-    <nav class='user-navbar' role='navigation'>
+    <nav class='user-navbar' id='logged-out-navbar' role='navigation'>
       <span class='navbar-toggle js-navbar-toggle'>
         <i class="fas fa-angle-double-down"></i>
       </span>
@@ -67,8 +69,8 @@
   <div class='modal-overlay' id='login-signup-modal-overlay'>
     <div class='modal-wrapper'>
       <ul class="modal-tabs">
-        <li><a href='#0'>Login</a></li>
-        <li><a href='#0'>Signup</a></li>
+        <li><a>Login</a></li>
+        <li><a>Signup</a></li>
       </ul>
 
     <div id='modal-login-form'>
@@ -76,14 +78,14 @@
         <fieldset>
           <legend>Login</legend>
           <div>
-            <label for="username">Username</label>
+            <label for="username">Username</label><br>
             <input name="username" id="login-username" aria-label="username" type="text" class='full-width has-padding has-border'>
           </div>
           <div>
-            <label for="password">Password</label>
+            <label for="password">Password</label><br>
             <input type="password" name="password" id="login-password" class='full-width has-padding has-border'>
           </div>
-          <button aria-label="submit" type="submit">LOGIN</button>
+          <button class='nav-button' aria-label="submit" type="submit">LOGIN</button>
           </fieldset>
         </form>
       </div>
@@ -93,14 +95,14 @@
           <fieldset>
             <legend>Signup</legend>
             <div>
-              <label for="username">Username</label>
+              <label for="username">Username</label><br>
               <input name="username" id="signup-username" aria-label="username" type="text" class='full-width has-padding has-border'>
             </div>
             <div>
-              <label for="password">Password</label>
+              <label for="password">Password</label><br>
               <input type="password" name="password" id="signup-password" class='full-width has-padding has-border'>
             </div>
-            <button aria-label="submit" type="submit">SIGNUP</button>
+            <button class='nav-button' aria-label="submit" type="submit">SIGNUP</button>
           </fieldset>
         </form>
       </div>
@@ -119,26 +121,32 @@
   </div>
 
   <div class='container flex hidden' id='new-challenge'>
-      <div class='nav-buttons'>
+      <div class='new-buttons'>
         <ul>
-          <li><a class='nav-button' id='new-challenge-button'>Submit a Challenge</a></li>
+          <li>
+            <a class='nav-button' id='new-challenge-button'>Submit a Challenge</a>
+          </li>
         </ul>
       </div>
       <div class='modal-overlay' id='challenge-overlay'>
         <div class='modal-wrapper'>
           <ul class="modal-tabs">
-            <li><a href='#0'>Submit a Challenge</a></li>
+            <li>
+              <a>Submit a Challenge</a>
+            </li>
           </ul>
   
           <div id='modal-challenge-form hidden'>
             <form role='form' class='form' id='js-new-challenge-form'>
               <fieldset>
-                <legend>Submit a Challenge</legend>
+                <legend>Choose a title and a photo to create a new Challenge.</legend>
+                <p>Think of an engaging word or phrase for users to submit photos to.</p><br>
                 <div>
                   <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
                   <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
                 </div>
-                <button aria-label="submit" type="submit">SUBMIT</button>
+                <button class='nav-button' aria-label="submit" type="submit">SUBMIT</button>
+                <p>Photos may be up to 10 MB in size, jpeg or png.</p>
               </fieldset>
             </form>
           </div>
@@ -147,7 +155,7 @@
     </div>
 
     <div class='container flex hidden' id='new-submission'>
-      <div class='nav-buttons'>
+      <div class='new-buttons'>
         <ul>
           <li><a class='nav-button' id='new-submission-button'>Submit a Photo</a>
         </ul>
@@ -155,18 +163,18 @@
       <div class='modal-overlay' id='submission-overlay'>
         <div class='modal-wrapper'>
           <ul class="modal-tabs">
-            <li><a href='#0'>Submit a Photo</a></li>
+            <li><a>Submit a Photo</a></li>
           </ul>
   
           <div id='modal-submission-form hidden'>
-            <form role='form' class='js-new-submission'>
-              <legend>Submit a Photo</legend>
+            <form role='form' class='form' id='js-new-submission-form'>
+              <legend>Choose a photo to submit to this challenge.</legend>
               <div>
                 <input type='file' name='image' id='submission-image' class='js-submission-upload' accept='image/*'
                   required>
-                <label for='image' class='file-label'>Choose a file</label>
               </div>
-              <input type='submit' value='Submit' class='button'>
+              <input type='submit' value='Submit' class='nav-button'>
+              <p>Photos may be up to 10 MB in size, jpeg or png.</p>
             </form>
           </div>
         </div>
