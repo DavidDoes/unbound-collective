@@ -95,12 +95,12 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 			cloudinary_id: public_id,
 			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
 		})
-			.then(challenge => {
-				res.status(201).send(challenge.serialize());
-			})
-			.catch(error => {
-				res.status(422).send({ error: 'File too large. Please upload image 10 MB or smaller.' });
-      })
+    .then(challenge => {
+      res.status(201).send(challenge.serialize());
+    })
+    .catch(err => {
+      res.status(422).send({ message: 'File too large. Please upload image 10 MB or smaller.' });
+    });
 	});
 });
 
@@ -134,7 +134,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 			next(err);
 		});
 });
-// FOR DEVELOPMENT ONLY - REMOVE DELETE
+
 router.delete('/:id', (req, res) => {
 	Challenge.remove({
 		Challenge: req.params.id
@@ -156,11 +156,8 @@ router.delete('/:id', (req, res) => {
 
 // New Submission for this Challenge
 router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
-  this.timeout(10000); // otherwise, will not end if file too large
-  // if (req.body = null){
-  //   new Error 
-  // }
-  
+  this.timeout(10000); // prevent endless attempt to upload
+
 	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
@@ -177,7 +174,7 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 				res.status(201).send(submission.serialize());
 			})
 			.catch(error => {
-				res.status(422).send({ error: 'File too large. Please upload image 10 MB or smaller.' });
+				res.status(422).send({ message: 'File too large. Please upload image 10 MB or smaller.' });
       })
 	});
 });

@@ -12,7 +12,6 @@ $(document).ready(function() {
 	}
 
 	function handleErrors(err) {
-    console.log('handleErrors() invoked')
 
 		if (err.status === 401) {
       console.error(err);
@@ -63,7 +62,6 @@ $(document).ready(function() {
 	});
 
 	function isLoggedIn() {
-    console.log('isLoggedIn() run')
     return store.authToken ? true : false;
 	}
 
