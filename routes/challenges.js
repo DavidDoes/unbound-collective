@@ -50,7 +50,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', jwtAuth, parser.single('image'), (req, res) => {
-  console.log('>>> req.body: ', req.body);
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -65,7 +64,8 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 	const stringFields = ['title'];
 	const nonStringField = stringFields.find(
 		field => field in req.body && typeof req.body[field] !== 'string'
-	);
+  );
+  
 	if (nonStringField) {
 		return res.status(422).json({
 			code: 422,
@@ -73,7 +73,15 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 			message: 'Incorrect field type: expected string',
 			location: nonStringField
 		});
-	}
+  }
+  
+  if (nonStringField) {
+    return res.status(400).json({
+      code: 400,
+      reason: 'ValidationError',
+      message: 'File size too large. Please select an image sized 10 MB or lower.'
+    });
+  }
 
 	let public_id;
 
@@ -90,10 +98,9 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 			.then(challenge => {
 				res.status(201).send(challenge.serialize());
 			})
-			.catch(err => {
-				console.error(err);
-				res.status(500).json({ error: 'Internal server error' });
-			});
+			.catch(error => {
+				res.status(422).send({ error: 'File too large. Please upload image 10 MB or smaller.' });
+      })
 	});
 });
 
@@ -149,8 +156,11 @@ router.delete('/:id', (req, res) => {
 
 // New Submission for this Challenge
 router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
-  console.log('>>> req.body: ', req.body);
-
+  this.timeout(10000); // otherwise, will not end if file too large
+  // if (req.body = null){
+  //   new Error 
+  // }
+  
 	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
@@ -166,10 +176,9 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 			.then(submission => {
 				res.status(201).send(submission.serialize());
 			})
-			.catch(err => {
-        console.error(err);
-				res.status(err).json();
-			});
+			.catch(error => {
+				res.status(422).send({ error: 'File too large. Please upload image 10 MB or smaller.' });
+      })
 	});
 });
 

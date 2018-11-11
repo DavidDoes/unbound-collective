@@ -48,9 +48,8 @@ app.use((err, req, res, next) => {
     const errBody = Object.assign({}, err, { message: err.message });
     res.status(err.status).json(errBody);
   } else {
-    res.status(500).json({ message: "Internal Server Error" });
-    console.error(err);
-  }
+    res.status(422).json({ message: 'Please choose a file 10 MB or smaller.' }); 
+  } 
 });
 
 let server;

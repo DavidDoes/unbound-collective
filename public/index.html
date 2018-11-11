@@ -12,15 +12,15 @@
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/modal.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/hover.css' />
+  <link rel="stylesheet" type="text/css" media='screen' href='./styles/loader.css'>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
 </head>
 
 <body>
+  
   <header role='banner' class='hero-image'>
-    <!-- <div class='js-err-msg'></div>
-    <div class='js-success-msg'></div> -->
     <div class='hero-text' role='group'>
       <h1>Push your inner photographer to its outer limits!</h1>
       <a class='nav-button' id='discover'>Discover</a>
@@ -32,13 +32,15 @@
       <!-- if user not logged in -->
       <ul class='main-nav js-menu'>
         <li>
-          <a href="#" class='nav-links' id='home'>Home</a>
-        </li>
-        <li>
           <a href="#" class='nav-links' id='nav-login'>Login</a>
         </li>
         <li>
           <a href="#" class='nav-links' id='nav-signup'>Signup</a>
+        </li>
+      </ul>
+      <ul class='nav-right'>
+        <li>
+          <a href="#" class='nav-links' id='home'>Home</a>
         </li>
       </ul>
     </nav>
@@ -88,6 +90,7 @@
           <button class='nav-button' aria-label="submit" type="submit">LOGIN</button>
           </fieldset>
         </form>
+        <div class='js-err-msg'></div>
       </div>
 
       <div id='modal-signup-form'>
@@ -105,6 +108,7 @@
             <button class='nav-button' aria-label="submit" type="submit">SIGNUP</button>
           </fieldset>
         </form>
+        <div class='js-err-msg'></div>
       </div>
     </div>
   </div>
@@ -114,9 +118,9 @@
     <p>Choose a challenge, get out there, submit your photo.</p>
   </div>
 
-  <div class='back-button flex hidden'>
+  <div class='flex hidden' id='back-button'>
     <ul>
-      <li><a class='nav-button' id='back-button'>Back</a></li>
+      <li><a class='nav-button'>Back</a></li>
     </ul>
   </div>
 
@@ -140,15 +144,16 @@
             <form role='form' class='form' id='js-new-challenge-form'>
               <fieldset>
                 <legend>Choose a title and a photo to create a new Challenge.</legend>
-                <p>Think of an engaging word or phrase for users to submit photos to.</p><br>
+                <p>Think of an engaging word or phrase to inspire other photographers.</p><br>
                 <div>
                   <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
                   <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
+                  <span class="lds-dual-ring hidden"></span>
                 </div>
                 <button class='nav-button' aria-label="submit" type="submit">SUBMIT</button>
                 <p>Photos may be up to 10 MB in size, jpeg or png.</p>
-              </fieldset>
             </form>
+            <div class='js-err-msg'></div>
           </div>
         </div>
       </div>
@@ -169,13 +174,16 @@
           <div id='modal-submission-form hidden'>
             <form role='form' class='form' id='js-new-submission-form'>
               <legend>Choose a photo to submit to this challenge.</legend>
+              <p>Be sure that your submission applies well to this Challenge's title.</p>
               <div>
                 <input type='file' name='image' id='submission-image' class='js-submission-upload' accept='image/*'
                   required>
+                <span class="lds-dual-ring hidden"></span>
               </div>
               <input type='submit' value='Submit' class='nav-button'>
               <p>Photos may be up to 10 MB in size, jpeg or png.</p>
             </form>
+            <div class='js-err-msg'></div>
           </div>
         </div>
       </div>

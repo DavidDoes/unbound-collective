@@ -2,24 +2,30 @@
 // const app = (function () {
 
 $(document).ready(function() {
-	function showSuccessMsg(msg) {
-		const listener = $('.js-success-msg');
-		listener.text(msg).show();
-		setTimeout(() => listener.fadeOut('slow'), 2000);
-	}
 
-	function showFailMsg(msg) {
+	function showFailMsg(message) {
+    $('.lds-dual-ring').addClass('hidden');
+
+    $('.js-err-msg').removeClass('hidden');
 		const listener = $('.js-err-msg');
-		listener.text(msg).show();
-		setTimeout(() => listener.fadeOut('slow'), 2000);
+		listener.text(message).show();
 	}
 
 	function handleErrors(err) {
+    console.log('handleErrors() invoked')
+
 		if (err.status === 401) {
+      console.error(err);
 			render();
 		}
-		showFailMsg(err.responseJSON.msg);
-	}
+    showFailMsg(err.responseJSON.message);
+    
+    if(err.status === 422) {
+      console.error(err);
+      render();
+    }
+    showFailMsg(err.responseJSON.message);	
+  }
 
 	function render() {
 		const challenges = displayChallenges(store.challenges);
@@ -90,7 +96,7 @@ $(document).ready(function() {
 			res.map(challenge => {
 				store.currentChallengeTitle = challenge.title;
 			});
-			$('.back-button').removeClass('hidden');
+			$('#back-button').removeClass('hidden');
 
 			render();
 		});
@@ -111,7 +117,7 @@ $(document).ready(function() {
         `
 		);
 
-		$('.back-button').addClass('hidden');
+		$('#back-button').addClass('hidden');
 
 		$('#challenges').append(challengeItems);
 
@@ -138,7 +144,7 @@ $(document).ready(function() {
 			const challengeId = $(event.currentTarget).prop('id');
 
 			$('#user-challenges').addClass('hidden');
-			$('#user-challenges').empty();
+      $('#user-challenges').empty();
 
 			getSubmissions(challengeId);
 		});
@@ -155,7 +161,9 @@ $(document).ready(function() {
 
 	function challengeFormSubmit() {
 		$('#js-new-challenge-form').on('submit', event => {
-			event.preventDefault();
+      event.preventDefault();
+      
+      $('.lds-dual-ring').removeClass('hidden');
 
 			const newChallengeTitle = $('.js-title-input').val();
 			const file = $('#image')[0].files;
@@ -169,6 +177,7 @@ $(document).ready(function() {
 			api
 				.upload('/api/challenges', formData)
 				.then(() => {
+          $('.lds-dual-ring').addClass('hidden');
 					$('#challenge-overlay').removeClass('is-visible is-selected');
 					$('#challenges').empty();
 				})
@@ -177,7 +186,8 @@ $(document).ready(function() {
 				})
 				.then(() => {
 					$('#challenges').removeClass('hidden');
-				});
+        })
+        .catch(handleErrors);
 		});
 	}
 
@@ -186,13 +196,15 @@ $(document).ready(function() {
 			event.preventDefault();
 			$('#modal-submission-form').removeClass('hidden');
 			$('#modal-submission-form').addClass('is-selected');
-			$('#submission-overlay').addClass('is-visible is-selected');
+      $('#submission-overlay').addClass('is-visible is-selected');
 		});
 	}
 
 	function submissionFormSubmit() {
 		$('#js-new-submission-form').on('submit', event => {
-			event.preventDefault();
+      event.preventDefault();
+      
+      $('.lds-dual-ring').removeClass('hidden');
 
 			const challengeId = store.currentChallenge;
 
@@ -213,10 +225,11 @@ $(document).ready(function() {
 					getSubmissions(store.currentChallenge);
 				})
 				.then(() => {
-					$('#submissions').removeClass('hidden');
+          $('#submissions').removeClass('hidden');
+          $('.lds-dual-ring').addClass('hidden');
 				})
 				.catch(err => {
-					console.error(err);
+          showFailMsg(err.responseJSON.message);
 				});
 		});
 	}
@@ -237,7 +250,7 @@ $(document).ready(function() {
 					signupForm[0].reset(); //clear storage
 					$('.modal-overlay').removeClass('is-visible');
 					$('.aux-nav').removeClass('hidden');
-					$('#new-challenge').removeClass('hidden');
+					$('#new-challenge-button').removeClass('hidden');
 
 					$([document.documentElement, document.body]).animate(
 						{
@@ -246,7 +259,11 @@ $(document).ready(function() {
 						2000
 					);
 				})
-				.catch(handleErrors());
+        // .catch(handleErrors);
+        .catch(err => {
+          showFailMsg(err.responseJSON.message);
+          handleErrors();
+        })
 		});
 	}
 
@@ -267,7 +284,6 @@ $(document).ready(function() {
 					localStorage.setItem('authToken', res.authToken);
 					localStorage.setItem('username', loginUser.username);
 					loginForm[0].reset();
-					showSuccessMsg(`You've been logged in.`);
 
 					return Promise.all([
 						// get user's submissions
@@ -276,10 +292,12 @@ $(document).ready(function() {
 				})
 				.then(() => {
           location.reload();
-          // isLoggedIn();
 					$('.modal-overlay').removeClass('is-visible');
           $('#new-challenge').removeClass('hidden');
-				});
+        })
+        .catch(err => {
+          showFailMsg(err.responseJSON.message);
+        })
 		});
 	}
 
@@ -306,15 +324,15 @@ $(document).ready(function() {
 	}
 
 	function displayUserSubmissions(submissions) {
-		$('.back-button').removeClass('hidden');
-		$('#new-challenge').addClass('hidden');
+		$('#back-button').removeClass('hidden');
+    $('#new-challenge').addClass('hidden');
+    $('#new-submission').addClass('hidden');
 		$('#challenges').addClass('hidden');
 		$('#submissions').addClass('hidden');
 		$('#user-challenges').addClass('hidden');
 		$('#user-challenges').hide();
 		$('#user-submissions').removeClass('hidden');
 		$('#user-submissions').show();
-		$('#new-challenge').addClass('hidden');
 		$('ul').removeClass('hidden');
 		$('#user-challenges').empty();
 
@@ -340,8 +358,9 @@ $(document).ready(function() {
 	}
 
 	function displayUserChallenges(challenges) {
-		$('.back-button').removeClass('hidden');
-		$('#new-challenge').addClass('hidden');
+		$('#back-button').removeClass('hidden');
+    $('#new-challenge').addClass('hidden');
+    $('#new-submission').addClass('hidden');
 		$('#challenges').addClass('hidden');
 		$('#submissions').addClass('hidden');
 		$('#user-challenges').removeClass('hidden');
@@ -377,7 +396,7 @@ $(document).ready(function() {
 			store.currentChallenge = challengeId;
 
 			$('#submissions').removeClass('hidden');
-			$('.back-button').removeClass('hidden');
+			$('#back-button').removeClass('hidden');
 
 			displaySubmissions(store.submissions);
 		});
@@ -400,7 +419,7 @@ $(document).ready(function() {
 		$('#challenges').addClass('hidden');
 		$('main ul').removeClass('hidden');
 		$('#new-challenge').addClass('hidden');
-		$('.back-button').removeClass('hidden');
+		$('#back-button').removeClass('hidden');
 
 		if (isLoggedIn()) {
 			$('#new-submission').removeClass('hidden');
@@ -465,34 +484,41 @@ $(document).ready(function() {
 
 	function backHomeClickListener() {
 		$('.main-nav').on('click', '#home', () => {
-			$('#challenges').removeClass('hidden');
+      $('#challenges').removeClass('hidden');
+      $('#new-submission').addClass('hidden');
 			$('#submissions').empty();
 			$('#submissions').addClass('hidden');
 			$('#user-submissions').addClass('hidden');
 			$('#user-challenges').addClass('hidden');
 			$('#user-submissions').empty();
-			$('#user-challenges').empty();
+      $('#user-challenges').empty();
+      $('#back-button').addClass('hidden');
 		});
 
 		$('.aux-nav').on('click', '#home', () => {
-			$('#challenges').removeClass('hidden');
+      $('#challenges').removeClass('hidden');
+      $('#new-challenge').removeClass('hidden');
+      $('#new-submission').addClass('hidden');
 			$('#submissions').empty();
 			$('#submissions').addClass('hidden');
 			$('#user-submissions').addClass('hidden');
 			$('#user-challenges').addClass('hidden');
 			$('#user-submissions').empty();
-			$('#user-challenges').empty();
+      $('#user-challenges').empty();
+      $('#back-button').addClass('hidden');
 		});
 
-		$('.back-button').on('click', () => {
-			$('#challenges').removeClass('hidden');
+		$('#back-button').on('click', () => {
+      $('#challenges').removeClass('hidden');
+      $('#new-challenge').removeClass('hidden');
+      $('#new-submission').addClass('hidden');
 			$('#submissions').empty();
 			$('#submissions').addClass('hidden');
 			$('#user-submissions').addClass('hidden');
 			$('#user-challenges').addClass('hidden');
 			$('#user-submissions').empty();
-			$('#user-challenges').empty();
-			$('.back-button').addClass('hidden');
+      $('#user-challenges').empty();
+      $('#back-button').addClass('hidden');
     });
     
     getChallenges();

@@ -5,12 +5,11 @@ $(document).ready(function($){
 		$form_modal_tab = $('.modal-tabs'),
 		$tab_login = $form_modal_tab.children('li').eq(0).children('a'),
 		$tab_signup = $form_modal_tab.children('li').eq(1).children('a'),
-    $main_nav = $('.main-nav:not(:first-child)');
+    $main_nav = $('.main-nav');
 
 	//open modal
 	$main_nav.on('click', function(event){
 		if( $(event.target).is($main_nav) ) {
-      console.log('$main_nav targeted')
 			// on mobile open the submenu
 			$(this).children('ul').toggleClass('is-visible');
 		} else {

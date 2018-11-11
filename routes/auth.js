@@ -28,9 +28,15 @@ router.post('/login', localAuth, (req, res, next) => {
     .then((authToken) => {
       res.json({ authToken })
     })
-    .catch(err => {
-      next(err)
-    })
+		.catch(err => {
+			if (err.code === 401) {
+				err = new Error(
+					'The username or password is incorrect. Please try again.'
+				);
+				err.status = 401;
+      }
+      next(err);
+    });
 })
 
 router.post('/refresh', jwtAuth, (req, res, next) => {

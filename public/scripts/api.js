@@ -23,12 +23,6 @@ const api = (function() {
       data: obj,
       headers: { 
         Authorization: `Bearer ${store.authToken}`,
-      },
-      success: function(){
-        console.log('Success');
-      },
-      error: function(){
-        console.log('Error');
       }
     });
 	};

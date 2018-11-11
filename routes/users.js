@@ -10,7 +10,7 @@ const jwtAuth = require('../middleware/jwt-auth');
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
 	const requiredFields = ['username'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -72,16 +72,16 @@ router.post('/', (req, res) => {
 	);
 	//if incorrect length, return JSON object
 	if (tooSmallField || tooLargeField) {
-		return res.status(422).json({
-			code: 422,
-			reason: 'ValidationError',
-			message: tooSmallField
+		const err = new Error(
+			tooSmallField
 				? `Must be at least ${sizedFields[tooSmallField].min} characters long`
 				: `Must be at no longer than ${
 						sizedFields[tooLargeField].max
-				  } characters long`,
-			location: tooSmallField || tooLargeField
-		});
+				  } characters long`
+		);
+		err.location = tooSmallField || tooLargeField;
+		err.status = 422;
+		next(err);
 	}
 
 	let { username, password = '' } = req.body;
@@ -103,10 +103,11 @@ router.post('/', (req, res) => {
 		.catch(err => {
 			if (err.code === 11000) {
 				err = new Error(
-					'The username already exists. Please choose a new one.'
+					'That username already exists. Please choose a different one.'
 				);
 				err.status = 400;
 			}
+			next(err);
 		});
 });
 
