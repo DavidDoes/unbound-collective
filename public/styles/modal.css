@@ -209,14 +209,14 @@ input.full-width {
 }
 
 #modal-login-form,
-#modal-signup-form,
-#forgot-password {
+#modal-signup-form
+{
 	display: none;
 }
 
 #modal-login-form.is-selected,
-#modal-signup-form.is-selected,
-#forgot-password.is-selected {
+#modal-signup-form.is-selected
+{
 	display: block;
 	z-index: 9999;
 }

@@ -10,6 +10,7 @@ const jwtAuth = require('../middleware/jwt-auth');
 
 const router = express.Router();
 
+// create new user, check for fields
 router.post('/', (req, res, next) => {
 	const requiredFields = ['username'];
 	const missingField = requiredFields.find(field => !(field in req.body));
@@ -111,6 +112,7 @@ router.post('/', (req, res, next) => {
 		});
 });
 
+// change password; not implemented client-side
 router.put('/:id', jwtAuth, (req, res, next) => {
 	const { id } = req.params;
 	const { newPassword } = req.body;
@@ -153,6 +155,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 	});
 });
 
+// delete account; not implemented client-side
 router.delete('/:id', jwtAuth, (req, res, next) => {
 	const { id } = req.params;
 	const userId = req.user.id;
@@ -194,6 +197,7 @@ router.delete('/:id', jwtAuth, (req, res, next) => {
 		});
 });
 
+// get submissions associated with this user
 router.get('/mysubmissions', jwtAuth, (req, res, next) => {
 	Submission.find({ creator: req.user.id })
 		.then(submissions => {
@@ -207,6 +211,7 @@ router.get('/mysubmissions', jwtAuth, (req, res, next) => {
 		});
 });
 
+// get challenges associated with this user
 router.get('/mychallenges', jwtAuth, (req, res, next) => {
 	Challenge.find({ creator: req.user.id })
 		.then(challenges => {
@@ -220,6 +225,7 @@ router.get('/mychallenges', jwtAuth, (req, res, next) => {
 		});
 });
 
+// get all users; not implemented client-side
 router.get('/', (req, res) => {
 	User.find()
 		.then(user => {
@@ -233,6 +239,7 @@ router.get('/', (req, res) => {
 		});
 });
 
+// get user by id
 router.get('/:id', jwtAuth, (req, res, next) => {
 	User.findById(req.user.id).then(data => {
 		res.json(data);

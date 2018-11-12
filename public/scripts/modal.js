@@ -7,17 +7,17 @@ $(document).ready(function($){
 		$tab_signup = $form_modal_tab.children('li').eq(1).children('a'),
     $main_nav = $('.main-nav');
 
-	//open modal
+	// open modal
 	$main_nav.on('click', function(event){
 		if( $(event.target).is($main_nav) ) {
-			// on mobile open the submenu
+			// open the submenu
 			$(this).children('ul').toggleClass('is-visible');
 		} else {
-			// on mobile close submenu
+			// close submenu
       $main_nav.children('ul').removeClass('is-visible');
-			//show modal layer
+			// show modal layer
       $form_modal.addClass('is-visible');
-			//show the selected form
+			// show the selected form
 			( $(event.target).is('#nav-signup') ) ? signup_selected() : login_selected();
 		}
   });

@@ -9,6 +9,7 @@ const cloudinary = require('cloudinary');
 
 const router = express.Router();
 
+// get all submissions; not implemented client-side
 router.get('/', (req, res) => {
 	Submission.find()
 		.then(submission => {
@@ -20,6 +21,7 @@ router.get('/', (req, res) => {
 		});
 });
 
+// delete users' own Submission, if authorized
 router.delete('/:id', jwtAuth, (req, res) => {
 	if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
 		const err = new Error(
@@ -29,6 +31,7 @@ router.delete('/:id', jwtAuth, (req, res) => {
 		return next(err);
 	}
 
+  // remove from Cloudinary
   Submission
     .findById(req.params.id)
     .then(submission => {

@@ -4,7 +4,7 @@
 $(document).ready(function() {
 
 	function showFailMsg(message) {
-    $('.lds-dual-ring').addClass('hidden');
+    $('.spinner').addClass('hidden');
 
     $('.js-err-msg').removeClass('hidden');
 		const listener = $('.js-err-msg');
@@ -61,10 +61,12 @@ $(document).ready(function() {
 		deleteClickListener();
 	});
 
+  // check for store.authToken
 	function isLoggedIn() {
     return store.authToken ? true : false;
 	}
 
+  // render Nav depending on logged in status
 	function renderNav() {
 		if (isLoggedIn()) {
 			$('.hero-image').addClass('hidden');
@@ -84,6 +86,7 @@ $(document).ready(function() {
 		}
 	}
 
+  // mobile drop-down menu toggle
 	function navbarClickListener() {
 		$('.js-navbar-toggle').on('click', () => {
 			$('.js-menu').toggleClass('active');
@@ -163,7 +166,7 @@ $(document).ready(function() {
 		$('#js-new-challenge-form').on('submit', event => {
       event.preventDefault();
       
-      $('.lds-dual-ring').removeClass('hidden');
+      $('.spinner').removeClass('hidden');
 
 			const newChallengeTitle = $('.js-title-input').val();
 			const file = $('#image')[0].files;
@@ -177,7 +180,7 @@ $(document).ready(function() {
 			api
 				.upload('/api/challenges', formData)
 				.then(() => {
-          $('.lds-dual-ring').addClass('hidden');
+          $('.spinner').addClass('hidden');
 					$('#challenge-overlay').removeClass('is-visible is-selected');
 					$('#challenges').empty();
 				})
@@ -204,7 +207,7 @@ $(document).ready(function() {
 		$('#js-new-submission-form').on('submit', event => {
       event.preventDefault();
       
-      $('.lds-dual-ring').removeClass('hidden');
+      $('.spinner').removeClass('hidden');
 
 			const challengeId = store.currentChallenge;
 
@@ -226,7 +229,7 @@ $(document).ready(function() {
 				})
 				.then(() => {
           $('#submissions').removeClass('hidden');
-          $('.lds-dual-ring').addClass('hidden');
+          $('.spinner').addClass('hidden');
 				})
 				.catch(err => {
           showFailMsg(err.responseJSON.message);
@@ -259,7 +262,6 @@ $(document).ready(function() {
 						2000
 					);
 				})
-        // .catch(handleErrors);
         .catch(err => {
           showFailMsg(err.responseJSON.message);
           handleErrors();
@@ -286,8 +288,7 @@ $(document).ready(function() {
 					loginForm[0].reset();
 
 					return Promise.all([
-						// get user's submissions
-						api.search(`/api/submissions/`) // ${user}
+						api.search(`/api/submissions/`)
 					]);
 				})
 				.then(() => {
@@ -301,6 +302,7 @@ $(document).ready(function() {
 		});
 	}
 
+  // Click listener for user's My Submissions link
 	function mySubmissionsListener() {
 		$('#my-submissions').on('click', function() {
 			return api.search(`/api/users/mysubmissions`).then(res => {
@@ -312,6 +314,7 @@ $(document).ready(function() {
 		});
 	}
 
+  // Click listener for user's My Challenges link
 	function myChallengesListener() {
 		$('#my-challenges').on('click', function() {
 			return api.search(`/api/users/mychallenges`).then(res => {
@@ -428,6 +431,8 @@ $(document).ready(function() {
 		}
 	}
 
+  // When user clicks submission thumbnail, enlarge.
+  // When user clicks out or hits esc, return to all submissions.
 	function submissionClickListener() {
 		$('.container').on('click', '.submission-thumb', function(event) {
 			const src = $(this)
@@ -455,6 +460,7 @@ $(document).ready(function() {
 		});
 	}
 
+  // Click listener for submission delete button on user's own submission
 	function deleteClickListener() {
 		$('.container').on('click', '.delete-submission', event => {
 			event.stopImmediatePropagation();
@@ -482,6 +488,7 @@ $(document).ready(function() {
 		});
 	}
 
+  // back button and home link listener
 	function backHomeClickListener() {
 		$('.nav-right').on('click', '#home', () => {
       $('#challenges').removeClass('hidden');
@@ -542,6 +549,7 @@ $(document).ready(function() {
 
   }
 
+  // scroll back to top of page
 	function topButtonScroller() {
 		$(window).scroll(function() {
 			if ($(this).scrollTop() > 100) {
@@ -552,6 +560,7 @@ $(document).ready(function() {
 		});
 	}
 
+  // click listener for scroll-to-top button
 	function topButtonClickListener() {
 		$('#nav-up-button').on('click', () => {
 			$([document.documentElement, document.body]).animate({

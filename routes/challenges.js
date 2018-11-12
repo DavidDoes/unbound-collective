@@ -15,18 +15,21 @@ const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL;
 
 const multer = require('multer');
 
+// parse multipart form-data for use (our image upload)
 const storage = multer.diskStorage({
 	cloudinary: cloudinary,
 	allowedFormats: ['jpg', 'jpeg', 'png']
 });
 const parser = multer({ storage: storage });
 
+// configure Cloudinary, where images are stored
 cloudinary.config({
 	cloud_name: 'challenge-photos',
 	api_key: process.env.CLOUDINARY_API_KEY,
 	api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// get all Challenges
 router.get('/', (req, res) => {
 	Challenge.find()
 		.then(challenge => {
@@ -38,6 +41,7 @@ router.get('/', (req, res) => {
 		});
 });
 
+// get Challenge by id, get Submissions associated with that Challenge
 router.get('/:id', (req, res) => {
 	Challenge.findById(req.params.id)
 		.then(id => {
@@ -49,6 +53,7 @@ router.get('/:id', (req, res) => {
 		});
 });
 
+// Create a new Challenge if user logged in and authorized, handle errors
 router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
@@ -83,6 +88,7 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
     });
   }
 
+  // upload to Cloudinary
 	let public_id;
 
 	cloudinary.uploader.upload(req.file.path, result => {
@@ -104,6 +110,7 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
 	});
 });
 
+// modify Challenge; not implemented client-side
 router.put('/:id', jwtAuth, (req, res, next) => {
 	const { id } = req.params;
 	const { newTitle } = req.body;
@@ -135,6 +142,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 		});
 });
 
+// Delete challenge; not implemented client-side 
 router.delete('/:id', (req, res) => {
 	Challenge.remove({
 		Challenge: req.params.id

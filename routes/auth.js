@@ -10,6 +10,7 @@ const { JWT_SECRET, JWT_EXPIRY } = require('../config')
 
 const router = express.Router()
 
+// create new JWT
 const createAuthToken = function (user) {
   return new Promise(function (resolve, reject) {
     jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY }, function (err, token) {
@@ -21,6 +22,7 @@ const createAuthToken = function (user) {
   })
 }
 
+// user login, create new JWT, handle errors
 router.post('/login', localAuth, (req, res, next) => {
   const user = req.user
 
@@ -39,6 +41,7 @@ router.post('/login', localAuth, (req, res, next) => {
     });
 })
 
+// refresh JWT 
 router.post('/refresh', jwtAuth, (req, res, next) => {
   createAuthToken(req.user)
     .then(authToken => {
