@@ -12,13 +12,26 @@
   border-radius: 50%;
   border: 5px solid #fcf;
   border-color: #7119a0 transparent #a417c1 transparent;
-  animation: spinner 1.2s linear infinite;
+  -webkit-animation: spinner 1.2s linear infinite;
+          animation: spinner 1.2s linear infinite;
+}
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 @keyframes spinner {
   0% {
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }

@@ -1,10 +1,6 @@
-/* https://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
 * {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -69,8 +65,6 @@ body, html {
 }
 
 body {
-  /* overflow: hidden; */
-  /* ^ allow `float: right` on `aux-nav-right` */
   font-size: 100%;
   font-family: "PT Sans", sans-serif;
   color: black;
@@ -99,13 +93,13 @@ h1, h2, h3, form, ul, li {
 
 h1 {
   text-align: center;
-  font-size: 32px;
+  font-size: 42px;
   padding: .2em .5em;
 }
 
 h2 {
   text-align: center;
-  font-size: 18px;
+  font-size: 28px;
   padding: .2em .5em;
 }
 
@@ -124,14 +118,22 @@ input::-ms-clear, textarea::-ms-clear {
 
 .container {
   position: relative;
-  flex-direction: row;
-  flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   width: 100%;
 }
 
 .flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .hidden {
@@ -161,6 +163,7 @@ nav {
   z-index: 9999;
   list-style-type: none;
   font-size: 18px;
+  background-image: -webkit-gradient(linear, left top, right top, from(#43147c), color-stop(#59178e), color-stop(#7119a0), color-stop(#8a19b1), to(#a417c1));
   background-image: linear-gradient(to right, #43147c, #59178e, #7119a0, #8a19b1, #a417c1);
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding-bottom: 50px;
@@ -224,11 +227,17 @@ nav {
 
 @media only screen and (min-width: 768px) {
   .user-navbar {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     padding-bottom: 0;
     height: 70px;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
 
   .nav-right {
@@ -236,10 +245,17 @@ nav {
   }
 
   .aux-nav, .main-nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin-right: 30px;
-    flex-direction: row;
-    justify-content: flex-end;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
   }
 
   .aux-nav li,
@@ -261,7 +277,8 @@ nav {
 }
 
 .nav-button { 
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box; 
+          box-sizing: border-box;
   display: inline-block;
   font-size: 18px;
   text-decoration: none;
@@ -312,7 +329,8 @@ nav {
 }
 
 .hero-image {
-  background: linear-gradient(rgba(0,0,0,0.20), rgba(0,0,0,0.20)), url('../images/hero-image.jpg') no-repeat center center fixed;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.20)), to(rgba(0,0,0,0.40))), url('../images/hero-image.jpg') no-repeat center center fixed;
+  background: linear-gradient(rgba(0,0,0,0.20), rgba(0,0,0,0.40)), url('../images/hero-image.jpg') no-repeat center center fixed;
   height: 100%;
   width: 100%;
 
@@ -329,7 +347,8 @@ nav {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   color:white;
 }
 
@@ -343,7 +362,8 @@ nav {
 .thumbnail {
   height: 191px;
   width: 300px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 #user-submissions {
