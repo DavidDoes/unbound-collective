@@ -52,7 +52,6 @@ describe('Submissions resource', function() {
 				return user;
 			})
 			.catch(err => {
-				console.log('<<< ' + err);
 			});
 	});
 

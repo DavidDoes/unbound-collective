@@ -61,7 +61,6 @@ describe('Login resources', function() {
         .post('/api/login')
         .send({  })
         .then(res => {
-          console.log('>>> res.body: ' + res.body)
           expect(res).to.have.status(400);
           expect(res.body.message).to.equal('No credentials provided. Please try again.');
         });
