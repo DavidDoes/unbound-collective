@@ -91,7 +91,7 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
   // upload to Cloudinary
 	let public_id;
 
-	cloudinary.uploader.upload(req.file.path, result => {
+	cloudinary.uploader.upload(req.file.path, (result) => {
 		req.body.image = result.secure_url;
 		public_id = result.public_id;
 
@@ -105,7 +105,9 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
       res.status(201).send(challenge.serialize());
     })
     .catch(err => {
-      res.status(422).send({ message: 'File too large. Please upload image 10 MB or smaller.' });
+      console.log(err);
+      err.status = err.http_code;
+      next(err);
     });
 	});
 });
