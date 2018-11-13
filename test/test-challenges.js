@@ -80,7 +80,13 @@ describe('Challenges resource', function() {
 				expect(res.body.length).to.equal(data.length);
 
 				res.body.forEach(function(challenge, i) {
-					expect(challenge).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
+					expect(challenge).to.have.all.keys(
+						'id',
+						'title',
+						'creator',
+						'image',
+						'cloudinary_id'
+					);
 					expect(challenge.id).to.equal(data[i].id);
 					expect(challenge.title).to.equal(data[i].title);
 				});
@@ -94,9 +100,7 @@ describe('Challenges resource', function() {
 			return Challenge.findOne()
 				.then(_challenge => {
 					challenge = _challenge;
-          return chai.
-            request(app)
-            .get(`/api/challenges/${challenge.id}`);
+					return chai.request(app).get(`/api/challenges/${challenge.id}`);
 				})
 				.then(res => {
 					expect(res).to.have.status(200);
@@ -108,24 +112,30 @@ describe('Challenges resource', function() {
 
 	describe('POST /api/challenges', function() {
 		it('Should add a new challenge', function() {
-      this.timeout(5000);
+			this.timeout(15000);
 
-      let body;
+			let body;
 			return chai
 				.request(app)
 				.post('/api/challenges')
-        .set('Authorization', `Bearer ${token}`)
-        .field('Content-Type', 'multipart/form-data')
-        .field('creator', user.id)
-        .field('title', 'Title')
-        .attach('image', './test/test-image.png')
+				.set('Authorization', `Bearer ${token}`)
+				.field('Content-Type', 'multipart/form-data')
+				.field('creator', user.id)
+				.field('title', 'Title')
+				.attach('image', './test/test-image.png')
 
 				.then(function(res) {
-          body = res.body;
+					body = res.body;
 					expect(res).to.have.status(201);
 					expect(res).to.be.json;
 					expect(body).to.be.an('object');
-					expect(body).to.have.all.keys('id', 'title', 'creator', 'image', 'cloudinary_id');
+					expect(body).to.have.keys(
+						'id',
+						'title',
+						'creator',
+						'image',
+						'cloudinary_id'
+					);
 					return Challenge.findOne({ _id: body.id, creator: user.id });
 				})
 				.then(challenge => {

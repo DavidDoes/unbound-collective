@@ -163,12 +163,11 @@ router.delete('/:id', (req, res) => {
 });
 
 // New Submission for this Challenge
-router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
-  this.timeout(10000); // prevent endless attempt to upload
+router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res, next) => {
 
 	let public_id;
 
-	cloudinary.uploader.upload(req.file.path, result => {
+	cloudinary.uploader.upload(req.file.path, result  => {
 		req.body.image = result.secure_url;
 		public_id = result.public_id;
 
@@ -178,13 +177,15 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res) => {
 			cloudinary_id: public_id,
 			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
 		})
-			.then(submission => {
-				res.status(201).send(submission.serialize());
-			})
-			.catch(error => {
-				res.status(422).send({ message: 'File too large. Please upload image 10 MB or smaller.' });
-      })
-	});
+    .then(submission => {
+      res.status(201).send(submission.serialize());
+    })
+  })
+  .catch(err => {
+    console.log(err);
+    err.status = err.http_code;
+    next(err);
+  })
 });
 
 module.exports = router;

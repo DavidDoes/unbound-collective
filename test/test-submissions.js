@@ -103,13 +103,13 @@ describe('Submissions resource', function() {
 	});
 
 	describe('POST Submission to /api/challenges/:id/submissions', function() {
-		it.only('Should add new submission with valid data', function() {
-			this.timeout(5000);
+		it('Should add new submission with valid data', function() {
+			this.timeout(15000);
 
 			return Challenge.findOne().then(data => {
 				return chai
 					.request(app)
-					.post(`/api/challenges/${data.id}/submissions`)
+          .post(`/api/challenges/${data.id}/submissions`)
 					.set('Authorization', `Bearer ${token}`)
 					.field('Content-Type', 'multipart/form-data')
 					.field('creator', user.id)
@@ -117,18 +117,16 @@ describe('Submissions resource', function() {
 					.attach('image', './test/test-image.png')
 
 					.then(res => {
-            console.log(res.body.cloudinary_id);
 						expect(res).to.have.status(201);
 						expect(res).to.be.json;
 						expect(res.body).to.be.an('object');
-						expect(res.body).to.have.all.keys(
+						expect(res.body).to.have.keys(
 							'id',
 							'creator',
 							'challenge',
 							'cloudinary_id',
 							'image'
 						);
-
 						return Submission.findById(res.body.id);
 					});
 			});
@@ -136,7 +134,7 @@ describe('Submissions resource', function() {
 	});
 
 	describe('DELETE Submission /api/submissions/:id', function() {
-		it.only('Should delete Submission of id', function() {
+		it('Should delete Submission of id', function() {
 			let userId = user.id;
 
 			Submission.findOne({ creator: userId })
