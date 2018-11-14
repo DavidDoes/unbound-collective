@@ -393,10 +393,10 @@ nav {
 }
 
 #fullscreen {
-  height: 100%;
-  position: absolute;
-  left: 0;
-  right: 0;
+  max-height: 600px;
+  max-width: 800px;
+  position: relative;
+  margin: 0 auto;
 }
 
 #fullscreen img {
