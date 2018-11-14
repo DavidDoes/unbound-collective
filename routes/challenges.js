@@ -54,7 +54,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Create a new Challenge if user logged in and authorized, handle errors
-router.post('/', jwtAuth, parser.single('image'), (req, res) => {
+router.post('/', jwtAuth, parser.single('image'), (req, res, next) => {
 	const requiredFields = ['title'];
 	const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -91,7 +91,7 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
   // upload to Cloudinary
 	let public_id;
 
-	cloudinary.uploader.upload(req.file.path, (result) => {
+	cloudinary.uploader.upload(req.file.path, result => {
 		req.body.image = result.secure_url;
 		public_id = result.public_id;
 
@@ -104,12 +104,12 @@ router.post('/', jwtAuth, parser.single('image'), (req, res) => {
     .then(challenge => {
       res.status(201).send(challenge.serialize());
     })
-    .catch(err => {
-      console.log(err);
-      err.status = err.http_code;
-      next(err);
-    });
-	});
+  })
+  .catch(err => {
+    console.log(err);
+    err.status = err.http_code;
+    next(err)
+  });
 });
 
 // modify Challenge; not implemented client-side

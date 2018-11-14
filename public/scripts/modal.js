@@ -26,6 +26,7 @@ $(document).ready(function($){
 	$(document).keyup(function(event){
     if(event.which == '27'){
       $form_modal.removeClass('is-visible');
+      $('.js-err-msg').addClass('hidden');
     }
   });
 
@@ -33,6 +34,7 @@ $(document).ready(function($){
   $('.modal-overlay').on('click', function(event){
     if( $(event.target).is($form_modal) || $(event.target).is('.close-form')){
       $form_modal.removeClass('is-visible');
+      $('.js-err-msg').addClass('hidden');
     }
   });
 
