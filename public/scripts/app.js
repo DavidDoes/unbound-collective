@@ -459,16 +459,18 @@ $(document).ready(function() {
 			$('#fullscreen').click(function() {
 				$(this).fadeOut();
 				$(this).addClass('hidden');
-			});
+      });
+      
+
 
 			$([document.documentElement, document.body]).animate({
-				scrollTop: $('#fullscreen').offset().top
+				scrollTop: $('#fullscreen').offset().top - 100
 			}),
-				$(document).keyup(function(event) {
-					if (event.which == '27') {
-						$('#fullscreen').addClass('hidden');
-					}
-				});
+      $(document).keyup(function(event) {
+        if (event.which == '27') {
+          $('#fullscreen').addClass('hidden');
+        }
+      });
 		});
 	}
 
