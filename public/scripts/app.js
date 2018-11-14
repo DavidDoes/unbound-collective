@@ -75,7 +75,7 @@ $(document).ready(function() {
       $('#new-challenge').removeClass('hidden');
       $('#username-heading').removeClass('hidden');
       $('#username-heading').append(`
-        <h2>Welcome, ${localStorage.username}</h2>`
+        <p>Welcome, ${localStorage.username}</p>`
       );
 		} else {
 			$('.hero-image').removeClass('hidden');
