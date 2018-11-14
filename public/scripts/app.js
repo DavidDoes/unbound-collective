@@ -90,7 +90,11 @@ $(document).ready(function() {
 	function navbarClickListener() {
 		$('.js-navbar-toggle').on('click', () => {
 			$('.js-menu').toggleClass('active');
-		});
+    });
+    
+    $('.aux-nav').on('click', '.nav-links', () => {
+      $('.js-menu').toggleClass('active');
+    })
 	}
 
 	function getChallenges() {
