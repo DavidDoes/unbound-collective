@@ -89,11 +89,18 @@ $(document).ready(function() {
   // mobile drop-down menu toggle
 	function navbarClickListener() {
 		$('.js-navbar-toggle').on('click', () => {
-			$('.js-menu').toggleClass('active');
+      $('.js-menu').toggleClass('active');
+      $('#fullscreen').addClass('hidden');
     });
-    
+
+    $('.user-navbar').on('click', '.nav-links', () => {
+      $('.js-menu').toggleClass('active');
+      $('#fullscreen').addClass('hidden');  
+    });  
+
     $('.aux-nav').on('click', '.nav-links', () => {
       $('.js-menu').toggleClass('active');
+      $('#fullscreen').addClass('hidden');
     })
 	}
 
@@ -443,10 +450,11 @@ $(document).ready(function() {
 				.children('.thumbnail')
 				.attr('src');
 
-			$('#fullscreen').removeClass('hidden');
+      $('#fullscreen')
+        .fadeIn()
+        .removeClass('hidden')
+        .css({ '-webkit-transform': 'translate(0px, -900px)' });
 			$('#fullscreen img').attr('src', src);
-			$('#fullscreen').fadeIn();
-			$('#fullscreen').css({ '-webkit-transform': 'translate(0px, -900px)' });
 
 			$('#fullscreen').click(function() {
 				$(this).fadeOut();
