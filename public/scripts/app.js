@@ -193,9 +193,12 @@ $(document).ready(function() {
 				.then(() => {
           $('.spinner').addClass('hidden');
 					$('#challenge-overlay').removeClass('is-visible is-selected');
-					$('#challenges').empty();
+          $('#challenges').empty();
+          $('.js-title-input').val('');
+          $('#image').val('');
 				})
 				.then(() => {
+
 					getChallenges();
 				})
 				.then(() => {
@@ -233,14 +236,15 @@ $(document).ready(function() {
 				.upload(`/api/challenges/${challengeId}/submissions`, formData)
 				.then(() => {
 					$('#submission-overlay').removeClass('is-visible is-selected');
-					$('#submissions').empty();
+          $('#submissions').empty();
+          $('.spinner').addClass('hidden');
+          $('#image').val('');
 				})
 				.then(() => {
 					getSubmissions(store.currentChallenge);
 				})
 				.then(() => {
           $('#submissions').removeClass('hidden');
-          $('.spinner').addClass('hidden');
 				})
 				.catch(err => {
           showFailMsg(err.responseJSON.message);
