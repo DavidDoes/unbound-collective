@@ -1,31 +1,44 @@
 # The Unbound Collective
 [Live](https://challenge-photos.herokuapp.com/)
+![image of splash screen](public/assets/splash.png)
 
-## Overview
-Challenge.photos is a dynamic web service providing users with the ability to contribute to photography challenges by uploading their own photos as submissions to challenges. 
+# Overview
+**The Unbound Collective** is a dynamic web service which helps to encourage and inspire photographers to step outside of their comfort zone by way of providing challenges, and a way to upload their submissions to that challenge. 
 
-Each challenge consists of a simple theme, to which users submit their interpretation of that theme in the form of an original photo. 
+# Features
+## Homepage
+From the homepage, the user can navigate to a login/signup form, their Submissions and Challenges, view a short description about how to use the service, and browse existing Challenges and Submissions. 
 
-## Features
-This MVP consists only of an `index.html` page and a `dashboard.html` page. This is by design. The intention is to have each challenge have its own page that users can visit by clicking on the challenge’s thumbnail. 
+## Challenges
+Users may browse existing Challenges in search of inspiration for their next photo outing, or create a Challenge of their own by uploading a photo and giving it a title that will serve to inspire other photographers on that subject. The subject is not a hard rule, but rather a guiding phrase to help expand the photographer's view. 
 
-### Homepage
-On the homepage, the user can navigate to a login form, their dashboard, and a short description about how to use the service. 
+## Submissions
+Users may submit their photo to a Challenge by navigating to that Challenge and clicking `Submit a Photo`.
 
-### Dashboard
-On the dashboard, users can see all of their submissions, ordered by date submitted. Users can also modify or delete their profile.
+## Dashboard
+Upon clicking `My Submissions`, users can see all of their submissions in one place, and may choose to delete them if necessary. 
 
-## Production Goals
-The following are some of the intended features for the first iteration of production:
-- Pop-up login/registration form
-- Full view-height sections with contrasting colors
-- Dedicated page for each challenge (`/:id`)
-- Full CRUD capabilities for user’s submissions
-- JWT integration
-- Max file size limit
-- Uploads per day limit
+Upon clicking `My Challenges`, users can see all of their challenges in one place.
 
-## Stretch Goals
-- User suggestions for challenges, to be approved by admin.
-- Sorting collections by category/number of contributions/etc.
-- EXIF data of photos
+# Technologies
+- [HTML5](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5)
+- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
+- [JavaScript ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [jQuery](https://jquery.com/)
+- [Node.js](https://nodejs.org/en/)
+- [Express.js](http://expressjs.com)
+- [JSON Web Token](https://jwt.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com)
+- [Multer](https://www.npmjs.com/package/multer)
+- [Cloudinary](https://cloudinary.com/documentation)
+- [Travis-CI](https://travis-ci.org)
+- [Heroku](https://heroku.com)
+
+# Future Implementations
+- Dedicated page for each Challenge
+- Dedicated page for each Submission
+- Dedicated Dashboard page
+- Uploads per day per user limit 
+- 'Liking' system for Submissions
+- Public user profile pages
