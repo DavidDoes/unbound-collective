@@ -121,7 +121,7 @@ $(document).ready(function() {
 		);
 
 		$('#back-button').addClass('hidden');
-
+    $('#challenges').empty();
 		$('#challenges').append(challengeItems);
 
 		if (isLoggedIn()) {
