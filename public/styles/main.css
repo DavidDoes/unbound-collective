@@ -154,10 +154,6 @@ input::-ms-clear, textarea::-ms-clear {
   display: none;
 }
 
-.hero-heading {
-
-}
-
 .nav-heading,
 #username-heading {
   color: rgba(255, 255, 255, .7);
