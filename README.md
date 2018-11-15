@@ -2,6 +2,8 @@
 [Live](https://challenge-photos.herokuapp.com/)
 ![image of splash screen](public/assets/splash.png)
 
+[![Build Status](https://travis-ci.org/DavidDoes/unbound-collective.svg?branch=master)](https://travis-ci.org/DavidDoes/unbound-collective)
+
 # Overview
 **The Unbound Collective** is a dynamic web service which helps to encourage and inspire photographers to step outside of their comfort zone by way of providing challenges, and a way to upload their submissions to that challenge. 
 
@@ -18,7 +20,7 @@ Users may submit their photo to a Challenge by navigating to that Challenge and 
 ## Dashboard
 Upon clicking `My Submissions`, users can see all of their submissions in one place, and may choose to delete them if necessary. 
 
-Upon clicking `My Challenges`, users can see all of their challenges in one place.
+Upon clicking `My Challenges`, users can see all of their challenges in one place, and may choose to edit the title of one of their challenges.
 
 # Technologies
 - [HTML5](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5)

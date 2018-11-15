@@ -470,7 +470,7 @@ $(document).ready(function() {
   // When user clicks submission thumbnail, enlarge.
   // When user clicks out or hits esc, return to all submissions.
 	function submissionClickListener() {
-		$('.container').on('click', '.submission-thumb', function(event) {
+		$('.container').on('click', '.submission-thumb', event => {
 			const src = $(this)
 				.children('.thumbnail')
 				.attr('src');
@@ -491,7 +491,7 @@ $(document).ready(function() {
 			$([document.documentElement, document.body]).animate({
 				scrollTop: $('#fullscreen').offset().top - 100
 			}),
-      $(document).keyup(function(event) {
+      $(document).keyup(event => {
         if (event.which == '27') {
           $('#fullscreen').addClass('hidden');
         }
@@ -546,14 +546,14 @@ $(document).ready(function() {
         .addClass('is-visible is-selected');
 
       // close modal on esc
-      $(document).keyup(function(event){
+      $(document).keyup(event =>{
         if(event.which == '27'){
           $('#edit-challenge-overlay').removeClass('is-visible');
         }
       });
 
       // close modal on click outside modal
-      $('.modal-overlay').on('click', function(event){
+      $('.modal-overlay').on('click', event =>{
         if( $(event.target).is(this) ){
           $(this).removeClass('is-visible');
         }

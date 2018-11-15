@@ -8,7 +8,7 @@ $(document).ready(function($){
     $main_nav = $('.main-nav');
 
 	// open modal
-	$main_nav.on('click', function(event){
+	$main_nav.on('click', event => {
 		if( $(event.target).is($main_nav) ) {
 			// open the submenu
 			$(this).children('ul').toggleClass('is-visible');
@@ -23,7 +23,7 @@ $(document).ready(function($){
   });
 
 	// close modal on esc
-	$(document).keyup(function(event){
+	$(document).keyup(event => {
     if(event.which == '27'){
       $form_modal.removeClass('is-visible');
       $('.js-err-msg').addClass('hidden');
@@ -31,7 +31,7 @@ $(document).ready(function($){
   });
 
   // close modal on click outside modal
-  $('.modal-overlay').on('click', function(event){
+  $('.modal-overlay').on('click', event => {
     if( $(event.target).is($form_modal) || $(event.target).is('.close-form')){
       $form_modal.removeClass('is-visible');
       $('.js-err-msg').addClass('hidden');
@@ -39,7 +39,7 @@ $(document).ready(function($){
   });
 
 	//switch from a tab to another
-	$form_modal_tab.on('click', function(event) {
+	$form_modal_tab.on('click', event => {
     event.preventDefault();
     ( $(event.target).is( $tab_login ) ) ? login_selected() : signup_selected();
 	});
