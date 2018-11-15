@@ -58,7 +58,8 @@ $(document).ready(function() {
 		newSubmissionListener();
 
 		backHomeClickListener();
-		deleteClickListener();
+    deleteClickListener();
+    editClickListener();
 	});
 
   // check for store.authToken
@@ -160,7 +161,7 @@ $(document).ready(function() {
 			$('#user-challenges').addClass('hidden');
       $('#user-challenges').empty();
 
-			getSubmissions(challengeId);
+      getSubmissions(challengeId);
 		});
 	}
 
@@ -391,6 +392,23 @@ $(document).ready(function() {
 
 		$('#user-challenges').append(`
     <h1>My Challenges</h1>
+    <div class='modal-overlay' id='edit-challenge-overlay'>
+    <div class='modal-wrapper'>
+      <ul class="modal-tabs">
+        <li><a>Edit Title</a></li>
+      </ul>
+
+      <div id='modal-edit-title-form hidden'>
+        <form role='form' class='form' id='js-edit-title-form'>
+          <p>Only update the title if you've made a spelling error, or have submitted the Challenge in the last few minutes and want to change the title.</p>
+          <div>
+            <input type='text' name='newTitle' id='new-title' class='js-new-title-input' placeholder='Enter new title' required>
+          </div>
+          <input type='submit' value='Submit' class='nav-button'>
+        </form>
+      </div>
+    </div>
+  </div>
   `);
 
 		const challengeItems = challenges.map(
@@ -401,6 +419,9 @@ $(document).ready(function() {
         <img class="thumbnail" src="${challenge.image}">
         <div class="content-details fadeIn-top">
           <h3>${challenge.title}</h3>
+          <button class="edit-challenge nav-button">Change Title</button>
+          <input type='text' name='newTitle' class='js-edit-title-input hidden' placeholder='Enter new title in case of error.' required>
+          <button type=submit class='edit-title-submit nav-button hidden'>Submit</button>
         </div>
       </div>
       `
@@ -504,7 +525,53 @@ $(document).ready(function() {
 					});
 			}
 		});
-	}
+  }
+  
+  function editClickListener() {
+    $('.container').on('click', '.edit-challenge', event => {
+      event.stopPropagation();
+      const challengeId = $(event.currentTarget)
+        .parents('.challenge-thumb')
+        .prop('id');
+      const title = $(event.currentTarget)
+        .siblings('h3')
+        .text();
+        store.currentChallenge = { challengeId, title }
+
+      $('#modal-edit-title-form')
+        .removeClass('hidden')
+        .addClass('is-selected');
+        
+      $('#edit-challenge-overlay')
+        .addClass('is-visible is-selected');
+
+      editTitleSubmit(challengeId);
+    })
+  }
+
+  // handle PUT request from editClickListener
+  function editTitleSubmit(challengeId) {
+    $('#js-edit-title-form').on('submit', event => {
+      event.stopImmediatePropagation();
+      
+      const newTitleValue = $('.js-new-title-input').val();
+      const newTitle = {
+        newTitle: newTitleValue
+      }
+      
+      console.log('challengeId:', challengeId)
+      console.log('newTitle: ', newTitle)
+
+      api.update(`/api/challenges/${challengeId}`, newTitle)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          showFailMsg(err.responseJSON.message);
+          handleErrors();
+        })
+    })
+  }
 
   // back button and home link listener
 	function backHomeClickListener() {

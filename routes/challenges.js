@@ -46,10 +46,11 @@ router.get('/:id', (req, res) => {
 	Challenge.findById(req.params.id)
 		.then(id => {
       id = req.params.id
+
       Submission.find({ challenge: id })
         .then(submissions => {
           res.json(submissions)
-			});
+      });
 		});
 });
 
