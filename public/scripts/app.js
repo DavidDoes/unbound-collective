@@ -265,8 +265,8 @@ $(document).ready(function() {
 
 			api
 				.create('/api/users', newUser)
-				.then(res => {
-					signupForm[0].reset(); //clear storage
+				.then(() => {
+					signupForm[0].reset();
 					$('.modal-overlay').removeClass('is-visible');
 					$('.aux-nav').removeClass('hidden');
 					$('#new-challenge-button').removeClass('hidden');
@@ -356,7 +356,7 @@ $(document).ready(function() {
 		$('#user-challenges').empty();
 
 		$('#user-submissions').append(`
-      <h1>My Submissions</h1>
+      <h2>My Submissions</h2>
     `);
 
 		const submissionItems = submissions.map(
@@ -391,7 +391,7 @@ $(document).ready(function() {
 		$('#user-submissions').empty();
 
 		$('#user-challenges').append(`
-    <h1>My Challenges</h1>
+    <h2>My Challenges</h2>
     <div class='modal-overlay' id='edit-challenge-overlay'>
     <div class='modal-wrapper'>
       <ul class="modal-tabs">
@@ -418,7 +418,7 @@ $(document).ready(function() {
       <div class="content-overlay"></div>
         <img class="thumbnail" src="${challenge.image}">
         <div class="content-details fadeIn-top">
-          <h3>${challenge.title}</h3>
+          <h3>${challenge.title}</h3><br>
           <button class="edit-challenge nav-button">Change Title</button>
           <input type='text' name='newTitle' class='js-edit-title-input hidden' placeholder='Enter new title in case of error.' required>
           <button type=submit class='edit-title-submit nav-button hidden'>Submit</button>
@@ -545,6 +545,20 @@ $(document).ready(function() {
       $('#edit-challenge-overlay')
         .addClass('is-visible is-selected');
 
+      // close modal on esc
+      $(document).keyup(function(event){
+        if(event.which == '27'){
+          $('#edit-challenge-overlay').removeClass('is-visible');
+        }
+      });
+
+      // close modal on click outside modal
+      $('.modal-overlay').on('click', function(event){
+        if( $(event.target).is(this) ){
+          $(this).removeClass('is-visible');
+        }
+      });
+
       editTitleSubmit(challengeId);
     })
   }
@@ -558,13 +572,10 @@ $(document).ready(function() {
       const newTitle = {
         newTitle: newTitleValue
       }
-      
-      console.log('challengeId:', challengeId)
-      console.log('newTitle: ', newTitle)
 
       api.update(`/api/challenges/${challengeId}`, newTitle)
-        .then(res => {
-          console.log(res);
+        .then(() => {
+					$('.modal-overlay').removeClass('is-visible');
         })
         .catch(err => {
           showFailMsg(err.responseJSON.message);

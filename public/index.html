@@ -168,35 +168,55 @@
     </div>
   </div>
 
-    <div class='container flex hidden' id='new-submission'>
-      <div class='new-buttons'>
-        <ul>
-          <li><a class='nav-button' id='new-submission-button'>Submit a Photo</a>
+  <div class='container flex hidden' id='new-submission'>
+    <div class='new-buttons'>
+      <ul>
+        <li><a class='nav-button' id='new-submission-button'>Submit a Photo</a>
+      </ul>
+    </div>
+    <div class='modal-overlay' id='submission-overlay'>
+      <div class='modal-wrapper'>
+        <ul class="modal-tabs">
+          <li><a>Submit a Photo</a></li>
         </ul>
-      </div>
-      <div class='modal-overlay' id='submission-overlay'>
-        <div class='modal-wrapper'>
-          <ul class="modal-tabs">
-            <li><a>Submit a Photo</a></li>
-          </ul>
-  
-          <div id='modal-submission-form hidden'>
-            <form role='form' class='form' id='js-new-submission-form'>
-              <legend>Choose a photo to submit to this challenge.</legend>
-              <p>Be sure that your submission applies well to this Challenge's title.</p>
-              <div>
-                <input type='file' name='image' id='submission-image' class='js-submission-upload' accept='image/*'
-                  required>
-                <span class="spinner hidden"></span>
-              </div>
-              <input type='submit' value='Submit' class='nav-button'>
-              <p>Photos may be up to 10 MB in size, jpeg or png.</p>
-            </form>
-            <div class='js-err-msg'></div>
-          </div>
+
+        <div id='modal-submission-form hidden'>
+          <form role='form' class='form' id='js-new-submission-form'>
+            <legend>Choose a photo to submit to this challenge.</legend>
+            <p>Be sure that your submission applies well to this Challenge's title.</p>
+            <div>
+              <input type='file' name='image' id='submission-image' class='js-submission-upload' accept='image/*'
+                required>
+              <span class="spinner hidden"></span>
+            </div>
+            <input type='submit' value='Submit' class='nav-button'>
+            <p>Photos may be up to 10 MB in size, jpeg or png.</p>
+          </form>
+          <div class='js-err-msg'></div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- <div class='container flex hidden' id='edit-challenge'>
+    <div class='modal-overlay' id='edit-challenge-overlay'>
+      <div class='modal-wrapper'>
+        <ul class="modal-tabs">
+          <li><a>Edit Title</a></li>
+        </ul>
+
+        <div id='modal-edit-title-form hidden'>
+          <form role='form' class='form' id='js-edit-title-form'>
+            <p>Only update the title if you've made a spelling error, or have submitted the Challenge in the last few minutes and want to change the title.</p>
+            <div>
+              <input type='text' name='newTitle' id='new-title' class='js-new-title-input' placeholder='Enter new title' required>
+            </div>
+            <input type='submit' value='Submit' class='nav-button'>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
 
   <main role='main' aria-live='assertive'>
     <div class='container flex' id='challenges' class='js-challenges'>

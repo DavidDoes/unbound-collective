@@ -231,6 +231,11 @@ nav {
   display: inline-block
 }
 
+.edit-challenge {
+  display: block;
+  margin: 0 auto;
+}
+
 .js-err-msg {
   display: none;
   width: 100%;
@@ -295,7 +300,6 @@ nav {
 .nav-button { 
   -webkit-box-sizing: border-box; 
           box-sizing: border-box;
-  display: inline-block;
   font-size: 18px;
   text-decoration: none;
   padding: 5px;
@@ -303,7 +307,7 @@ nav {
   background-color: #8B18B1;
   color:white;
   outline: none;
-  margin-left: 5px;
+  line-height: 2;
 }
 
 .nav-button:hover {
