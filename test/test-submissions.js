@@ -130,7 +130,7 @@ describe('Submissions resource', function() {
 					});
 			});
 		});
-	});
+  });
 
 	describe('DELETE Submission /api/submissions/:id', function() {
 		it('Should delete Submission of id', function() {
@@ -154,6 +154,37 @@ describe('Submissions resource', function() {
 				.then(submission => {
 					expect(submission).to.be.null;
 				});
-		});
-	});
+    });
+    
+    it('Should respond 500 for invalid id', function() {
+      const invalidId = 'invalid-id';
+
+      return chai
+        .request(app)
+        .delete(`/api/submissions/${invalidId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(500);
+        })
+    })
+
+    it('Should respond 401 unauthorized', function() {
+      const badToken = 'bad-token';
+      let submission;
+
+			return Submission.findOne()
+				.then(_submission => {
+          submission = _submission;
+
+					return chai
+						.request(app)
+						.delete(`/api/submissions/${submission.id}`)
+            .set('Authorization', `Bearer ${badToken}`)
+            .then(res => {
+              expect(res).to.have.status(401);
+            })
+        });
+    });
+  });
+  
 });

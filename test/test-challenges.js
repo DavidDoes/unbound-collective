@@ -53,7 +53,6 @@ describe('Challenges resource', function() {
 	});
 
 	after(function() {
-    tearDownDb();
 		return closeServer();
 	});
 
@@ -146,9 +145,75 @@ describe('Challenges resource', function() {
 		});
 	});
 
+	describe('PUT /api/challenges/:id', function() {
+		it.only('Should update title of challenge', function() {
+			const userId = user.id;
+			const newTitle = { 'newTitle': 'Updated title' };
+      let challenge;
+
+			return Challenge.findOne({ creator: userId })
+				.then(_challenge => {
+          challenge = _challenge;
+          console.log('--- challenge: ', challenge)
+					return chai
+						.request(app)
+            .put(`/api/challenges/${challenge.id}`)
+            .type('form')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newTitle);
+				})
+				.then(res => {
+          console.log('--- res.body: ', res.body)
+					expect(res).to.have.status(200);
+					expect(res).to.be.json;
+					expect(res.body).to.be.a('object');
+					expect(res.body).to.have.all.keys(
+            '_id',
+            '__v',
+						'title',
+						'creator',
+						'image',
+						'cloudinary_id'
+					);
+					expect(res.body._id).to.equal(challenge.id);
+					expect(res.body.title).to.equal(newTitle.newTitle);
+				});
+    });
+
+    it('Should respond 400 for invalid id', function() {
+      const invalidId = 'invalid-id';
+
+      return chai
+        .request(app)
+        .put(`/api/challenges/${invalidId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(400);
+        })
+    })
+
+    it('Should respond 401 unauthorized', function() {
+      const badToken = 'bad-token';
+      let submission;
+
+			return Challenge.findOne()
+				.then(_submission => {
+          submission = _submission;
+
+					return chai
+						.request(app)
+						.put(`/api/challenges/${submission.id}`)
+            .set('Authorization', `Bearer ${badToken}`)
+            .then(res => {
+              expect(res).to.have.status(401);
+            })
+        });
+    });    
+	});
+
 	describe('DELETE /api/challenges/:id', function() {
 		it('Should delete challenge of provided id', function() {
-      const userId = user.id;
+			const userId = user.id;
 			let challenge;
 
 			return Challenge.findOne({ creator: userId })
@@ -167,6 +232,35 @@ describe('Challenges resource', function() {
 				.then(challenge => {
 					expect(challenge).to.be.null;
 				});
+		});
+
+		it('Should respond 500 for invalid id', function() {
+			const invalidId = 'invalid-id';
+
+			return chai
+				.request(app)
+				.delete(`/api/submissions/${invalidId}`)
+				.set('Authorization', `Bearer ${token}`)
+				.then(res => {
+					expect(res).to.have.status(500);
+				});
+		});
+
+		it('Should respond 401 unauthorized', function() {
+			const badToken = 'bad-token';
+			let submission;
+
+			return Submission.findOne().then(_submission => {
+				submission = _submission;
+
+				return chai
+					.request(app)
+					.delete(`/api/submissions/${submission.id}`)
+					.set('Authorization', `Bearer ${badToken}`)
+					.then(res => {
+						expect(res).to.have.status(401);
+					});
+			});
 		});
 	});
 });
