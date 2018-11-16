@@ -42,17 +42,17 @@ describe('Submissions resource', function() {
 			User.insertMany(seedUsers),
 			User.createIndexes(),
 			Submission.insertMany(seedSubmissions),
-			// Submission.createIndexes(),
+			Submission.createIndexes(),
 			Challenge.insertMany(seedChallenges),
 			Challenge.createIndexes()
 		])
-			.then(([users]) => {
-				user = users[0];
-				token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-				return user;
-			})
-			.catch(err => {
-			});
+    .then(([users]) => {
+      user = users[0];
+      token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+      return user;
+    })
+    .catch(err => {
+    });
 	});
 
 	afterEach(function() {
@@ -134,10 +134,13 @@ describe('Submissions resource', function() {
 
 	describe('DELETE Submission /api/submissions/:id', function() {
 		it('Should delete Submission of id', function() {
-			let userId = user.id;
+      const userId = user.id;
+      let submission;
 
-			Submission.findOne({ creator: userId })
-				.then(submission => {
+			return Submission.findOne({ creator: userId })
+				.then(_submission => {
+          submission = _submission;
+
 					return chai
 						.request(app)
 						.delete(`/api/submissions/${submission.id}`)
@@ -146,7 +149,7 @@ describe('Submissions resource', function() {
 				.then(res => {
 					expect(res).to.have.status(204);
 					expect(res.body).to.be.empty;
-					return Submission.findById(submission);
+					return Submission.findById(submission.id);
 				})
 				.then(submission => {
 					expect(submission).to.be.null;

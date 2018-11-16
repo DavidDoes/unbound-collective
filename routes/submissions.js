@@ -23,6 +23,7 @@ router.get('/', (req, res) => {
 
 // delete users' own Submission, if authorized
 router.delete('/:id', jwtAuth, (req, res) => {
+  console.log('req.params.id: ', req.params.id);
 	if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
 		const err = new Error(
 			'You do not have permission to delete this submission.'
@@ -31,30 +32,27 @@ router.delete('/:id', jwtAuth, (req, res) => {
 		return next(err);
 	}
 
-  // remove from Cloudinary
-  Submission
-    .findById(req.params.id)
-    .then(submission => {
+	// remove from Cloudinary
+	Submission.findById(req.params.id)
+		.then(submission => {
       cloudinary.v2.uploader
-      .destroy(submission.cloudinary_id, (err) => {
-        return res.status(204).end();
-      })
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).end();
-    })
-    .then(() => {
-      Submission
-        .findByIdAndRemove(req.params.id)
-        .then(() => {
-          return res.status(204).end();
-      })
-    })
-    .catch(err => {
-      console.error(err)
-      res.status(500).json({ err: 'Internal server error' })
-  })
-})
+        .destroy(submission.cloudinary_id, res => {
+				  return res.status(204).end();
+			});
+		})
+		.catch(err => {
+			console.error(err);
+			return res.status(500).end();
+		})
+		.then(() => {
+			Submission.findByIdAndRemove(req.params.id).then(() => {
+				return res.status(204).end();
+			});
+		})
+		.catch(err => {
+			console.error(err);
+			res.status(500).json({ err: 'Internal server error' });
+		});
+});
 
 module.exports = router;

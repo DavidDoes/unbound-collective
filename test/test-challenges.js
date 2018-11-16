@@ -53,6 +53,7 @@ describe('Challenges resource', function() {
 	});
 
 	after(function() {
+    tearDownDb();
 		return closeServer();
 	});
 
@@ -147,9 +148,10 @@ describe('Challenges resource', function() {
 
 	describe('DELETE /api/challenges/:id', function() {
 		it('Should delete challenge of provided id', function() {
+      const userId = user.id;
 			let challenge;
 
-			return Challenge.findOne({ creator: user.id })
+			return Challenge.findOne({ creator: userId })
 				.then(_challenge => {
 					challenge = _challenge;
 					return chai
