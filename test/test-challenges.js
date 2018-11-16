@@ -158,7 +158,6 @@ describe('Challenges resource', function() {
 					return chai
 						.request(app)
             .put(`/api/challenges/${challenge.id}`)
-            .type('form')
             .set('Authorization', `Bearer ${token}`)
             .send(newTitle);
 				})
