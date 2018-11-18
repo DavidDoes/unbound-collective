@@ -148,18 +148,19 @@ describe('Challenges resource', function() {
 	describe('PUT /api/challenges/:id', function() {
 		it.only('Should update title of challenge', function() {
 			const userId = user.id;
-			const newTitle = { 'newTitle': 'Updated title' };
+			const newTitle = { 'title': 'Updated title' };
       let challenge;
 
 			return Challenge.findOne({ creator: userId })
 				.then(_challenge => {
           challenge = _challenge;
           console.log('--- challenge: ', challenge)
+
 					return chai
 						.request(app)
             .put(`/api/challenges/${challenge.id}`)
-            .set('Authorization', `Bearer ${token}`)
-            .send(newTitle);
+            .send(newTitle)
+            .set('Authorization', `Bearer ${token}`);
 				})
 				.then(res => {
           console.log('--- res.body: ', res.body)
@@ -175,7 +176,9 @@ describe('Challenges resource', function() {
 						'cloudinary_id'
 					);
 					expect(res.body._id).to.equal(challenge.id);
-					expect(res.body.title).to.equal(newTitle.newTitle);
+          expect(res.body.title).to.equal(newTitle.title);
+          console.log('--- res.body.title: ', res.body.title)
+          console.log('--- newTitle: ', newTitle);
 				});
     });
 

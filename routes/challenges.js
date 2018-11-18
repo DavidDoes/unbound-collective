@@ -115,9 +115,12 @@ router.post('/', jwtAuth, parser.single('image'), (req, res, next) => {
 
 // modify Challenge; not implemented client-side
 router.put('/:id', jwtAuth, (req, res, next) => {
-  console.log('--- req from router: ', req.body)
 	const { id } = req.params;
-	const { newTitle } = req.body;
+  const { title } = req.body;
+  const updateTitle = { title };
+
+  console.log('--- req from router: ', req.body)
+  console.log('--- newTitle from router: ', updateTitle)
 
 	if (!req.user.id === req.body.creator) {
 		const err = new Error(
@@ -133,7 +136,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 		return next(err);
 	}
 
-	Challenge.findByIdAndUpdate(id, { title: newTitle, new: true })
+	Challenge.findByIdAndUpdate(id, updateTitle, { new: true })
 		.then(result => {
       console.log('--- result from router: ', result)
 			if (result) {
