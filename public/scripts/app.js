@@ -599,6 +599,7 @@ $(document).ready(function() {
 			$('#user-submissions').empty();
       $('#user-challenges').empty();
       $('#back-button').addClass('hidden');
+      $('#fullscreen').addClass('hidden');
 
       if (isLoggedIn()) {
         $('#new-challenge').removeClass('hidden');
@@ -618,6 +619,7 @@ $(document).ready(function() {
 			$('#user-submissions').empty();
       $('#user-challenges').empty();
       $('#back-button').addClass('hidden');
+      $('#fullscreen').addClass('hidden');
 
       if (isLoggedIn()) {
         $('#new-challenge').removeClass('hidden');
@@ -636,6 +638,7 @@ $(document).ready(function() {
 			$('#user-submissions').empty();
       $('#user-challenges').empty();
       $('#back-button').addClass('hidden');
+      $('#fullscreen').addClass('hidden');
 
       if (isLoggedIn()) {
         $('#new-challenge').removeClass('hidden');
