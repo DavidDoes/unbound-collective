@@ -323,7 +323,7 @@ $(document).ready(function() {
 	function mySubmissionsListener() {
 		$('#my-submissions').on('click', function() {
 			return api.search(`/api/users/mysubmissions`).then(res => {
-        $('.js-menu').toggleClass('active');
+        $('.js-menu').removeClass('active');
 				$('#user-submissions').empty();
 				store.userSubmissions = res;
 
@@ -336,7 +336,7 @@ $(document).ready(function() {
 	function myChallengesListener() {
 		$('#my-challenges').on('click', function() {
 			return api.search(`/api/users/mychallenges`).then(res => {
-        $('.js-menu').toggleClass('active');
+        $('.js-menu').removeClass('active');
 				$('#user-challenges').empty();
 				store.userChallenges = res;
 
