@@ -94,16 +94,17 @@ h1, h2, h3, h4, form, ul, li {
   padding: .2em, .5em;
 }
 
-h1 {
-  font-size: 60px;
+h1 { 
+  font-size: 40px;
+  padding-top: 50px;
 }
 
 h2 {
-  font-size: 36px;
+  font-size: 24px;
 }
 
 h3 {
-  font-size: 26px;
+  font-size: 14px;
 }
 
 footer {
@@ -246,6 +247,19 @@ nav {
 }
 
 @media only screen and (min-width: 768px) {
+
+  h1 { 
+    font-size: 60px;
+    padding-top: 0px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
 
   .user-navbar {
     display: -webkit-box;

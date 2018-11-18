@@ -471,23 +471,23 @@ $(document).ready(function() {
   // When user clicks out or hits esc, return to all submissions.
 	function submissionClickListener() {
 		$('.container').on('click', '.submission-thumb', event => {
-			const src = $(this)
-				.children('.thumbnail')
-				.attr('src');
+      console.log('clicked')
 
+			const src = $(event.target)
+				.siblings('.thumbnail')
+        .attr('src');
+        
       $('#fullscreen')
         .fadeIn()
         .removeClass('hidden')
-        .css({ '-webkit-transform': 'translate(0px, -900px)' });
+        .css({ '-webkit-transform': 'translate(0px, -500px)' });
 			$('#fullscreen img').attr('src', src);
-
+      // close fullscreen on click outside image
 			$('#fullscreen').click(function() {
 				$(this).fadeOut();
-				$(this).addClass('hidden');
+        $(this).addClass('hidden');
       });
-      
-
-
+      // close fullscreen on esc key
 			$([document.documentElement, document.body]).animate({
 				scrollTop: $('#fullscreen').offset().top - 100
 			}),
@@ -659,9 +659,9 @@ $(document).ready(function() {
   // click listener for scroll-to-top button
 	function topButtonClickListener() {
 		$('#nav-up-button').on('click', () => {
-			$([document.documentElement, document.body]).animate({
-				scrollTop: $('nav').offset().top
-			});
+      $('html, body').animate({ 
+        scrollTop: 0
+       }, 'slow');
 		});
 	}
 
