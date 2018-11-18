@@ -4,8 +4,10 @@
 
 [![Build Status](https://travis-ci.org/DavidDoes/unbound-collective.svg?branch=master)](https://travis-ci.org/DavidDoes/unbound-collective)
 
+[API Documentation](https://documenter.getpostman.com/view/1740901/RzZ9GzYF)
+
 # Overview
-**The Unbound Collective** is a dynamic web service which helps to encourage and inspire photographers to step outside of their comfort zone by way of providing challenges, and a way to upload their submissions to that challenge. 
+**The Unbound Collective** is a dynamic web service which helps to encourage and inspire photographers to step outside of their comfort zone by way of providing challenges, and a way to upload their submissions to those challenges. 
 
 # Features
 ## Homepage
