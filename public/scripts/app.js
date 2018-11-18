@@ -122,11 +122,11 @@ $(document).ready(function() {
 		const challengeItems = challenges.map(
 			challenge =>
 				`
-        <div class="one-third challenge-thumb" id="${
+        <div class='one-third challenge-thumb' id='${
 					challenge.id
-				}"><div class="content-overlay"></div>
-          <img class="thumbnail" src="${challenge.image}">
-          <div class="content-details fadeIn-top">
+				}'><div class='content-overlay'></div>
+          <img class='thumbnail' src='${challenge.image}'>
+          <div class='content-details fadeIn-top'>
           <h3>${challenge.title}</h3>
           </div>
         </div>
@@ -365,11 +365,11 @@ $(document).ready(function() {
 		const submissionItems = submissions.map(
 			submission =>
 				`
-        <div class="one-third submission-thumb" id="${submission._id}">
-          <div class="content-overlay"></div>
-            <img class="thumbnail" src="${submission.image}">
-            <div class="content-details fadeIn-top">
-              <button class="delete-submission nav-button">Delete</button>
+        <div class='one-third submission-thumb' id='${submission._id}'>
+          <div class='content-overlay'></div>
+            <img class='thumbnail' src='${submission.image}'>
+            <div class='content-details fadeIn-top'>
+              <button class='delete-submission nav-button'>Delete</button>
             </div>
           </div>
         </div>
@@ -397,7 +397,7 @@ $(document).ready(function() {
     <h2>My Challenges</h2>
     <div class='modal-overlay' id='edit-challenge-overlay'>
     <div class='modal-wrapper'>
-      <ul class="modal-tabs">
+      <ul class='modal-tabs'>
         <li><a>Edit Title</a></li>
       </ul>
 
@@ -417,12 +417,12 @@ $(document).ready(function() {
 		const challengeItems = challenges.map(
 			challenge =>
 				`
-      <div class="one-third challenge-thumb" id="${challenge._id}">
-      <div class="content-overlay"></div>
-        <img class="thumbnail" src="${challenge.image}">
-        <div class="content-details fadeIn-top">
+      <div class='one-third challenge-thumb' id='${challenge._id}'>
+      <div class='content-overlay'></div>
+        <img class='thumbnail' src='${challenge.image}'>
+        <div class='content-details fadeIn-top'>
           <h3>${challenge.title}</h3><br>
-          <button class="edit-challenge nav-button">Change Title</button>
+          <button class='edit-challenge nav-button'>Change Title</button>
           <input type='text' name='newTitle' class='js-edit-title-input hidden' placeholder='Enter new title in case of error.' required>
           <button type=submit class='edit-title-submit nav-button hidden'>Submit</button>
         </div>
@@ -448,10 +448,10 @@ $(document).ready(function() {
 		const submissionItems = submissions.map(
 			submission =>
 				`
-        <div class="one-third submission-thumb" id="${submission._id}">
-          <div class="content-overlay"></div>
-          <img class="thumbnail" src="${submission.image}">
-          <div class="content-details fadeIn-top">
+        <div class='one-third submission-thumb' id='${submission._id}'>
+          <div class='content-overlay'></div>
+          <img class='thumbnail' src='${submission.image}'>
+          <div class='content-details fadeIn-top'>
             <h3>Submitted by:<br>${submission.creator}</h3>
           </div>
         </div>

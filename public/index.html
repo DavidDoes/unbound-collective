@@ -9,15 +9,15 @@
   <meta name='description' content='Push yourself to think outside the grid with these user-contributed photography challenges.'>
   <meta name='author' content='David Clark, @DavidDoes___'>
 
-  <link rel="icon" type="image/png" href="./public/assets/favicon-16x16.png" sizes="16x16" />
+  <link rel='icon' type='image/png' href='./public/assets/favicon-16x16.png' sizes='16x16' />
 
 
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/modal.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='./styles/hover.css' />
-  <link rel="stylesheet" type="text/css" media='screen' href='./styles/loader.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='./styles/loader.css'>
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
 
 </head>
 
@@ -33,20 +33,20 @@
     </div>
     <nav class='user-navbar' id='logged-out-navbar' role='navigation'>
       <span class='navbar-toggle js-navbar-toggle'>
-        <i class="fas fa-angle-double-down"></i>
+        <i class='fas fa-angle-double-down'></i>
       </span>
       <!-- if user not logged in -->
       <ul class='main-nav js-menu'>
         <li>
-          <a href="#" class='nav-links' id='nav-login'>Login</a>
+          <a href='#' class='nav-links' id='nav-login'>Login</a>
         </li>
         <li>
-          <a href="#" class='nav-links' id='nav-signup'>Signup</a>
+          <a href='#' class='nav-links' id='nav-signup'>Signup</a>
         </li>
       </ul>
       <ul class='nav-right'>
         <li>
-          <a href="#" class='nav-links' id='home'>Home</a>
+          <a href='#' class='nav-links' id='home'>Home</a>
         </li>
       </ul>
     </nav>
@@ -56,27 +56,27 @@
     <!-- if user logged in -->
     <li class='hidden' id='username-heading'></li>
     <span class='navbar-toggle js-navbar-toggle'>
-        <i class="fas fa-angle-double-down"></i>
+        <i class='fas fa-angle-double-down'></i>
     </span>
     <ul class='aux-nav js-menu'>
       <li>
-        <a href="#" class='nav-links' id='home'>Home</a>
+        <a href='#' class='nav-links' id='home'>Home</a>
       </li>
       <li>
-        <a href="#" class='nav-links' id='my-submissions'>My Submissions</a>
+        <a href='#' class='nav-links' id='my-submissions'>My Submissions</a>
       </li>
       <li>
-        <a href="#" class='nav-links' id='my-challenges'>My Challenges</a>
+        <a href='#' class='nav-links' id='my-challenges'>My Challenges</a>
       </li>
       <li>
-        <a href="#" class='nav-links' id='nav-logout'>Logout</a>
+        <a href='#' class='nav-links' id='nav-logout'>Logout</a>
       </li>
     </ul>
   </nav>
 
   <div class='modal-overlay' id='login-signup-modal-overlay'>
     <div class='modal-wrapper'>
-      <ul class="modal-tabs">
+      <ul class='modal-tabs'>
         <li><a>Login</a></li>
         <li><a>Signup</a></li>
       </ul>
@@ -86,14 +86,14 @@
         <fieldset>
           <legend>Login</legend>
           <div>
-            <label for="username">Username</label><br>
-            <input name="username" id="login-username" aria-label="username" type="text" class='full-width has-padding has-border'>
+            <label for='username'>Username</label><br>
+            <input name='username' id='login-username' aria-label='username' type='text' class='full-width has-padding has-border'>
           </div>
           <div>
-            <label for="password">Password</label><br>
-            <input type="password" name="password" id="login-password" class='full-width has-padding has-border'>
+            <label for='password'>Password</label><br>
+            <input type='password' name='password' id='login-password' class='full-width has-padding has-border'>
           </div>
-          <button class='nav-button' aria-label="submit" type="submit">LOGIN</button>
+          <button class='nav-button' aria-label='submit' type='submit'>LOGIN</button>
           </fieldset>
         </form>
         <h4>Test Login: <strong>TestUser</strong> |     <strong>securepass</strong></h4>
@@ -105,14 +105,14 @@
           <fieldset>
             <legend>Signup</legend>
             <div>
-              <label for="username">Username</label><br>
-              <input name="username" id="signup-username" aria-label="username" type="text" class='full-width has-padding has-border'>
+              <label for='username'>Username</label><br>
+              <input name='username' id='signup-username' aria-label='username' type='text' class='full-width has-padding has-border'>
             </div>
             <div>
-              <label for="password">Password</label><br>
-              <input type="password" name="password" id="signup-password" class='full-width has-padding has-border'>
+              <label for='password'>Password</label><br>
+              <input type='password' name='password' id='signup-password' class='full-width has-padding has-border'>
             </div>
-            <button class='nav-button' aria-label="submit" type="submit">SIGNUP</button>
+            <button class='nav-button' aria-label='submit' type='submit'>SIGNUP</button>
           </fieldset>
         </form>
         <div class='js-err-msg'></div>
@@ -142,7 +142,7 @@
     </div>
     <div class='modal-overlay' id='challenge-overlay'>
       <div class='modal-wrapper'>
-        <ul class="modal-tabs">
+        <ul class='modal-tabs'>
           <li>
             <a>Submit a Challenge</a>
           </li>
@@ -156,9 +156,9 @@
               <div>
                 <input type='text' name='title' id='title' class='js-title-input' placeholder='Please enter a title' required>
                 <input type='file' name='image' id='image' class='js-challenge-upload' accept='image/*' required>
-                <span class="spinner hidden"></span>
+                <span class='spinner hidden'></span>
               </div>
-              <button class='nav-button' aria-label="submit" type="submit">SUBMIT</button>
+              <button class='nav-button' aria-label='submit' type='submit'>SUBMIT</button>
               <p>Photos may be up to 10 MB in size, jpeg or png.</p>
             </fieldset>
           </form>
@@ -176,7 +176,7 @@
     </div>
     <div class='modal-overlay' id='submission-overlay'>
       <div class='modal-wrapper'>
-        <ul class="modal-tabs">
+        <ul class='modal-tabs'>
           <li><a>Submit a Photo</a></li>
         </ul>
 
@@ -187,7 +187,7 @@
             <div>
               <input type='file' name='image' id='submission-image' class='js-submission-upload' accept='image/*'
                 required>
-              <span class="spinner hidden"></span>
+              <span class='spinner hidden'></span>
             </div>
             <input type='submit' value='Submit' class='nav-button'>
             <p>Photos may be up to 10 MB in size, jpeg or png.</p>
@@ -213,13 +213,13 @@
 
     <div>
       <button id='nav-up-button'>
-        <i class="fas fa-angle-double-up"></i>
+        <i class='fas fa-angle-double-up'></i>
       </button>
     </div>
   </main>
 
   <div class='hidden' id='fullscreen'>
-    <img src="" alt="">
+    <img src='' alt=''>
   </div>
 
   <footer>
@@ -228,8 +228,8 @@
   </footer>
 
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous">
+  <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8='
+    crossorigin='anonymous'>
   </script>
 
   <script type='text/javascript' src='./scripts/app.js'></script>

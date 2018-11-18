@@ -11,7 +11,8 @@ const api = (function() {
 			data: JSON.stringify(obj),
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
-	};
+  };
+  
 	const upload = function(path, obj) {
 		 return $.ajax({
 			type: 'POST',
@@ -25,7 +26,8 @@ const api = (function() {
         Authorization: `Bearer ${store.authToken}`,
       }
     });
-	};
+  };
+  
 	const search = function(path, query) {
 		return $.ajax({
 			type: 'GET',
@@ -34,7 +36,8 @@ const api = (function() {
 			data: query,
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
-	};
+  };
+  
 	const update = function(path, obj) {
 		return $.ajax({
 			type: 'PUT',
@@ -43,7 +46,8 @@ const api = (function() {
 			data: JSON.stringify(obj),
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
-	};
+  };
+  
 	const remove = function(path) {
 		return $.ajax({
 			type: 'DELETE',
@@ -51,7 +55,8 @@ const api = (function() {
 			url: path,
 			headers: { Authorization: `Bearer ${store.authToken}` }
 		});
-	};
+  };
+  
 	return {
     create,
     upload,

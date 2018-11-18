@@ -14,12 +14,14 @@
 	-webkit-transition: opacity 0.3s 0, visibility 0 0.3s;
 	transition: opacity 0.3s 0, visibility 0 0.3s;
 }
+
 .modal-overlay.is-visible {
 	visibility: visible;
 	opacity: 1;
 	-webkit-transition: opacity 0.3s 0, visibility 0 0;
 	transition: opacity 0.3s 0, visibility 0 0;
 }
+
 .modal-overlay.is-visible .modal-wrapper {
 	-webkit-transform: translateY(0);
 	transform: translateY(0);
@@ -41,11 +43,13 @@
 	-webkit-transition-duration: 0.3s;
 	transition-duration: 0.3s;
 }
+
 .modal-wrapper .modal-tabs:after {
 	content: '';
 	display: table;
 	clear: both;
 }
+
 .modal-wrapper .modal-tabs li {
 	width: 50%;
 	float: left;
@@ -70,6 +74,7 @@
 	background: #fff;
 	color: #505260;
 }
+
 @media only screen and (min-width: 600px) {
 	.modal-wrapper {
 		margin: 4em auto;
@@ -83,23 +88,29 @@
 .form {
 	padding: 1.4em;
 }
+
 .form .fieldset {
 	position: relative;
 	margin: 1.4em 0;
 }
+
 .form .fieldset:first-child {
 	margin-top: 0;
 }
+
 .form .fieldset:last-child {
 	margin-bottom: 0;
 }
+
 .form label {
 	font-size: 14px;
 	font-size: 0.875rem;
 }
+
 .form p {
   text-align: center;
 }
+
 .form input {
 	max-width: 80%;
 	margin-bottom: 10px;
@@ -130,15 +141,18 @@
 	-o-appearance: none;
 	appearance: none;
 }
+
 .form input.has-border:focus {
 	border-color: #343642;
 	-webkit-box-shadow: 0 0 5px rgba(52, 54, 66, 0.1);
 	        box-shadow: 0 0 5px rgba(52, 54, 66, 0.1);
 	outline: none;
 }
+
 .form input.has-error {
 	border: 1px solid #d76666;
 }
+
 .form input[type='password'] {
 	/* space left for the HIDE button */
 	padding-right: 65px;
@@ -194,11 +208,6 @@ input.full-width {
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
-}
-@media only screen and (min-width: 1170px) {
-	.close-form {
-		display: none;
-	}
 }
 
 #modal-login-form,
