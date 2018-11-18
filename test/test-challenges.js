@@ -175,8 +175,6 @@ describe('Challenges resource', function() {
 					);
 					expect(res.body._id).to.equal(challenge.id);
           expect(res.body.title).to.equal(newTitle.title);
-          console.log('--- res.body.title: ', res.body.title)
-          console.log('--- newTitle: ', newTitle);
 				});
     });
 

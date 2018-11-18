@@ -7,6 +7,6 @@ deploy:
   edge: true
   api_key:
     secure: ac4c85af-34aa-4d52-a65d-91c9f2de21e6
-  app: challenge-photos
+  app: unbound-collective
   on:
     repo: DavidDoes/unbound-collective
