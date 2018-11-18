@@ -570,7 +570,7 @@ $(document).ready(function() {
       
       const newTitleValue = $('.js-new-title-input').val();
       const newTitle = {
-        newTitle: newTitleValue
+        title: newTitleValue
       }
 
       api.update(`/api/challenges/${challengeId}`, newTitle)
