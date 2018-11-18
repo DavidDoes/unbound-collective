@@ -154,7 +154,6 @@ describe('Challenges resource', function() {
 			return Challenge.findOne({ creator: userId })
 				.then(_challenge => {
           challenge = _challenge;
-          console.log('--- challenge: ', challenge)
 
 					return chai
 						.request(app)
@@ -163,7 +162,6 @@ describe('Challenges resource', function() {
             .set('Authorization', `Bearer ${token}`);
 				})
 				.then(res => {
-          console.log('--- res.body: ', res.body)
 					expect(res).to.have.status(200);
 					expect(res).to.be.json;
 					expect(res.body).to.be.a('object');

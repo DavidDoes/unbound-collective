@@ -119,9 +119,6 @@ router.put('/:id', jwtAuth, (req, res, next) => {
   const { title } = req.body;
   const updateTitle = { title };
 
-  console.log('--- req from router: ', req.body)
-  console.log('--- newTitle from router: ', updateTitle)
-
 	if (!req.user.id === req.body.creator) {
 		const err = new Error(
 			'You do not have permission to modify this Challenge.'
@@ -138,7 +135,6 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 
 	Challenge.findByIdAndUpdate(id, updateTitle, { new: true })
 		.then(result => {
-      console.log('--- result from router: ', result)
 			if (result) {
 				res.json(result);
 			} else {
