@@ -89,7 +89,8 @@ $(document).ready(function() {
 
   // mobile drop-down menu toggle
 	function navbarClickListener() {
-		$('.js-navbar-toggle').on('click', () => {
+		$('.user-navbar').on('click', () => {
+      console.log('clicked')
       $('.js-menu').toggleClass('active');
       $('#fullscreen').addClass('hidden');
     });
@@ -322,6 +323,7 @@ $(document).ready(function() {
 	function mySubmissionsListener() {
 		$('#my-submissions').on('click', function() {
 			return api.search(`/api/users/mysubmissions`).then(res => {
+        $('.js-menu').toggleClass('active');
 				$('#user-submissions').empty();
 				store.userSubmissions = res;
 
@@ -334,6 +336,7 @@ $(document).ready(function() {
 	function myChallengesListener() {
 		$('#my-challenges').on('click', function() {
 			return api.search(`/api/users/mychallenges`).then(res => {
+        $('.js-menu').toggleClass('active');
 				$('#user-challenges').empty();
 				store.userChallenges = res;
 
