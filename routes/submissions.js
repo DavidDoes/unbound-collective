@@ -23,7 +23,6 @@ router.get('/', (req, res) => {
 
 // delete users' own Submission, if authorized
 router.delete('/:id', jwtAuth, (req, res) => {
-  console.log('req.params.id: ', req.params.id);
 	if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
 		const err = new Error(
 			'You do not have permission to delete this submission.'
@@ -35,18 +34,17 @@ router.delete('/:id', jwtAuth, (req, res) => {
 	// remove from Cloudinary
 	Submission.findById(req.params.id)
 		.then(submission => {
-      cloudinary.v2.uploader
-        .destroy(submission.cloudinary_id, res => {
-				  return res.status(204).end();
-			});
+      cloudinary.uploader
+        .destroy(submission.cloudinary_id)
 		})
 		.catch(err => {
 			console.error(err);
 			return res.status(500).end();
-		})
+    })
+    // remove from db
 		.then(() => {
 			Submission.findByIdAndRemove(req.params.id).then(() => {
-				return res.status(204).end();
+        res.status(204).end();
 			});
 		})
 		.catch(err => {

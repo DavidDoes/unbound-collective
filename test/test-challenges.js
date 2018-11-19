@@ -146,7 +146,7 @@ describe('Challenges resource', function() {
 	});
 
 	describe('PUT /api/challenges/:id', function() {
-		it.only('Should update title of challenge', function() {
+		it('Should update title of challenge', function() {
 			const userId = user.id;
 			const newTitle = { 'title': 'Updated title' };
       let challenge;
@@ -232,33 +232,5 @@ describe('Challenges resource', function() {
 				});
 		});
 
-		it('Should respond 500 for invalid id', function() {
-			const invalidId = 'invalid-id';
-
-			return chai
-				.request(app)
-				.delete(`/api/submissions/${invalidId}`)
-				.set('Authorization', `Bearer ${token}`)
-				.then(res => {
-					expect(res).to.have.status(500);
-				});
-		});
-
-		it('Should respond 401 unauthorized', function() {
-			const badToken = 'bad-token';
-			let submission;
-
-			return Submission.findOne().then(_submission => {
-				submission = _submission;
-
-				return chai
-					.request(app)
-					.delete(`/api/submissions/${submission.id}`)
-					.set('Authorization', `Bearer ${badToken}`)
-					.then(res => {
-						expect(res).to.have.status(401);
-					});
-			});
-		});
 	});
 });

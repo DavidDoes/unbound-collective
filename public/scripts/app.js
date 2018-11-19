@@ -90,7 +90,6 @@ $(document).ready(function() {
   // mobile drop-down menu toggle
 	function navbarClickListener() {
 		$('.user-navbar').on('click', () => {
-      console.log('clicked')
       $('.js-menu').toggleClass('active');
       $('#fullscreen').addClass('hidden');
     });
@@ -239,6 +238,7 @@ $(document).ready(function() {
 				.then(() => {
 					$('#submission-overlay').removeClass('is-visible is-selected');
           $('#submissions').empty();
+          $('.js-submission-upload').val('');
           $('.spinner').addClass('hidden');
           $('#image').val('');
 				})
@@ -474,7 +474,6 @@ $(document).ready(function() {
   // When user clicks out or hits esc, return to all submissions.
 	function submissionClickListener() {
 		$('.container').on('click', '.submission-thumb', event => {
-      console.log('clicked')
 
 			const src = $(event.target)
 				.siblings('.thumbnail')
@@ -518,11 +517,11 @@ $(document).ready(function() {
 				api
 					.remove(`/api/submissions/${submission}`)
 					.then(() => {
-						$('#submissions').empty();
+						$('#user-submissions').empty();
 					})
 					.then(() => {
-						getSubmissions(store.currentChallenge);
-					})
+            displayUserSubmissions(store.userSubmissions);
+          })
 					.then(() => {
 						$('#submissions').removeClass('hidden');
 					});
