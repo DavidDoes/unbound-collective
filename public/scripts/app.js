@@ -517,16 +517,15 @@ $(document).ready(function() {
 				api
 					.remove(`/api/submissions/${submission}`)
 					.then(() => {
-						$('#user-submissions').empty();
-					})
-					.then(() => {
-            displayUserSubmissions(store.userSubmissions);
-          })
-					.then(() => {
-						$('#submissions').removeClass('hidden');
-					});
-			}
-		});
+            return api.search(`/api/users/mysubmissions`).then(res => {
+              $('#user-submissions').empty();
+              store.userSubmissions = res;
+      
+              displayUserSubmissions(res);
+        	  })
+          });
+		    }
+    });
   }
   
   function editClickListener() {
