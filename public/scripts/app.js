@@ -363,12 +363,13 @@ $(document).ready(function() {
     `);
 
 		const submissionItems = submissions.map(
-			submission =>
+      submission =>
 				`
         <div class='one-third submission-thumb' id='${submission._id}'>
           <div class='content-overlay'></div>
             <img class='thumbnail' src='${submission.image}'>
             <div class='content-details fadeIn-top'>
+              <h3>Submitted to Challenge:<br> ${submission.challenge}</h3>
               <button class='delete-submission nav-button'>Delete</button>
             </div>
           </div>

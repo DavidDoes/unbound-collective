@@ -46,8 +46,9 @@
   text-transform: uppercase;
 }
 
-#submissions .content-details h3 {
-  font-size: 12px;
+#submissions .content-details h3,
+#user-submissions .content-details h3 {
+  font-size: 14px;
   
 }
 
