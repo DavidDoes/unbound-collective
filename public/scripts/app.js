@@ -74,11 +74,16 @@ $(document).ready(function() {
       $('.main-nav').addClass('hidden');
       $('#aux-nav-wrapper').removeClass('hidden');
       $('#new-challenge').removeClass('hidden');
-      $('#username-heading').removeClass('hidden');
-      $('#username-heading').append(`
+      $('#about')
+        .empty()
+        .append(`<h2>All Challenges</h2>`);
+      $('#username-heading')
+        .removeClass('hidden')
+        .append(`
         <p>Welcome, ${localStorage.username}</p>`
       );
 		} else {
+      $('#about').css('padding-top', '2em');
 			$('.hero-image').removeClass('hidden');
 			$('#aux-nav-wrapper').addClass('hidden');
       $('.main-nav').removeClass('hidden');
@@ -346,22 +351,23 @@ $(document).ready(function() {
 	}
 
 	function displayUserSubmissions(submissions) {
+    $('#about')
+      .empty()
+      .append(`<h2>My Submissions</h2>`);
 		$('#back-button').removeClass('hidden');
     $('#new-challenge').addClass('hidden');
     $('#new-submission').addClass('hidden');
 		$('#challenges').addClass('hidden');
 		$('#submissions').addClass('hidden');
-		$('#user-challenges').addClass('hidden');
-		$('#user-challenges').hide();
-		$('#user-submissions').removeClass('hidden');
-		$('#user-submissions').show();
-		$('ul').removeClass('hidden');
-		$('#user-challenges').empty();
-
-		$('#user-submissions').append(`
-      <h2>My Submissions</h2>
-    `);
-
+    $('#user-challenges')
+      .addClass('hidden')
+      .hide()
+      .empty();
+    $('#user-submissions')
+      .removeClass('hidden')
+		  .show();
+    $('ul').removeClass('hidden');
+    
 		const submissionItems = submissions.map(
       submission =>
 				`
@@ -381,21 +387,27 @@ $(document).ready(function() {
 	}
 
 	function displayUserChallenges(challenges) {
+    $('#about')
+      .empty()
+      .append(`
+      <h2>My Challenges</h2>
+    `)
 		$('#back-button').removeClass('hidden');
     $('#new-challenge').addClass('hidden');
     $('#new-submission').addClass('hidden');
 		$('#challenges').addClass('hidden');
 		$('#submissions').addClass('hidden');
-		$('#user-challenges').removeClass('hidden');
-		$('#user-challenges').show();
-		$('#user-submissions').addClass('hidden');
-		$('#user-submissions').hide();
+    $('#user-challenges')
+      .removeClass('hidden')
+		  .show();
+    $('#user-submissions')
+      .addClass('hidden')
+      .empty()
+		  .hide();
 		$('#new-challenge').addClass('hidden');
 		$('ul').removeClass('hidden');
-		$('#user-submissions').empty();
 
 		$('#user-challenges').append(`
-    <h2>My Challenges</h2>
     <div class='modal-overlay' id='edit-challenge-overlay'>
     <div class='modal-wrapper'>
       <ul class='modal-tabs'>
@@ -518,7 +530,9 @@ $(document).ready(function() {
 				api
 					.remove(`/api/submissions/${submission}`)
 					.then(() => {
-            return api.search(`/api/users/mysubmissions`).then(res => {
+            return api
+            .search(`/api/users/mysubmissions`)
+            .then(res => {
               $('#user-submissions').empty();
               store.userSubmissions = res;
       
@@ -589,14 +603,20 @@ $(document).ready(function() {
   // back button and home link listener
 	function backHomeClickListener() {
 		$('.nav-right').on('click', '#home', () => {
+      $('#about')
+        .empty()
+        .append(`<h2>All Challenges</h2>`);
       $('#challenges').removeClass('hidden');
       $('#new-submission').addClass('hidden');
-			$('#submissions').empty();
-			$('#submissions').addClass('hidden');
-			$('#user-submissions').addClass('hidden');
-			$('#user-challenges').addClass('hidden');
-			$('#user-submissions').empty();
-      $('#user-challenges').empty();
+      $('#submissions')
+        .empty()
+        .addClass('hidden');
+      $('#user-submissions')
+        .addClass('hidden')
+        .empty();
+      $('#user-challenges')
+        .addClass('hidden')
+        .empty();
       $('#back-button').addClass('hidden');
       $('#fullscreen').addClass('hidden');
 
@@ -608,15 +628,20 @@ $(document).ready(function() {
 		});
 
 		$('.aux-nav').on('click', '#home', () => {
-      $('#challenges').removeClass('hidden');
+      $('#about')
+        .empty()
+        .append(`<h2>All Challenges</h2>`);      $('#challenges').removeClass('hidden');
       $('#new-challenge').removeClass('hidden');
       $('#new-submission').addClass('hidden');
-			$('#submissions').empty();
-			$('#submissions').addClass('hidden');
-			$('#user-submissions').addClass('hidden');
-			$('#user-challenges').addClass('hidden');
-			$('#user-submissions').empty();
-      $('#user-challenges').empty();
+      $('#submissions')
+        .empty()
+        .addClass('hidden');
+      $('#user-submissions')
+        .addClass('hidden')
+        .empty();
+      $('#user-challenges')
+        .addClass('hidden')
+        .empty();
       $('#back-button').addClass('hidden');
       $('#fullscreen').addClass('hidden');
 
@@ -628,14 +653,19 @@ $(document).ready(function() {
 		});
 
 		$('#back-button').on('click', () => {
-      $('#challenges').removeClass('hidden');
+      $('#about')
+        .empty()
+        .append(`<h2>All Challenges</h2>`);      $('#challenges').removeClass('hidden');
       $('#new-submission').addClass('hidden');
-			$('#submissions').empty();
-			$('#submissions').addClass('hidden');
-			$('#user-submissions').addClass('hidden');
-			$('#user-challenges').addClass('hidden');
-			$('#user-submissions').empty();
-      $('#user-challenges').empty();
+      $('#submissions')
+        .empty()
+        .addClass('hidden');
+      $('#user-submissions')
+        .addClass('hidden')
+        .empty();
+      $('#user-challenges')
+        .addClass('hidden')
+        .empty();
       $('#back-button').addClass('hidden');
       $('#fullscreen').addClass('hidden');
 

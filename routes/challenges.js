@@ -176,12 +176,19 @@ router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res, next
 		public_id = result.public_id;
 
 		Submission.create({
-			creator: req.user.id,
+      creator: req.user.id,
 			challenge: ObjectId(req.params.id),
 			cloudinary_id: public_id,
 			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-		})
+    })
     .then(submission => {
+      return submission
+        .populate('creator', 'username')
+        .populate('challenge', 'title')
+        .execPopulate()
+    })
+    .then(submission => {
+      console.log('submission: ', submission)
       res.status(201).send(submission.serialize());
     })
   })
