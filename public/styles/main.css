@@ -401,12 +401,9 @@ nav {
      object-fit: cover;
 }
 
-#user-submissions {
-  display: inline-block;
-}
-
-#user-challenges {
-  display: inline-block;
+#new-challenge,
+#new-submission {
+  margin-bottom: 5px;
 }
 
 #about {
