@@ -161,10 +161,12 @@ $(document).ready(function() {
 
 	function challengeClickListener() {
 		$('.container').on('click', '.challenge-thumb', event => {
-			const challengeId = $(event.currentTarget).prop('id');
-
-			$('#user-challenges').addClass('hidden');
-      $('#user-challenges').empty();
+      const challengeId = $(event.currentTarget).prop('id');
+      
+      $('#about').empty();
+      $('#user-challenges')
+        .addClass('hidden')
+        .empty();
 
       getSubmissions(challengeId);
 		});
@@ -240,18 +242,21 @@ $(document).ready(function() {
 
 			api
 				.upload(`/api/challenges/${challengeId}/submissions`, formData)
-				.then(() => {
-					$('#submission-overlay').removeClass('is-visible is-selected');
-          $('#submissions').empty();
-          $('.js-submission-upload').val('');
-          $('.spinner').addClass('hidden');
-          $('#image').val('');
+				.then(res => {
+          store.currentSubmission = res;
+          console.log(store.currentSubmission);
 				})
 				.then(() => {
 					getSubmissions(store.currentChallenge);
 				})
 				.then(() => {
-          $('#submissions').removeClass('hidden');
+          $('#submission-overlay').removeClass('is-visible is-selected');
+          $('#submissions')
+            .empty()
+            .removeClass('hidden')
+          $('.js-submission-upload').val('');
+          $('.spinner').addClass('hidden');
+          $('#image').val('');
 				})
 				.catch(err => {
           showFailMsg(err.responseJSON.message);
@@ -312,7 +317,11 @@ $(document).ready(function() {
 					return Promise.all([
 						api.search(`/api/submissions/`)
 					]);
-				})
+        })
+        .then(res => {
+          store.submissions = res;
+          console.log(store.submissions);
+        })
 				.then(() => {
           location.reload();
 					$('.modal-overlay').removeClass('is-visible');
@@ -375,7 +384,7 @@ $(document).ready(function() {
           <div class='content-overlay'></div>
             <img class='thumbnail' src='${submission.image}'>
             <div class='content-details fadeIn-top'>
-              <h3>Submitted to Challenge:<br> ${submission.challenge}</h3>
+              <h3>Submitted to Challenge:<br> ${submission.challenge.title}</h3>
               <button class='delete-submission nav-button'>Delete</button>
             </div>
           </div>
@@ -471,7 +480,10 @@ $(document).ready(function() {
         `
 		);
 		$('#submissions').append(submissionItems);
-		$('#challenges').addClass('hidden');
+    $('#challenges').addClass('hidden');
+    $('#about')
+      .empty()
+      .append(`<h2>${store.currentChallenge}</h2>`);
 		$('main ul').removeClass('hidden');
 		$('#new-challenge').addClass('hidden');
 		$('#back-button').removeClass('hidden');
