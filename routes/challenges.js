@@ -43,15 +43,14 @@ router.get('/', (req, res) => {
 
 // get Challenge by id, get Submissions associated with that Challenge
 router.get('/:id', (req, res) => {
-	Challenge.findById(req.params.id)
-		.then(id => {
-      id = req.params.id
+	Challenge.findById(req.params.id).then(id => {
+    id = req.params.id;
 
-      Submission.find({ challenge: id })
-        .then(submissions => {
-          res.json(submissions)
-      });
+    Submission.find({ challenge: id })
+    .then(submissions => {
+			res.json(submissions);
 		});
+	});
 });
 
 // Create a new Challenge if user logged in and authorized, handle errors
@@ -70,8 +69,8 @@ router.post('/', jwtAuth, parser.single('image'), (req, res, next) => {
 	const stringFields = ['title'];
 	const nonStringField = stringFields.find(
 		field => field in req.body && typeof req.body[field] !== 'string'
-  );
-  
+	);
+
 	if (nonStringField) {
 		return res.status(422).json({
 			code: 422,
@@ -79,45 +78,46 @@ router.post('/', jwtAuth, parser.single('image'), (req, res, next) => {
 			message: 'Incorrect field type: expected string',
 			location: nonStringField
 		});
-  }
-  
-  if (nonStringField) {
-    return res.status(400).json({
-      code: 400,
-      reason: 'ValidationError',
-      message: 'File size too large. Please select an image sized 10 MB or lower.'
-    });
-  }
+	}
 
-  // upload to Cloudinary
+	if (nonStringField) {
+		return res.status(400).json({
+			code: 400,
+			reason: 'ValidationError',
+			message:
+				'File size too large. Please select an image sized 10 MB or lower.'
+		});
+	}
+
+	// upload to Cloudinary
 	let public_id;
 
-	cloudinary.uploader.upload(req.file.path, result => {
-		req.body.image = result.secure_url;
-		public_id = result.public_id;
+	cloudinary.uploader
+		.upload(req.file.path, result => {
+			req.body.image = result.secure_url;
+			public_id = result.public_id;
 
-		Challenge.create({
-			creator: req.user.id,
-			title: req.body.title,
-			cloudinary_id: public_id,
-			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+			Challenge.create({
+				creator: req.user.id,
+				title: req.body.title,
+				cloudinary_id: public_id,
+				image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+			}).then(challenge => {
+				res.status(201).send(challenge.serialize());
+			});
 		})
-    .then(challenge => {
-      res.status(201).send(challenge.serialize());
-    })
-  })
-  .catch(err => {
-    console.log(err);
-    err.status = err.http_code;
-    next(err)
-  });
+		.catch(err => {
+			console.log(err);
+			err.status = err.http_code;
+			next(err);
+		});
 });
 
 // modify Challenge; not implemented client-side
 router.put('/:id', jwtAuth, (req, res, next) => {
 	const { id } = req.params;
-  const { title } = req.body;
-  const updateTitle = { title };
+	const { title } = req.body;
+	const updateTitle = { title };
 
 	if (!req.user.id === req.body.creator) {
 		const err = new Error(
@@ -146,7 +146,7 @@ router.put('/:id', jwtAuth, (req, res, next) => {
 		});
 });
 
-// Delete challenge; not implemented client-side 
+// Delete challenge; not implemented client-side
 router.delete('/:id', (req, res) => {
 	Challenge.remove({
 		Challenge: req.params.id
@@ -167,36 +167,41 @@ router.delete('/:id', (req, res) => {
 });
 
 // New Submission for this Challenge
-router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res, next) => {
+router.post(
+	'/:id/submissions',
+	parser.single('image'),
+	jwtAuth,
+	(req, res, next) => {
+		let public_id;
 
-	let public_id;
+		cloudinary.uploader
+			.upload(req.file.path, result => {
+				req.body.image = result.secure_url;
+				public_id = result.public_id;
 
-	cloudinary.uploader.upload(req.file.path, result  => {
-		req.body.image = result.secure_url;
-		public_id = result.public_id;
-
-		Submission.create({
-      creator: req.user.id,
-			challenge: ObjectId(req.params.id),
-			cloudinary_id: public_id,
-			image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
-    })
-    .then(submission => {
-      return submission
-        .populate('creator', 'username')
-        .populate('challenge', 'title')
-        .execPopulate()
-    })
-    .then(submission => {
-      console.log('submission: ', submission)
-      res.status(201).send(submission.serialize());
-    })
-  })
-  .catch(err => {
-    console.log(err);
-    err.status = err.http_code;
-    next(err);
-  })
-});
+				Submission.create({
+					creator: req.user.id,
+					challenge: ObjectId(req.params.id),
+					cloudinary_id: public_id,
+					image: CLOUDINARY_BASE_URL + 'image/upload/' + public_id
+				})
+        .then(submission => {
+          return submission
+            .populate('creator', 'username')
+            .populate('challenge', 'title')
+            .execPopulate();
+        })
+        .then(submission => {
+          console.log('submission: ', submission);
+          res.status(201).send(submission);
+        });
+			})
+			.catch(err => {
+				console.log(err);
+				err.status = err.http_code;
+				next(err);
+			});
+	}
+);
 
 module.exports = router;
