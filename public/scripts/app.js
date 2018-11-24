@@ -514,6 +514,12 @@ $(document).ready(function() {
 	function submissionClickListener() {
 		$('.container').on('click', '.submission-thumb', event => {
 
+      function scrollOnClose(){ 
+        $([document.documentElement, document.body]).animate({
+          scrollTop: $('#about').offset().top - 100
+        })
+      };
+
 			const src = $(event.target)
 				.siblings('.thumbnail')
         .attr('src');
@@ -522,21 +528,27 @@ $(document).ready(function() {
         .fadeIn()
         .removeClass('hidden')
         .css({ '-webkit-transform': 'translate(0px, -500px)' });
-			$('#fullscreen img').attr('src', src);
+      $('#fullscreen img').attr('src', src);
+      
       // close fullscreen on click outside image
 			$('#fullscreen').click(function() {
 				$(this).fadeOut();
         $(this).addClass('hidden');
+        scrollOnClose();
       });
+
       // close fullscreen on esc key
-			$([document.documentElement, document.body]).animate({
-				scrollTop: $('#fullscreen').offset().top - 100
-			}),
       $(document).keyup(event => {
         if (event.which == '27') {
           $('#fullscreen').addClass('hidden');
+          
         }
       });
+
+      // scroll to fullscreen image
+			$([document.documentElement, document.body]).animate({
+				scrollTop: $('#fullscreen').offset().top - 100
+      })
 		});
 	}
 
@@ -614,6 +626,7 @@ $(document).ready(function() {
   // handle PUT request from editClickListener
   function editTitleSubmit(challengeId) {
     $('#js-edit-title-form').on('submit', event => {
+      event.preventDefault();
       event.stopImmediatePropagation();
       
       const newTitleValue = $('.js-new-title-input').val();
@@ -623,7 +636,8 @@ $(document).ready(function() {
 
       api.update(`/api/challenges/${challengeId}`, newTitle)
         .then(() => {
-					$('.modal-overlay').removeClass('is-visible');
+          $('.modal-overlay').removeClass('is-visible');
+          location.reload();
         })
         .catch(err => {
           showFailMsg(err.responseJSON.message);
