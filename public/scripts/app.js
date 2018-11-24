@@ -163,13 +163,14 @@ $(document).ready(function() {
         .prop('id');
 
       const title = $(event.currentTarget)
-        .children(2)
+        .find('h3')
         .text();
 
         store.currentChallenge = { challengeId }
         store.currentChallengeTitle = title
       
       $('#about').empty();
+      $('#content-d')
       $('#submissions')
         .empty();
       $('#user-challenges')
@@ -359,7 +360,7 @@ $(document).ready(function() {
 		$('#my-challenges').on('click', function() {
 			return api.search(`/api/users/mychallenges`).then(res => {
         $('.js-menu').removeClass('active');
-				$('#user-challenges').empty();
+        $('#user-challenges').empty();
 				store.userChallenges = res;
 
 				displayUserChallenges(res);
@@ -408,7 +409,7 @@ $(document).ready(function() {
       .empty()
       .append(`
       <h2>My Challenges</h2>
-    `)
+    `);
 		$('#back-button').removeClass('hidden');
     $('#new-challenge').addClass('hidden');
     $('#new-submission').addClass('hidden');
