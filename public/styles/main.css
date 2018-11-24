@@ -247,6 +247,15 @@ nav {
   background-color: #A40E4C;
 }
 
+.js-success-msg {
+  display: none;
+  width: 100%;
+  height: 1.2em;
+  text-align: center;
+  color: white;
+  background-color: rgb(42, 128, 13);
+}
+
 @media only screen and (min-width: 768px) {
 
   h1 { 
@@ -428,7 +437,3 @@ nav {
   display:none;
 }
 
-.err-msg {
-  color: red;
-  display: none;
-}

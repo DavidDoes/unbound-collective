@@ -9,7 +9,13 @@ $(document).ready(function() {
     $('.js-err-msg').removeClass('hidden');
 		const listener = $('.js-err-msg');
 		listener.text(message).show();
-	}
+  }
+  
+  function showSuccessMsg(message) {
+    $('.js-success-msg').removeClass('hidden');
+    const listener = $('.js-success-msg');
+    listener.text(message).show();
+  }
 
 	function handleErrors(err) {
 
@@ -286,19 +292,18 @@ $(document).ready(function() {
 			api
 				.create('/api/users', newUser)
 				.then(() => {
-					signupForm[0].reset();
-					$('.modal-overlay').removeClass('is-visible');
-					$('.aux-nav').removeClass('hidden');
-					$('#new-challenge-button').removeClass('hidden');
-
-					$([document.documentElement, document.body]).animate(
-						{
-							scrollTop: $('.aux-nav').offset().top
-						},
-						2000
-					);
+          signupForm[0].reset();
+          
+          const message = 'User creation successful! Please login.'
+          $('.js-err-msg')
+            .addClass('hidden')
+            .empty();
+          showSuccessMsg(message);
 				})
         .catch(err => {
+          $('.js-success-msg')
+            .addClass('hidden')
+            .empty();
           showFailMsg(err.responseJSON.message);
           handleErrors();
         })
