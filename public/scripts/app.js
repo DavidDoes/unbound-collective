@@ -170,6 +170,8 @@ $(document).ready(function() {
         store.currentChallengeTitle = title
       
       $('#about').empty();
+      $('#submissions')
+        .empty();
       $('#user-challenges')
         .addClass('hidden')
         .empty();
