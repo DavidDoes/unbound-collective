@@ -199,8 +199,12 @@ router.delete('/:id', jwtAuth, (req, res, next) => {
 
 // get submissions associated with this user
 router.get('/mysubmissions', jwtAuth, (req, res, next) => {
-	Submission.find({ creator: req.user.id })
+  Submission
+    .find({ creator: req.user.id })
+    .populate('challenge', 'title')
+    
 		.then(submissions => {
+      console.log(submissions)
 			res.json(submissions);
 		})
 		.catch(err => {

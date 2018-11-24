@@ -43,13 +43,20 @@ router.get('/', (req, res) => {
 
 // get Challenge by id, get Submissions associated with that Challenge
 router.get('/:id', (req, res) => {
-	Challenge.findById(req.params.id).then(id => {
+
+  Challenge
+    .findById(req.params.id)
+    .then(id => {
     id = req.params.id;
 
-    Submission.find({ challenge: id })
-    .then(submissions => {
-			res.json(submissions);
-		});
+    Submission
+      .find({ challenge: id })
+      .populate('creator', 'username')
+      .populate('challenge', 'title')
+
+      .then(submissions => {
+        res.json(submissions);
+    })
 	});
 });
 
@@ -167,11 +174,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // New Submission for this Challenge
-router.post(
-	'/:id/submissions',
-	parser.single('image'),
-	jwtAuth,
-	(req, res, next) => {
+router.post('/:id/submissions', parser.single('image'), jwtAuth, (req, res, next) => {
 		let public_id;
 
 		cloudinary.uploader
@@ -192,7 +195,6 @@ router.post(
             .execPopulate();
         })
         .then(submission => {
-          console.log('submission: ', submission);
           res.status(201).send(submission);
         });
 			})
