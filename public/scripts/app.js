@@ -474,7 +474,7 @@ $(document).ready(function() {
           <div class='content-overlay'></div>
           <img class='thumbnail' src='${submission.image}'>
           <div class='content-details fadeIn-top'>
-            <h3>Submitted by:<br>${submission.creator}</h3>
+            <h3>Submitted by:<br>${submission.creator.username}</h3>
           </div>
         </div>
         `
