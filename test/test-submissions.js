@@ -156,18 +156,6 @@ describe('Submissions resource', function() {
 					expect(submission).to.be.null;
 				});
     });
-    
-    it('Should respond 500 for invalid id', function() {
-      const invalidId = 'invalid-id';
-
-      return chai
-        .request(app)
-        .delete(`/api/submissions/${invalidId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .then(res => {
-          expect(res).to.have.status(500);
-        })
-    })
 
     it('Should respond 401 unauthorized', function() {
       const badToken = 'bad-token';
