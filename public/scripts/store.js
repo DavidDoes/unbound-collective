@@ -5,6 +5,7 @@ const store = (function() {
     username: [],
     challenges: [],
     currentChallenge: null,
+    currentChallengeTitle: null,
     currentSubmission: null,
     ChallengeTitles: [],
     submissions: [],

@@ -113,9 +113,7 @@ $(document).ready(function() {
 	function getChallenges() {
 		return api.search('/api/challenges').then(res => {
 			store.challenges = res;
-			res.map(challenge => {
-				store.currentChallengeTitle = challenge.title;
-			});
+
 			$('#back-button').removeClass('hidden');
 
 			render();
@@ -161,7 +159,15 @@ $(document).ready(function() {
 
 	function challengeClickListener() {
 		$('.container').on('click', '.challenge-thumb', event => {
-      const challengeId = $(event.currentTarget).prop('id');
+      const challengeId = $(event.currentTarget)
+        .prop('id');
+
+      const title = $(event.currentTarget)
+        .children(2)
+        .text();
+
+        store.currentChallenge = { challengeId }
+        store.currentChallengeTitle = title
       
       $('#about').empty();
       $('#user-challenges')
@@ -483,7 +489,7 @@ $(document).ready(function() {
     $('#challenges').addClass('hidden');
     $('#about')
       .empty()
-      .append(`<h2>${store.currentChallenge}</h2>`);
+      .append(`<h2>${store.currentChallengeTitle}</h2>`);
 		$('main ul').removeClass('hidden');
 		$('#new-challenge').addClass('hidden');
 		$('#back-button').removeClass('hidden');
@@ -558,13 +564,19 @@ $(document).ready(function() {
   function editClickListener() {
     $('.container').on('click', '.edit-challenge', event => {
       event.stopPropagation();
+
       const challengeId = $(event.currentTarget)
         .parents('.challenge-thumb')
         .prop('id');
       const title = $(event.currentTarget)
         .siblings('h3')
         .text();
-        store.currentChallenge = { challengeId, title }
+
+        console.log('challengeId', challengeId)
+        console.log('title: ', title)
+
+        store.currentChallenge = { challengeId }
+        store.currentChallengeTitle = { title }
 
       $('#modal-edit-title-form')
         .removeClass('hidden')
