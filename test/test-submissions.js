@@ -120,7 +120,8 @@ describe('Submissions resource', function() {
 						expect(res).to.be.json;
 						expect(res.body).to.be.an('object');
 						expect(res.body).to.have.keys(
-							'id',
+              '_id',
+              '__v',
 							'creator',
 							'challenge',
 							'cloudinary_id',
