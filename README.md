@@ -1,5 +1,5 @@
 # The Unbound Collective
-[Live](https://challenge-photos.herokuapp.com/)
+[Live App](https://unbound-collective.herokuapp.com/)
 ![image of splash screen](public/assets/splash.png)
 
 [![Build Status](https://travis-ci.org/DavidDoes/unbound-collective.svg?branch=master)](https://travis-ci.org/DavidDoes/unbound-collective)
