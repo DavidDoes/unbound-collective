@@ -40,9 +40,6 @@ Upon clicking `My Challenges`, users can see all of their challenges in one plac
 - [Heroku](https://heroku.com)
 
 # Future Implementations
-- Dedicated page for each Challenge
-- Dedicated page for each Submission
-- Dedicated Dashboard page
 - Uploads per day per user limit 
 - 'Liking' system for Submissions
 - Public user profile pages
